@@ -12,8 +12,6 @@ public class MMBattleManager : MonoBehaviour
     public Text buttonMain;
     public Text title;
 
-    public MMNodeUnit source;
-    public MMNodeUnit target;
 
     public MMNode background;
 
@@ -28,6 +26,7 @@ public class MMBattleManager : MonoBehaviour
 
 
     public MMNodeCard selectedCard;
+    public MMNodeUnit selectedUnit;
 
 
 
@@ -77,58 +76,39 @@ public class MMBattleManager : MonoBehaviour
         units1.Add(node1);
         units2.Add(node2);
 
-        MMMap.instance.FindCellOfIndex(0).AcceptUnitNode(node1);
-        MMMap.instance.FindCellOfIndex(32).AcceptUnitNode(node2);
+        MMMap.instance.FindCellOfIndex(0).Accept(node1);
+        MMMap.instance.FindCellOfIndex(32).Accept(node2);
     }
 
 
 
-
-    public void SetSource(MMNodeUnit source)
+    public void SetSelectedUnit(MMNodeUnit unit)
     {
-        if (this.source != null)
-        {
-            this.source.cell.EnterHighlight(MMNodeHighlight.Normal);
-        }
-
-        this.source = source;
-        this.source.cell.EnterHighlight(MMNodeHighlight.Green);
+        this.selectedUnit = unit;
     }
 
-
-    public void SetTarget(MMNodeUnit target)
-    {
-        if(this.target != null)
-        {
-            this.target.cell.EnterHighlight(MMNodeHighlight.Normal);
-        }
-
-        this.target = target;
-        this.target.cell.EnterHighlight(MMNodeHighlight.Red);
-    }
-
+    
 
     public void PlayCard()
     {
         if (this.selectedCard == null)
         {
-            MMTipManager.instance.CreateTip("");
+            MMTipManager.instance.CreateTip("没有卡牌");
             return;
         }
 
-        if (this.source == null)
+        if (this.cellSource.nodeUnit == null)
         {
-            MMTipManager.instance.CreateTip("");
+            MMTipManager.instance.CreateTip("没有己方英雄");
             return;
         }
 
-        selectedCard.ExecuteEffect(source.cell, target.cell);        
+        selectedCard.ExecuteEffect(cellSource, cellTarget);        
         MMCardManager.instance.PlayCard(selectedCard);
-        selectedCard = null;
+        
     }
 
 
-    
 
     public void OnClickMainButton()
     {
@@ -151,7 +131,6 @@ public class MMBattleManager : MonoBehaviour
     }
 
     
-
 
     public void EnterState(MMBattleState s)
     {
@@ -185,7 +164,8 @@ public class MMBattleManager : MonoBehaviour
     public void OnEnterPlayerState()
     {
         MMCardManager.instance.Draw(4);
-        SetSource(units1[0]);
+        SetSourceCell(units1[0].cell);
+
     }
 
 

@@ -36,4 +36,18 @@ public partial class MMMap : MMNode
     }
 
 
+    public List<MMCell> FindCellsWithinDistance(MMCell cell, int dis)
+    {
+        List<MMCell> ret = new List<MMCell>();
+
+        foreach (var c in cells)
+        {
+            if (cell.FindDistanceFromCell(c) <= dis)
+            {
+                ret.Add(c);
+            }
+        }
+        
+        return ret;
+    }
 }

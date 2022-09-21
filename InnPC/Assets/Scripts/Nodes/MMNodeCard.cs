@@ -56,8 +56,6 @@ public partial class MMNodeCard : MMNode
     
     public void ExecuteEffect(MMCell source, MMCell target)
     {
-        Debug.Log(source.nodeUnit.key);
-        Debug.Log(target.nodeUnit.key);
         if (id == 1)
         {
             target.nodeUnit.DecreaseHP(1);

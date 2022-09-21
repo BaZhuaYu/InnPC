@@ -7,7 +7,7 @@ public class MMUnit
 
     public string key;
     public int id;
-    
+
     public int maxHP;
     public int hp;
     public int maxAP;
@@ -18,11 +18,12 @@ public class MMUnit
     public int mag;
     public int spd;
 
-    
+    public int attackRange;
+
 
     void LoadData()
     {
-        if(id == 1)
+        if (id == 1)
         {
             //Knight
             this.key = "Unit_10100QS";
@@ -30,6 +31,9 @@ public class MMUnit
             this.hp = maxHP;
             this.maxAP = 2;
             this.ap = maxAP;
+
+            this.spd = 3;
+            attackRange = 1;
         }
         else if (id == 2)
         {
@@ -39,6 +43,9 @@ public class MMUnit
             this.hp = maxHP;
             this.maxAP = 3;
             this.ap = maxAP;
+
+            this.spd = 3;
+            attackRange = 2;
         }
         else if (id == 3)
         {
@@ -48,9 +55,12 @@ public class MMUnit
             this.hp = maxHP;
             this.maxAP = 4;
             this.ap = maxAP;
+
+            this.spd = 3;
+            attackRange = 3;
         }
     }
-    
+
 
     public static MMUnit Create(int id)
     {

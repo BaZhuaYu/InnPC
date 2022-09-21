@@ -10,6 +10,9 @@ public partial class MMCell : MMNode
     public MMNodeUnit nodeUnit;
     public int id;
 
+    public int x;
+    public int y;
+
     public Text labelID;
 
     public MMNodeHighlight highlight;
@@ -31,17 +34,36 @@ public partial class MMCell : MMNode
     {
         MMNodeUnit node = MMNodeUnit.Create();
         node.Accept(unit);
-        this.AcceptUnitNode(node);
+        this.Accept(node);
     }
 
 
-    public void AcceptUnitNode(MMNodeUnit node)
+    public void Accept(MMNodeUnit node)
     {
+        if(node.cell != null)
+        {
+            node.cell.Clear();
+        }
+
         this.nodeUnit = node;
         node.cell = this;
         node.SetParent(this);
     }
     
+
+    public void Reload()
+    {
+
+    }
+
+    public void Clear()
+    {
+        this.nodeUnit.cell = null;
+        this.nodeUnit = null;
+    }
+
+
+
 
 
     public static MMCell Create()
@@ -80,4 +102,21 @@ public partial class MMCell : MMNode
         }
 
     }
+
+
+
+
+
+    public int FindDistanceFromCell(MMCell cell)
+    {
+        int a = Mathf.Abs(cell.x - this.x);
+        int b = Mathf.Abs(cell.y - this.y);
+        return a + b;
+    }
+
+
+
+
+
+
 }

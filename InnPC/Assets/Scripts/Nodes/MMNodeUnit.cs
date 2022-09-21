@@ -32,6 +32,8 @@ public partial class MMNodeUnit : MMNode
     private int mag;
     private int spd;
 
+    private int attackRange;
+
 
     public void Accept(MMUnit unit)
     {
@@ -53,6 +55,8 @@ public partial class MMNodeUnit : MMNode
         def = unit.def;
         mag = unit.mag;
         spd = unit.spd;
+
+        attackRange = unit.attackRange;
 
         UpdateUI();
     }
@@ -124,19 +128,78 @@ public partial class MMNodeUnit : MMNode
 
 
 
+    public List<MMCell> FindMoveCells()
+    {
+        return MMMap.instance.FindCellsWithinDistance(this.cell, this.spd);
+    }
+
+    public void ShowMoveCells()
+    {
+        List<MMCell> cells = FindMoveCells();
+        foreach (var cell in cells)
+        {
+            cell.EnterState(MMNodeState.Blue);
+        }
+    }
+
+
+    public void HideMoveCells()
+    {
+        List<MMCell> cells = FindMoveCells();
+        foreach (var cell in cells)
+        {
+            cell.EnterState(MMNodeState.Normal);
+        }
+    }
+
+
+    public List<MMCell> FindAttackCells()
+    {
+        return MMMap.instance.FindCellsWithinDistance(this.cell, this.attackRange);
+    }
+
+    public void ShowAttackCells()
+    {
+        List < MMCell > cells = FindAttackCells();
+        foreach (var cell in cells)
+        {
+            cell.EnterState(MMNodeState.Blue);
+            if (cell.nodeUnit != null)
+            {
+                if(cell.nodeUnit.group != this.group)
+                {
+                    cell.EnterHighlight(MMNodeHighlight.Red);
+                }
+                //else
+                //{
+                //    cell.EnterHighlight(MMNodeHighlight.Green);
+                //}
+            }
+        }
+    }
+
+
+    public void HideAttackCells()
+    {
+        List<MMCell> cells = FindAttackCells();
+        foreach (var cell in cells)
+        {
+            cell.EnterState(MMNodeState.Normal);
+            if (cell.nodeUnit != null)
+            {
+                cell.EnterHighlight(MMNodeHighlight.Normal);
+            }
+        }
+    }
 
 
 
-
-
-
-
-
-
-
-
-
-
+    public void MoveTo(MMCell cell)
+    {
+        int dis = this.cell.FindDistanceFromCell(cell);
+        this.spd = 0;
+        cell.Accept(this);
+    }
 
 
 
