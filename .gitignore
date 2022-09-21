@@ -1,0 +1,11 @@
+InnPC/Library/*
+InnPC/ProjectSettings/*
+InnPC/Temp/*
+InnPC/Logs/*
+InnPC/obj/*
+InnPC/Packages/*
+InnPC/.vs/*
+InnPC/.vsconfig
+InnPC/Assembly-CSharp.csproj
+InnPC/InnPC.sln
+InnPC/UserSettings/EditorUserSettings.asset
