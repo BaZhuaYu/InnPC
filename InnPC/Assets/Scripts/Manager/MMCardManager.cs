@@ -73,6 +73,26 @@ public class MMCardManager : MonoBehaviour
     }
 
 
+    public void DiscardHand()
+    {
+        foreach(var card in hand.cards)
+        {
+            used.AddCard(card);
+        }
+
+        hand.Clear();
+        UpdateUI();
+    }
+
+
+
+
+
+    /// <summary>
+    /// Private
+    /// </summary>
+
+
     public void Draw()
     {
         if (deck.IsEmpty())

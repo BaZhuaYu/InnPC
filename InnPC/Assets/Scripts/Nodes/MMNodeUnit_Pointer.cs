@@ -4,30 +4,78 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public partial class MMNodeUnit : MMNode, IPointerDownHandler, IPointerUpHandler, IDragHandler, IBeginDragHandler, IEndDragHandler
+public partial class MMNodeUnit : MMNode, IPointerDownHandler, IPointerUpHandler, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler
 {
 
     MMCell cellsHighlight;
     MMCell cellsState;
+    //bool
+
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+
+        //if(this.group == 1)
+        //{
+        //    MMBattleManager.instance.SetSourceCell(this.cell);
+        //    this.cell.EnterHighlight(MMNodeHighlight.Green);
+        //    MMCardManager.instance.Draw(4);
+        //}
+        //else if (this.group == 2)
+        //{
+        //    MMBattleManager.instance.SetTargetCell(this.cell);
+        //    this.cell.EnterHighlight(MMNodeHighlight.Red);
+        //}
+
+
+
+
+        //if(MMBattleManager.instance.cellSource == null)
+        //{
+        //    MMBattleManager.instance.SetSourceCell(this.cell);
+        //    this.cell.EnterHighlight(MMNodeHighlight.Green);
+        //    MMCardManager.instance.Draw(4);
+        //}
+        //else if (MMBattleManager.instance.cellTarget == null)
+        //{
+        //    MMBattleManager.instance.SetTargetCell(this.cell);
+        //    this.cell.EnterHighlight(MMNodeHighlight.Red);
+        //}
+
+
+
+    }
+
 
 
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        this.ShowMoveCells();
+        //this.ShowMoveCells();
+        
+        //MMBattleManager.instance.SetSourceCell(this.cell);
+        
+
     }
 
     
     public void OnPointerUp(PointerEventData eventData)
     {
-        this.transform.localPosition = Vector3.zero;
+        //this.HideMoveCells();
 
-        this.HideMoveCells();
-        if (cellsHighlight != null)
-        {
-            cellsHighlight.EnterHighlight(MMNodeHighlight.Normal);
-            cellsHighlight = null;
-        }
+        //this.transform.localPosition = Vector3.zero;
+
+        //if(MMBattleManager.instance.cellTarget == null)
+        //{
+        //    MMCardManager.instance.DiscardHand();
+        //}
+        
+
+        //if (cellsHighlight != null)
+        //{
+        //    cellsHighlight.EnterHighlight(MMNodeHighlight.Normal);
+        //    cellsHighlight = null;
+        //}
     }
 
 
@@ -49,26 +97,26 @@ public partial class MMNodeUnit : MMNode, IPointerDownHandler, IPointerUpHandler
             cellsHighlight.EnterHighlight(MMNodeHighlight.Normal);
         }
 
-        this.transform.position = eventData.position;
+        //this.transform.position = eventData.position;
         
-        MMCell cell = MMMap.instance.FindCellAtPosition(eventData.position);
+        //MMCell cell = MMMap.instance.FindCellAtPosition(eventData.position);
 
-        if (cell == null)
-        {
-            return;
-        }
+        //if (cell == null)
+        //{
+        //    return;
+        //}
         
 
-        cellsHighlight = cell;
+        //cellsHighlight = cell;
 
-        if (CheckAbleMove(cell))
-        {
-            cell.EnterHighlight(MMNodeHighlight.Green);
-        }
-        else
-        {
-            cell.EnterHighlight(MMNodeHighlight.Red);
-        }
+        //if (CheckAbleMove(cell))
+        //{
+        //    cell.EnterHighlight(MMNodeHighlight.Green);
+        //}
+        //else
+        //{
+        //    cell.EnterHighlight(MMNodeHighlight.Red);
+        //}
 
         //MMBattleManager.instance.SetTarget(cell.nodeUnit);
         //cell.EnterState(MMNodeState.Red);
@@ -83,14 +131,23 @@ public partial class MMNodeUnit : MMNode, IPointerDownHandler, IPointerUpHandler
             return;
         }
 
-        if (CheckAbleMove(cell))
+        if (cell.nodeUnit == null)
         {
-            this.MoveTo(cell);
+            return;
         }
 
-        //MMBattleManager.instance.SetTarget(cell.nodeUnit);
-        this.cell.transform.SetSiblingIndex(0);
-        this.transform.SetSiblingIndex(10);
+        MMBattleManager.instance.SetTargetCell(cell);
+
+
+
+        //if (CheckAbleMove(cell))
+        //{
+        //    this.MoveTo(cell);
+        //}
+
+        ////MMBattleManager.instance.SetTarget(cell.nodeUnit);
+        //this.cell.transform.SetSiblingIndex(0);
+        //this.transform.SetSiblingIndex(10);
 
     }
 

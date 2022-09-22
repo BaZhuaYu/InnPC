@@ -33,8 +33,7 @@ public class MMCardDeck : MMNode
         MMDebugManager.Log(cards.Count + "");
     }
 
-
-
+    
 
     public void AddCard(MMCard card)
     {

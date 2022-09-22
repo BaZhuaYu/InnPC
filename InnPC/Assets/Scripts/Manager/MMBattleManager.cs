@@ -80,14 +80,12 @@ public class MMBattleManager : MonoBehaviour
         MMMap.instance.FindCellOfIndex(32).Accept(node2);
     }
 
-
-
+    
     public void SetSelectedUnit(MMNodeUnit unit)
     {
         this.selectedUnit = unit;
     }
 
-    
 
     public void PlayCard()
     {
@@ -107,6 +105,14 @@ public class MMBattleManager : MonoBehaviour
         MMCardManager.instance.PlayCard(selectedCard);
         
     }
+
+
+
+
+
+
+
+
 
 
 
@@ -163,8 +169,8 @@ public class MMBattleManager : MonoBehaviour
     
     public void OnEnterPlayerState()
     {
-        MMCardManager.instance.Draw(4);
-        SetSourceCell(units1[0].cell);
+        //MMCardManager.instance.Draw(4);
+        //SetSourceCell(units1[0].cell);
 
     }
 
@@ -174,6 +180,32 @@ public class MMBattleManager : MonoBehaviour
         Invoke("OnClickMainButton", 3);
         Invoke("OnClickMainButton", 5);
     }
+
+
+
+
+    public void DrawCard(int count)
+    {
+        MMCardManager.instance.Draw(count);
+    }
+
+
+    public void ClearCard()
+    {
+        //MMCardManager.instance.clear
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     public void SetSourceCell(MMCell cell)

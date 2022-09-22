@@ -4,17 +4,18 @@ using UnityEngine;
 
 public class MMCardHand : MMNode
 {
-    
-    public List<MMNodeCard> cards;
+
     public static MMCardHand instance;
+
+    public List<MMNodeCard> cards;
+    
 
     private void Awake()
     {
         instance = this;
     }
 
-
-
+    
     public void UpdateUI()
     {
         float offset = 10f;
@@ -25,9 +26,7 @@ public class MMCardHand : MMNode
         }
     }
 
-
     
-
     public void AddCard(MMNodeCard card)
     {
         this.cards.Add(card);
@@ -41,5 +40,16 @@ public class MMCardHand : MMNode
         this.cards.Remove(card);
     }
 
+    
+    public void Reload()
+    {
+
+    }
+
+
+    public void Clear()
+    {
+        this.cards = new List<MMNodeCard>();
+    }
     
 }
