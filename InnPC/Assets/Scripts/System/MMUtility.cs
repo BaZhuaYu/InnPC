@@ -48,3 +48,13 @@ public enum MMNodeState
     Blue,
     Green
 }
+
+
+public enum MMArea
+{
+    Single,
+    Row,
+    Col,
+    Beside,
+    Behind
+}

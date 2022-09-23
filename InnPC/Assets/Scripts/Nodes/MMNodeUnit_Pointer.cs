@@ -15,35 +15,28 @@ public partial class MMNodeUnit : MMNode, IPointerDownHandler, IPointerUpHandler
     public void OnPointerClick(PointerEventData eventData)
     {
 
-        //if(this.group == 1)
-        //{
-        //    MMBattleManager.instance.SetSourceCell(this.cell);
-        //    this.cell.EnterHighlight(MMNodeHighlight.Green);
-        //    MMCardManager.instance.Draw(4);
-        //}
-        //else if (this.group == 2)
-        //{
-        //    MMBattleManager.instance.SetTargetCell(this.cell);
-        //    this.cell.EnterHighlight(MMNodeHighlight.Red);
-        //}
-
-
-
-
-        //if(MMBattleManager.instance.cellSource == null)
-        //{
-        //    MMBattleManager.instance.SetSourceCell(this.cell);
-        //    this.cell.EnterHighlight(MMNodeHighlight.Green);
-        //    MMCardManager.instance.Draw(4);
-        //}
-        //else if (MMBattleManager.instance.cellTarget == null)
-        //{
-        //    MMBattleManager.instance.SetTargetCell(this.cell);
-        //    this.cell.EnterHighlight(MMNodeHighlight.Red);
-        //}
-
-
-
+        if (this.group == 1)
+        {
+            if (MMBattleManager.instance.cellSource != null)
+            {
+                MMBattleManager.instance.ClearSourceCell();
+            }
+            MMBattleManager.instance.SetSourceCell(this.cell);
+        }
+        else if (this.group == 2)
+        {
+            if (MMBattleManager.instance.cellTarget != null)
+            {
+                MMBattleManager.instance.ClearTargetCell();
+            }
+            MMBattleManager.instance.SetTargetCell(this.cell);
+            
+            
+            //MMBattleManager.instance.cellSource.EnterHighlight(MMNodeHighlight.Green);
+            //MMCardManager.instance.ShowHandCards(this.cards);
+            //MMCardManager.instance.Draw(4);
+        }
+        
     }
 
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MMBattleManager : MonoBehaviour
+public partial class MMBattleManager : MonoBehaviour
 {
 
     public static MMBattleManager instance;
@@ -28,12 +28,7 @@ public class MMBattleManager : MonoBehaviour
     public MMNodeCard selectedCard;
     public MMNodeUnit selectedUnit;
 
-
-
-    public LineRenderer liner;
-    public int currentPoint;
-
-
+    
 
     private void Awake()
     {
@@ -46,39 +41,47 @@ public class MMBattleManager : MonoBehaviour
         LoadLevel();
         EnterState(MMBattleState.Begin);
         main.onClick.AddListener(OnClickMainButton);
-
-        liner = GetComponent<LineRenderer>();
-        liner.material = new Material(Shader.Find("Standard"));
-        liner.positionCount = 2;
-
-        liner.startWidth = liner.endWidth = 5f;
-        liner.material.SetColor("_Color", Color.black);
-
-        currentPoint = 0;
     }
 
 
     public void LoadLevel()
     {
-        //MMMap.instance.FindCellOfIndex(0).AcceptUnit("Unit_10100QS");
-        MMUnit unit1 = MMUnit.Create(1);
-        MMNodeUnit node1 = MMNodeUnit.Create();
-        node1.group = 1;
-        node1.Accept(unit1);
+        for (int i =0;i<4;i++)
+        {
+            MMUnit unit1 = MMUnit.Create(i + 1);
+            MMNodeUnit node1 = MMNodeUnit.Create();
+            node1.group = 1;
+            node1.Accept(unit1);
+            units1.Add(node1);
+            MMMap.instance.FindCellOfIndex(i).Accept(node1);
+        }
 
-        //MMMap.instance.FindCellOfIndex(32).AcceptUnit("Unit_10200QS");
-        MMUnit unit2 = MMUnit.Create(2);
-        MMNodeUnit node2 = MMNodeUnit.Create();
-        node2.group = 2;
-        node2.Accept(unit2);
-
-
-        units1.Add(node1);
-        units2.Add(node2);
-
-        MMMap.instance.FindCellOfIndex(0).Accept(node1);
-        MMMap.instance.FindCellOfIndex(32).Accept(node2);
+        for (int i = 0; i < 4; i++)
+        {
+            MMUnit unit2 = MMUnit.Create(4-i);
+            MMNodeUnit node2 = MMNodeUnit.Create();
+            node2.group = 2;
+            node2.Accept(unit2);
+            units2.Add(node2);
+            MMMap.instance.FindCellOfIndex(32 + i).Accept(node2);
+        }
+        
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     
     public void SetSelectedUnit(MMNodeUnit unit)
@@ -111,10 +114,7 @@ public class MMBattleManager : MonoBehaviour
 
 
 
-
-
-
-
+    
 
     public void OnClickMainButton()
     {
@@ -124,7 +124,14 @@ public class MMBattleManager : MonoBehaviour
         }
         else if (state == MMBattleState.PlayerRound)
         {
-            EnterState(MMBattleState.EnemyRound);
+            if(cellSource == null)
+            {
+                EnterState(MMBattleState.EnemyRound);
+            }
+            else
+            {
+                UnselectSourceCell();
+            }
         }
         else if (state == MMBattleState.EnemyRound)
         {
@@ -177,8 +184,7 @@ public class MMBattleManager : MonoBehaviour
 
     public void OnEnterEnemyState()
     {
-        Invoke("OnClickMainButton", 3);
-        Invoke("OnClickMainButton", 5);
+        StartCoroutine(ConfigEnemyAI());
     }
 
 
@@ -210,26 +216,70 @@ public class MMBattleManager : MonoBehaviour
 
     public void SetSourceCell(MMCell cell)
     {
-        if(cellSource != null)
-        {
-            cellSource.EnterState(MMNodeState.Normal);
-        }
-
         cellSource = cell;
-        cell.highlight = MMNodeHighlight.Green;
+        cellSource.EnterHighlight(MMNodeHighlight.Green);
+        MMCardManager.instance.ShowHandCards(cell.nodeUnit.cards);
+        cell.nodeUnit.ShowMoveCells();
+        cell.nodeUnit.ShowAttackCells();
     }
 
 
     public void SetTargetCell(MMCell cell)
     {
-        if (cellTarget != null)
-        {
-            cellTarget.EnterState(MMNodeState.Normal);
-        }
-
         cellTarget = cell;
-        cell.highlight = MMNodeHighlight.Red;
+        cellTarget.EnterHighlight(MMNodeHighlight.Red);
+
+        cellSource.nodeUnit.HideMoveCells();
+        cellSource.nodeUnit.HideAttackCells();
+        cellSource.EnterHighlight(MMNodeHighlight.Green);
     }
+
+
+    public void ClearSourceCell()
+    {
+        if (cellSource == null)
+        {
+            return;
+        }
+        cellSource.EnterState(MMNodeState.Normal);
+        cellSource.EnterHighlight(MMNodeHighlight.Normal);
+        cellSource.nodeUnit.HideMoveCells();
+        cellSource.nodeUnit.HideAttackCells();
+        MMCardManager.instance.HideHandCards();
+        cellSource = null;
+    }
+
+
+    public void ClearTargetCell()
+    {
+        if(cellTarget == null)
+        {
+            return;
+        }
+        cellTarget.EnterState(MMNodeState.Normal);
+        cellTarget.EnterHighlight(MMNodeHighlight.Normal);
+        cellTarget = null;
+    }
+
+    
+    public void UnselectSourceCell()
+    {
+        this.ClearSourceCell();
+        this.ClearTargetCell();
+    }
+
+
+    public void OnClickButtonBack()
+    {
+        this.ClearSourceCell();
+        this.ClearTargetCell();
+    }
+
+
+
+
+
+
 
 
     public void ShowButton(string s)

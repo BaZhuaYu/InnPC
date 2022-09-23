@@ -10,8 +10,8 @@ public partial class MMCell : MMNode
     public MMNodeUnit nodeUnit;
     public int id;
 
-    public int x;
-    public int y;
+    public int row;
+    public int col;
 
     public Text labelID;
 
@@ -109,8 +109,8 @@ public partial class MMCell : MMNode
 
     public int FindDistanceFromCell(MMCell cell)
     {
-        int a = Mathf.Abs(cell.x - this.x);
-        int b = Mathf.Abs(cell.y - this.y);
+        int a = Mathf.Abs(cell.row - this.row);
+        int b = Mathf.Abs(cell.col - this.col);
         return a + b;
     }
 

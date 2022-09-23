@@ -16,6 +16,7 @@ public partial class MMNodeCard : MMNode
     public int id;
     public string key;
 
+    public MMArea area;
     
 
 
@@ -45,6 +46,7 @@ public partial class MMNodeCard : MMNode
         icon.LoadImage("Cards/" + key);
     }
 
+
     public void Clear()
     {
         this.card = null;
@@ -52,25 +54,7 @@ public partial class MMNodeCard : MMNode
         this.textNote.text = "";
         this.name = "Card_0";
     }
-
     
-    public void ExecuteEffect(MMCell source, MMCell target)
-    {
-        if (id == 1)
-        {
-            target.nodeUnit.DecreaseHP(1);
-        }
-        else if (id == 2)
-        {
-            source.nodeUnit.IncreaseDEF(1);
-        }
-        else if (id == 3)
-        {
-            source.nodeUnit.IncreaseSPD(1);
-        }
-    }
-
-
 
     public static MMNodeCard Create()
     {

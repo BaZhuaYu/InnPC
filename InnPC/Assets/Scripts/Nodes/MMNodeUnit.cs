@@ -34,6 +34,8 @@ public partial class MMNodeUnit : MMNode
 
     private int attackRange;
 
+    public List<MMNodeCard> cards;
+
 
     public void Accept(MMUnit unit)
     {
@@ -58,12 +60,23 @@ public partial class MMNodeUnit : MMNode
 
         attackRange = unit.attackRange;
 
+        cards = new List<MMNodeCard>();
+        foreach(var id in unit.cards)
+        {
+            MMCard card = MMCard.Create(id);
+            MMNodeCard node = MMNodeCard.Create();
+            node.Accept(card);
+            cards.Add(node);
+        }
+
         UpdateUI();
     }
+
 
     public void Clear()
     {
 
+        cards.Clear();
     }
 
 

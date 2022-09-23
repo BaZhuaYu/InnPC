@@ -85,6 +85,18 @@ public class MMCardManager : MonoBehaviour
     }
 
 
+    public void ShowHandCards(List<MMNodeCard> cards)
+    {
+        foreach(var card in cards)
+        {
+            this.hand.AddCard(card);
+        }
+    }
+         
+    public void HideHandCards()
+    {
+        this.DiscardHand();
+    }
 
 
 

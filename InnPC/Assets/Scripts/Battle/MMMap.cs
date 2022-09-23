@@ -39,8 +39,8 @@ public partial class MMMap : MMNode
             
             cell.name = "Cell" + i;
             cell.id = i;
-            cell.x = i / 4;
-            cell.y = i % 4;
+            cell.row = i / 4;
+            cell.col = i % 4;
             cell.SetParent(this);
             cells.Add(cell);
             

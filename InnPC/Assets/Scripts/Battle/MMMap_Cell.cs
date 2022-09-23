@@ -14,9 +14,23 @@ public partial class MMMap : MMNode
                 return cell;
             }
         }
+        
+        MMDebugManager.Log("FindCellOfIndex: " + index);
+        return null;
+    }
 
 
-        MMDebugManager.Log("FindCell");
+    public MMCell FindCellInXY(int x, int y)
+    {
+        foreach (var cell in cells)
+        {
+            if (cell.row == x && cell.col == y)
+            {
+                return cell;
+            }
+        }
+
+        MMDebugManager.Log("FindCellOfIndex: X " + x + " Y " + y);
         return null;
     }
 
@@ -50,4 +64,107 @@ public partial class MMMap : MMNode
         
         return ret;
     }
+
+
+    //Single,
+    //Row,
+    //Col,
+    //Beside,
+    //Behind
+
+
+    public List<MMCell> FindCellsInRow(int row)
+    {
+        List<MMCell> ret = new List<MMCell>();
+        foreach(var cell in cells)
+        {
+            if(cell.row == row)
+            {
+                ret.Add(cell);
+            }
+        }
+
+        return ret;
+    }
+
+    public List<MMCell> FindCellsInCol(int col)
+    {
+        List<MMCell> ret = new List<MMCell>();
+        foreach (var cell in cells)
+        {
+            if (cell.col == col)
+            {
+                ret.Add(cell);
+            }
+        }
+
+        return ret;
+    }
+
+
+    public List<MMCell> FindCellsInRow(MMCell cell)
+    {
+        return FindCellsInRow(cell.row);
+    }
+
+
+    public List<MMCell> FindCellsInCol(MMCell cell)
+    {
+        return FindCellsInCol(cell.col);
+    }
+
+
+    public List<MMCell> FindCellsBeside(MMCell cell)
+    {
+        List<MMCell> ret = new List<MMCell>();
+
+        MMCell cell1 = FindCellOfIndex(cell.col - 1);
+        MMCell cell2 = FindCellOfIndex(cell.col + 1);
+
+
+        if(cell1.row == cell.row)
+        {
+            ret.Add(cell1);
+        }
+
+        if (cell2.row == cell.row)
+        {
+            ret.Add(cell2);
+        }
+
+        return ret;
+    }
+
+
+    public List<MMCell> FindCellsBehind(MMCell cell)
+    {
+        List<MMCell> ret = new List<MMCell>();
+
+        MMCell cell1 = FindCellInXY(cell.row, cell.col + 1);
+
+        if(cell1 != null)
+        {
+            ret.Add(cell1);
+        }
+
+        return ret;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

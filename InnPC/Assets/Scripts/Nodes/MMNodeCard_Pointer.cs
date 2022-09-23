@@ -12,17 +12,22 @@ public partial class MMNodeCard : MMNode, IBeginDragHandler, IDragHandler, IEndD
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        //MMCell cell = MMMap.instance.FindCellAtPosition(eventData.position);
-
-
-        //MMBattleManager.instance.SetTargetCell(cell);
-
-        if(MMBattleManager.instance.cellSource != null && MMBattleManager.instance.cellTarget != null)
+        if(MMBattleManager.instance.cellSource == null)
         {
-            MMBattleManager.instance.selectedCard = this;
-            MMBattleManager.instance.PlayCard();
-            MMBattleManager.instance.selectedCard = null;
-        }        
+            MMTipManager.instance.CreateTip("没有己方英雄");
+            return;
+        }
+
+        if (MMBattleManager.instance.cellTarget == null)
+        {
+            MMTipManager.instance.CreateTip("没有目标");
+            return;
+        }
+        
+        MMBattleManager.instance.selectedCard = this;
+        MMBattleManager.instance.PlayCard();
+        MMBattleManager.instance.selectedCard = null;
+
     }
 
 
