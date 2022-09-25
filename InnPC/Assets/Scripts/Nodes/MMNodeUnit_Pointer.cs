@@ -15,27 +15,55 @@ public partial class MMNodeUnit : MMNode, IPointerDownHandler, IPointerUpHandler
     public void OnPointerClick(PointerEventData eventData)
     {
 
-        if (this.group == 1)
+        if(MMBattleManager.instance.uxState == MMBattleUXState.Normal)
         {
-            if (MMBattleManager.instance.cellSource != null)
+            if (this.group == 1)
             {
-                MMBattleManager.instance.ClearSourceCell();
+                //if (MMBattleManager.instance.cellSource != null)
+                //{
+                //    MMBattleManager.instance.ClearSourceCell();
+                //}
+                MMBattleManager.instance.SetSource(this);
+                MMBattleManager.instance.EnterUXState(MMBattleUXState.SelectSour);
             }
-            MMBattleManager.instance.SetSourceCell(this.cell);
         }
-        else if (this.group == 2)
+        else if (MMBattleManager.instance.uxState == MMBattleUXState.SelectSour)
         {
-            if (MMBattleManager.instance.cellTarget != null)
+            if (this.group == 1)
             {
-                MMBattleManager.instance.ClearTargetCell();
+                if (MMBattleManager.instance.sourceUnit != null)
+                {
+                    MMBattleManager.instance.ClearSource();
+                }
+                MMBattleManager.instance.SetSource(this);
+                MMBattleManager.instance.EnterUXState(MMBattleUXState.SelectSour);
             }
-            MMBattleManager.instance.SetTargetCell(this.cell);
-            
-            
-            //MMBattleManager.instance.cellSource.EnterHighlight(MMNodeHighlight.Green);
-            //MMCardManager.instance.ShowHandCards(this.cards);
-            //MMCardManager.instance.Draw(4);
+            //else if (this.group == 2)
+            //{
+            //    if (MMBattleManager.instance.cellTarget != null)
+            //    {
+            //        MMBattleManager.instance.ClearTargetCell();
+            //    }
+            //    MMBattleManager.instance.SetTargetCell(this.cell);
+            //}
         }
+        else if (MMBattleManager.instance.uxState == MMBattleUXState.SourMoved)
+        {
+
+        }
+        else if (MMBattleManager.instance.uxState == MMBattleUXState.SelectCard)
+        {
+            if (this.group == 2)
+            {
+                //if (MMBattleManager.instance.cellTarget != null)
+                //{
+                //    MMBattleManager.instance.ClearTargetCell();
+                //}
+                MMBattleManager.instance.SetTarget(this);
+                MMBattleManager.instance.PlayCard();
+            }
+        }
+
         
     }
 
@@ -76,7 +104,7 @@ public partial class MMNodeUnit : MMNode, IPointerDownHandler, IPointerUpHandler
     {
         this.ShowMoveCells();
 
-        MMBattleManager.instance.SetSourceCell(this.cell);
+        MMBattleManager.instance.SetSource(this.cell.nodeUnit);
         MMBattleManager.instance.SetSelectedUnit(this);
 
         this.cell.transform.SetSiblingIndex(101);
@@ -129,7 +157,7 @@ public partial class MMNodeUnit : MMNode, IPointerDownHandler, IPointerUpHandler
             return;
         }
 
-        MMBattleManager.instance.SetTargetCell(cell);
+        MMBattleManager.instance.SetTarget(cell.nodeUnit);
 
 
 

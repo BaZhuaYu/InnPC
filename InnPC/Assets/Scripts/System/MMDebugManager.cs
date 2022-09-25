@@ -31,8 +31,7 @@ public class MMDebugManager : MonoBehaviour
 
     public void ShowSourceTarget()
     {
-        Debug.Log(MMBattleManager.instance.cellSource.nodeUnit.key);
-        Debug.Log(MMBattleManager.instance.cellTarget.nodeUnit.key);
+        
     }
 
 

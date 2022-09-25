@@ -5,7 +5,6 @@ using UnityEngine;
 public partial class MMBattleManager : MonoBehaviour
 {
     
-
     public MMNodeUnit FindRandomUnit1()
     {
         int index = Random.Range(0, units1.Count);
@@ -17,17 +16,17 @@ public partial class MMBattleManager : MonoBehaviour
     {
         foreach(var unit in units2)
         {
-            SetSourceCell(unit.cell);
+            SetSource(unit);
             yield return new WaitForSeconds(1f);
 
-            SetTargetCell(FindRandomUnit1().cell);
+            SetTarget(FindRandomUnit1());
             yield return new WaitForSeconds(1f);
 
-            cellTarget.nodeUnit.DecreaseHP(3);
+            targetUnit.DecreaseHP(3);
             yield return new WaitForSeconds(1f);
 
-            ClearSourceCell();
-            ClearTargetCell();
+            ClearSource();
+            ClearTarget();
         }
 
         yield return new WaitForSeconds(1.0f);
@@ -35,11 +34,28 @@ public partial class MMBattleManager : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         OnClickMainButton();
     }
+    
 
-
-
-
-
+    public MMNodeUnit FindFrontUnit2()
+    {
+        MMNodeUnit ret= units2[0];
+        foreach (var unit in units2)
+        {
+            if (ret.cell.row < unit.cell.row)
+            {
+                ret= unit;
+            }
+            else if (ret.cell.row == unit.cell.row)
+            {
+                if (ret.cell.col < unit.cell.col)
+                {
+                    ret = unit;
+                }
+            }
+        }
+        return ret;
+       
+    }
 
 
 }

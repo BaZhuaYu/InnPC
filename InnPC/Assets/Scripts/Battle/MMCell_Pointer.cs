@@ -23,6 +23,16 @@ public partial class MMCell : MMNode, IPointerEnterHandler, IPointerExitHandler,
         //    //this.EnterHighlight(MMNodeHighlight.Red);
         //}
         
+        
+        if(MMBattleManager.instance.uxState == MMBattleUXState.SelectSour)
+        {
+            if (MMBattleManager.instance.sourceUnit.FindMoveCells().Contains(this))
+            {
+                this.Accept(MMBattleManager.instance.sourceUnit);
+                MMBattleManager.instance.EnterUXState(MMBattleUXState.SourMoved);
+            }
+        }
+        
     }
 
 

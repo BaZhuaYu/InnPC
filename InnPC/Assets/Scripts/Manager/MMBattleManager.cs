@@ -16,18 +16,18 @@ public partial class MMBattleManager : MonoBehaviour
     public MMNode background;
 
     public MMBattleState state;
+    public MMBattleUXState uxState;
 
     public List<MMNodeUnit> units1;
     public List<MMNodeUnit> units2;
 
-
-    public MMCell cellSource;
-    public MMCell cellTarget;
+    
 
 
     public MMNodeCard selectedCard;
     public MMNodeUnit selectedUnit;
-
+    public MMNodeUnit sourceUnit;
+    public MMNodeUnit targetUnit;
     
 
     private void Awake()
@@ -98,20 +98,38 @@ public partial class MMBattleManager : MonoBehaviour
             return;
         }
 
-        if (this.cellSource.nodeUnit == null)
+        if (this.sourceUnit == null)
         {
             MMTipManager.instance.CreateTip("没有己方英雄");
             return;
         }
 
-        selectedCard.ExecuteEffect(cellSource, cellTarget);        
+        selectedCard.ExecuteEffect(sourceUnit.cell, targetUnit.cell);        
         MMCardManager.instance.PlayCard(selectedCard);
         
     }
 
 
-
-
+    public void EnterUXState(MMBattleUXState state)
+    {
+        this.uxState = state;
+        switch(state)
+        {
+            case MMBattleUXState.Normal:
+                break;
+            case MMBattleUXState.SelectSour:
+                sourceUnit.ShowMoveCells();
+                break;
+            case MMBattleUXState.SourMoved:
+                Debug.Log("MMBattleUXState.SourMoved");
+                sourceUnit.HideMoveCells();
+                break;
+            case MMBattleUXState.SelectCard:
+                sourceUnit.HideMoveCells();
+                sourceUnit.ShowAttackCells();
+                break;
+        }
+    }
 
 
     
@@ -124,7 +142,7 @@ public partial class MMBattleManager : MonoBehaviour
         }
         else if (state == MMBattleState.PlayerRound)
         {
-            if(cellSource == null)
+            if(sourceUnit == null)
             {
                 EnterState(MMBattleState.EnemyRound);
             }
@@ -214,65 +232,65 @@ public partial class MMBattleManager : MonoBehaviour
 
 
 
-    public void SetSourceCell(MMCell cell)
+    public void SetSource(MMNodeUnit unit)
     {
-        cellSource = cell;
-        cellSource.EnterHighlight(MMNodeHighlight.Green);
-        MMCardManager.instance.ShowHandCards(cell.nodeUnit.cards);
-        cell.nodeUnit.ShowMoveCells();
-        cell.nodeUnit.ShowAttackCells();
+        sourceUnit = unit;
+        sourceUnit.cell.EnterHighlight(MMNodeHighlight.Green);
+        MMCardManager.instance.ShowHandCards(sourceUnit.cards);
+        sourceUnit.ShowMoveCells();
+        sourceUnit.ShowAttackCells();
     }
 
 
-    public void SetTargetCell(MMCell cell)
+    public void SetTarget(MMNodeUnit unit)
     {
-        cellTarget = cell;
-        cellTarget.EnterHighlight(MMNodeHighlight.Red);
+        targetUnit = unit;
+        targetUnit.cell.EnterHighlight(MMNodeHighlight.Red);
 
-        cellSource.nodeUnit.HideMoveCells();
-        cellSource.nodeUnit.HideAttackCells();
-        cellSource.EnterHighlight(MMNodeHighlight.Green);
+        sourceUnit.HideMoveCells();
+        sourceUnit.HideAttackCells();
+        sourceUnit.cell.EnterHighlight(MMNodeHighlight.Green);
     }
 
 
-    public void ClearSourceCell()
+    public void ClearSource()
     {
-        if (cellSource == null)
+        if (sourceUnit == null)
         {
             return;
         }
-        cellSource.EnterState(MMNodeState.Normal);
-        cellSource.EnterHighlight(MMNodeHighlight.Normal);
-        cellSource.nodeUnit.HideMoveCells();
-        cellSource.nodeUnit.HideAttackCells();
+        sourceUnit.cell.EnterState(MMNodeState.Normal);
+        sourceUnit.cell.EnterHighlight(MMNodeHighlight.Normal);
+        sourceUnit.HideMoveCells();
+        sourceUnit.HideAttackCells();
         MMCardManager.instance.HideHandCards();
-        cellSource = null;
+        sourceUnit = null;
     }
 
 
-    public void ClearTargetCell()
+    public void ClearTarget()
     {
-        if(cellTarget == null)
+        if(targetUnit == null)
         {
             return;
         }
-        cellTarget.EnterState(MMNodeState.Normal);
-        cellTarget.EnterHighlight(MMNodeHighlight.Normal);
-        cellTarget = null;
+        targetUnit.cell.EnterState(MMNodeState.Normal);
+        targetUnit.cell.EnterHighlight(MMNodeHighlight.Normal);
+        targetUnit = null;
     }
 
     
     public void UnselectSourceCell()
     {
-        this.ClearSourceCell();
-        this.ClearTargetCell();
+        this.ClearSource();
+        this.ClearTarget();
     }
 
 
     public void OnClickButtonBack()
     {
-        this.ClearSourceCell();
-        this.ClearTargetCell();
+        this.ClearSource();
+        this.ClearTarget();
     }
 
 

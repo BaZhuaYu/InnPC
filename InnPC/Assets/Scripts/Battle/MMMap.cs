@@ -23,7 +23,6 @@ public partial class MMMap : MMNode
         cells = new List<MMCell>();
         LoadData();
         LoadCells();
-        LoadUI();
     }
 
     
@@ -58,15 +57,7 @@ public partial class MMMap : MMNode
         
     }
 
-    public void LoadUI()
-    {
-        
-        foreach(var cell in cells)
-        {
-            
-            
-        }
-    }
+
 
 
 

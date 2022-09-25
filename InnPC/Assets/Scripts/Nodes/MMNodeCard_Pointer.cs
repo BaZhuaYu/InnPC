@@ -12,21 +12,32 @@ public partial class MMNodeCard : MMNode, IBeginDragHandler, IDragHandler, IEndD
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if(MMBattleManager.instance.cellSource == null)
+        //if(MMBattleManager.instance.cellSource == null)
+        //{
+        //    MMTipManager.instance.CreateTip("没有己方英雄");
+        //    return;
+        //}
+
+        //if (MMBattleManager.instance.cellTarget == null)
+        //{
+        //    MMTipManager.instance.CreateTip("没有目标");
+        //    return;
+        //}
+        
+        //MMBattleManager.instance.selectedCard = this;
+        //MMBattleManager.instance.PlayCard();
+        //MMBattleManager.instance.selectedCard = null;
+
+
+        MMBattleUXState state = MMBattleManager.instance.uxState;
+        if (state == MMBattleUXState.SelectSour || state == MMBattleUXState.SourMoved)
         {
-            MMTipManager.instance.CreateTip("没有己方英雄");
-            return;
+            MMBattleManager.instance.selectedCard = this;
+            MMBattleManager.instance.EnterUXState(MMBattleUXState.SelectCard);
         }
 
-        if (MMBattleManager.instance.cellTarget == null)
-        {
-            MMTipManager.instance.CreateTip("没有目标");
-            return;
-        }
+
         
-        MMBattleManager.instance.selectedCard = this;
-        MMBattleManager.instance.PlayCard();
-        MMBattleManager.instance.selectedCard = null;
 
     }
 
@@ -100,7 +111,7 @@ public partial class MMNodeCard : MMNode, IBeginDragHandler, IDragHandler, IEndD
             return;
         }
 
-        MMBattleManager.instance.SetTargetCell(cell);
+        MMBattleManager.instance.SetTarget(cell.nodeUnit);
         MMBattleManager.instance.PlayCard();
         MMBattleManager.instance.selectedCard = null;
     }

@@ -58,3 +58,12 @@ public enum MMArea
     Beside,
     Behind
 }
+
+
+public enum MMBattleUXState
+{
+    Normal,
+    SelectSour,
+    SourMoved,
+    SelectCard,
+}
