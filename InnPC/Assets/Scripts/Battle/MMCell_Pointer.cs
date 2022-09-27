@@ -22,25 +22,33 @@ public partial class MMCell : MMNode, IPointerEnterHandler, IPointerExitHandler,
         //    MMBattleManager.instance.SetTarget(this.nodeUnit);
         //    //this.EnterHighlight(MMNodeHighlight.Red);
         //}
-        
-        
-        if(MMBattleManager.instance.uxState == MMBattleUXState.SelectSour)
+
+
+        if (MMBattleManager.instance.state == MMBattleState.SelectSour)
         {
             if (MMBattleManager.instance.sourceUnit.FindMoveCells().Contains(this))
             {
                 this.Accept(MMBattleManager.instance.sourceUnit);
-                MMBattleManager.instance.EnterUXState(MMBattleUXState.SourMoved);
+                MMBattleManager.instance.EnterState(MMBattleState.SourMoved);
             }
         }
-        
+        else if (MMBattleManager.instance.state == MMBattleState.SelectCard)
+        {
+            if(this.nodeUnit == null)
+            {
+                MMTipManager.instance.CreateTip("没有目标");
+            }
+        }
+
+
     }
 
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        
+
     }
-    
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         //MMBattleManager.instance.liner.SetPosition(0, eventData.position);
@@ -65,7 +73,7 @@ public partial class MMCell : MMNode, IPointerEnterHandler, IPointerExitHandler,
         //{
         //    this.EnterState(MMNodeState.Red);
         //}
-        
+
     }
 
     public void OnPointerExit(PointerEventData eventData)

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public partial class MMNodeCard : MMNode
+public partial class MMCardNode : MMNode
 {
 
 
@@ -31,9 +31,9 @@ public partial class MMNodeCard : MMNode
     }
 
 
-    public List<MMNodeUnit> FindTargetUnits(MMCell tagetCell)
+    public List<MMUnitNode> FindTargetUnits(MMCell tagetCell)
     {
-        List<MMNodeUnit> ret = new List<MMNodeUnit>();
+        List<MMUnitNode> ret = new List<MMUnitNode>();
         ret.Add(tagetCell.nodeUnit);
 
         List<MMCell> cells = FindSideTargetCells(tagetCell);
@@ -54,28 +54,74 @@ public partial class MMNodeCard : MMNode
 
     public void ExecuteEffect(MMCell source, MMCell target)
     {
-        List<MMNodeUnit> targets = FindTargetUnits(target);
+        List<MMUnitNode> targets = null;
 
+        if (this.area == MMArea.None)
+        {
+
+        }
+        else
+        {
+            targets = FindTargetUnits(target);
+        }
+
+        
         if (id == 1)
         {
             foreach (var dest in targets)
             {
-                target.nodeUnit.DecreaseHP(3);
+                dest.DecreaseHP(3);
             }
         }
         else if (id == 2)
         {
             foreach (var dest in targets)
             {
-                target.nodeUnit.DecreaseHP(2);
+                dest.DecreaseHP(2);
             }
         }
         else if (id == 3)
         {
             foreach (var dest in targets)
             {
-                target.nodeUnit.DecreaseHP(1);
+                dest.DecreaseHP(1);
             }
+        }
+        else if (id == 100)
+        {
+            source.nodeUnit.EnterState(MMUnitState.Stunned);
+        }
+        else if (id == 1000)
+        {
+            source.nodeUnit.IncreaseAP();
+        }
+        else if (id == 10000)
+        {
+            target.nodeUnit.DecreaseHP(source.nodeUnit.atk);
+            source.nodeUnit.DecreaseHP(target.nodeUnit.atk);
+        }
+        else if (id == 10101)
+        {
+            target.nodeUnit.DecreaseHP(2);
+            source.nodeUnit.IncreaseHP(2);
+        }
+        else if (id == 10201)
+        {
+            foreach (var dest in targets)
+            {
+                dest.DecreaseHP(source.nodeUnit.atk);
+            }
+        }
+        else if (id == 10301)
+        {
+            foreach (var dest in targets)
+            {
+                dest.DecreaseHP(2);
+            }
+        }
+        else if (id == 10401)
+        {
+            source.nodeUnit.IncreaseHP(4);
         }
     }
 

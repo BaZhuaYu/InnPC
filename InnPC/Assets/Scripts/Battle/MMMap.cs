@@ -18,8 +18,8 @@ public partial class MMMap : MMNode
     {
         instance = this;
 
-        row = 4;
-        col = 9;
+        row = 9;
+        col = 4;
         cells = new List<MMCell>();
         LoadData();
         LoadCells();
@@ -45,8 +45,8 @@ public partial class MMMap : MMNode
             
             cell.labelID.text = "" + i;
             
-            cell.MoveToLeft((float)(i / row) * cell.FindWidth());
-            cell.MoveToBottom((float)(i % row) * cell.FindHeight());
+            cell.MoveToLeft((float)(cell.row) * cell.FindWidth());
+            cell.MoveToTop((float)(cell.col) * cell.FindHeight());
             
         }
     }
@@ -63,7 +63,7 @@ public partial class MMMap : MMNode
 
 
 
-    public void Accept(MMNodeUnit nodeUnit)
+    public void Accept(MMUnitNode nodeUnit)
     {
         nodeUnit.SetParent(this);
     }

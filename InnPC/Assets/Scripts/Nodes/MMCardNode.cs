@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public partial class MMNodeCard : MMNode
+public partial class MMCardNode : MMNode
 {
     
     public MMCard card;
@@ -23,10 +23,13 @@ public partial class MMNodeCard : MMNode
     public void Accept(MMCard card)
     {
         this.card = card;
+
         this.id = card.id;
         this.key = card.key;
+        this.area = card.area;
 
         this.name = "Card_" + id;
+
 
         Reload();
     } 
@@ -56,11 +59,11 @@ public partial class MMNodeCard : MMNode
     }
     
 
-    public static MMNodeCard Create()
+    public static MMCardNode Create()
     {
         GameObject obj = Instantiate(Resources.Load("Prefabs/MMNodeCard") as GameObject);
         obj.name = "MMNodeCard";
-        return obj.GetComponent<MMNodeCard>();
+        return obj.GetComponent<MMCardNode>();
     }
 
 

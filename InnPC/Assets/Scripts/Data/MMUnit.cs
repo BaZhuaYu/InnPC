@@ -8,6 +8,9 @@ public partial class MMUnit
     public string key;
     public int id;
 
+    public string displayName;
+    public string displayNote;
+
     public int maxHP;
     public int hp;
     public int maxAP;
@@ -17,6 +20,10 @@ public partial class MMUnit
     public int def;
     public int mag;
     public int spd;
+
+    public int tempATK;
+    public int tempDEF;
+
 
     public int attackRange;
 

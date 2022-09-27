@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 
 public partial class MMCell : MMNode
 {
-    public MMNodeUnit nodeUnit;
+    public MMUnitNode nodeUnit;
     public int id;
 
     public int row;
@@ -32,13 +32,13 @@ public partial class MMCell : MMNode
 
     public void AcceptUnit(MMUnit unit)
     {
-        MMNodeUnit node = MMNodeUnit.Create();
+        MMUnitNode node = MMUnitNode.Create();
         node.Accept(unit);
         this.Accept(node);
     }
 
 
-    public void Accept(MMNodeUnit node)
+    public void Accept(MMUnitNode node)
     {
         if(node.cell != null)
         {

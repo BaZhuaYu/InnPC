@@ -4,37 +4,49 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public partial class MMNodeUnit : MMNode
+public partial class MMUnitNode : MMNode
 {
 
     public MMUnit unit;
 
     public MMCell cell;
+    public MMCell tempCell;
 
     public Text textHP;
     public Text textAP;
-    
+    public Text textATK;
 
-    public MMNodeUnit target;
+
+    public MMUnitNode target;
 
     public int group;
+
+
 
     public string key;
     public int id;
 
-    private int maxHP;
-    private int hp;
-    private int maxAP;
-    private int ap;
+    public string displayName;
+    public string displayNote;
 
-    private int atk;
-    private int def;
-    private int mag;
-    private int spd;
+    public int maxHP;
+    public int hp;
+    public int maxAP;
+    public int ap;
 
-    private int attackRange;
+    public int atk;
+    public int def;
+    public int mag;
+    public int spd;
 
-    public List<MMNodeCard> cards;
+    public int attackRange;
+
+    public List<MMCardNode> cards;
+
+    public MMUnitState unitState;
+
+    public MMNode iconRage;
+    public MMNode iconWeak;
 
 
     public void Accept(MMUnit unit)
@@ -48,6 +60,9 @@ public partial class MMNodeUnit : MMNode
     {
         LoadImage("Units/" + unit.key);
 
+        displayName = unit.displayName;
+        displayNote = unit.displayNote;
+
         maxHP = unit.maxHP;
         hp = unit.hp;
         maxAP = unit.maxAP;
@@ -60,14 +75,16 @@ public partial class MMNodeUnit : MMNode
 
         attackRange = unit.attackRange;
 
-        cards = new List<MMNodeCard>();
-        foreach(var id in unit.cards)
+        cards = new List<MMCardNode>();
+        foreach (var id in unit.cards)
         {
             MMCard card = MMCard.Create(id);
-            MMNodeCard node = MMNodeCard.Create();
+            MMCardNode node = MMCardNode.Create();
             node.Accept(card);
             cards.Add(node);
         }
+        
+        EnterState(MMUnitState.Normal);
 
         UpdateUI();
     }
@@ -75,7 +92,6 @@ public partial class MMNodeUnit : MMNode
 
     public void Clear()
     {
-
         cards.Clear();
     }
 
@@ -92,15 +108,36 @@ public partial class MMNodeUnit : MMNode
         UpdateUI();
     }
 
-    public void IncreaseAP(int value)
+    public void IncreaseAP()
     {
-        this.ap += value;
+        if (ap == maxAP)
+        {
+            return;
+        }
+        this.ap += 1;
+
+        if (this.ap == maxAP)
+        {
+            EnterState(MMUnitState.Rage);
+        }
+
         UpdateUI();
     }
 
-    public void DecreaseAP(int value)
+    public void DecreaseAP()
     {
-        this.ap -= value;
+        if (ap == 0)
+        {
+            return;
+        }
+
+        this.ap -= 1;
+
+        if (this.ap == 0)
+        {
+            EnterState(MMUnitState.Weak);
+        }
+
         UpdateUI();
     }
 
@@ -135,15 +172,24 @@ public partial class MMNodeUnit : MMNode
 
     public void UpdateUI()
     {
-        textHP.text = hp + "/" + maxHP;
+        textHP.text = hp + "";
         textAP.text = ap + "";
+        textATK.text = atk + "";
     }
 
 
 
     public List<MMCell> FindMoveCells()
     {
-        return MMMap.instance.FindCellsWithinDistance(this.cell, this.spd);
+        List<int> rows = new List<int>();
+        MMUnitNode unit = MMBattleManager.instance.FindFrontUnit2();
+        for(int i = this.cell.row; i < unit.cell.row; i++)
+        {
+            rows.Add(i);
+        }
+        return MMMap.instance.FindCellsInRows(rows);
+
+        //return MMMap.instance.FindCellsWithinDistance(this.cell, this.spd);
     }
 
     public void ShowMoveCells()
@@ -168,18 +214,20 @@ public partial class MMNodeUnit : MMNode
 
     public List<MMCell> FindAttackCells()
     {
-        return MMMap.instance.FindCellsWithinDistance(this.cell, this.attackRange);
+        return MMMap.instance.FindCellsInFrontDistance(this.cell, this.attackRange);
+        
+        //return MMMap.instance.FindCellsWithinDistance(this.cell, this.attackRange);
     }
 
     public void ShowAttackCells()
     {
-        List < MMCell > cells = FindAttackCells();
+        List<MMCell> cells = FindAttackCells();
         foreach (var cell in cells)
         {
             cell.EnterState(MMNodeState.Blue);
             if (cell.nodeUnit != null)
             {
-                if(cell.nodeUnit.group != this.group)
+                if (cell.nodeUnit.group != this.group)
                 {
                     cell.EnterHighlight(MMNodeHighlight.Red);
                 }
@@ -207,7 +255,7 @@ public partial class MMNodeUnit : MMNode
 
 
 
-    public void MoveTo(MMCell cell)
+    public void MoveToCell(MMCell cell)
     {
         int dis = this.cell.FindDistanceFromCell(cell);
         this.spd = 0;
@@ -216,12 +264,29 @@ public partial class MMNodeUnit : MMNode
 
 
 
-
-    public static MMNodeUnit Create()
+    public static MMUnitNode Create()
     {
         GameObject obj = Instantiate(Resources.Load("Prefabs/MMNodeUnit") as GameObject);
-        obj.name = "MMNodeUnit";
-        return obj.GetComponent<MMNodeUnit>();
+        //obj.name = "MMNodeUnit";
+        return obj.GetComponent<MMUnitNode>();
     }
 
+
+    public bool CheckHasAP()
+    {
+        return this.ap > 0;
+    }
+
+    public bool CheckNoAP()
+    {
+        return this.ap <= 0;
+    }
+
+    public void IncreaspAPToMax()
+    {
+        for (int i = 0; i < maxAP; i++)
+        {
+            IncreaseAP();
+        }
+    }
 }

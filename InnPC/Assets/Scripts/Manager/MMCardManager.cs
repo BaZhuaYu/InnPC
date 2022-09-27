@@ -85,7 +85,7 @@ public class MMCardManager : MonoBehaviour
     }
 
 
-    public void ShowHandCards(List<MMNodeCard> cards)
+    public void ShowHandCards(List<MMCardNode> cards)
     {
         foreach(var card in cards)
         {
@@ -120,12 +120,12 @@ public class MMCardManager : MonoBehaviour
             }
         }
 
-        MMNodeCard card = deck.cards[0];
+        MMCardNode card = deck.cards[0];
         DrawCard(card);
     }
 
 
-    public void PlayCard(MMNodeCard card)
+    public void PlayCard(MMCardNode card)
     {
         hand.RemoveCard(card);
         used.AddCard(card);
@@ -149,7 +149,7 @@ public class MMCardManager : MonoBehaviour
 
 
 
-    public void DrawCard(MMNodeCard card)
+    public void DrawCard(MMCardNode card)
     {
         deck.RemoveCard(card);
         hand.AddCard(card);

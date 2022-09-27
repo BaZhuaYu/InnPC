@@ -4,8 +4,8 @@ using UnityEngine;
 
 public partial class MMBattleManager : MonoBehaviour
 {
-    
-    public MMNodeUnit FindRandomUnit1()
+
+    public MMUnitNode FindRandomUnit1()
     {
         int index = Random.Range(0, units1.Count);
         return units1[index];
@@ -14,7 +14,7 @@ public partial class MMBattleManager : MonoBehaviour
 
     public IEnumerator ConfigEnemyAI()
     {
-        foreach(var unit in units2)
+        foreach (var unit in units2)
         {
             SetSource(unit);
             yield return new WaitForSeconds(1f);
@@ -34,16 +34,16 @@ public partial class MMBattleManager : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         OnClickMainButton();
     }
-    
 
-    public MMNodeUnit FindFrontUnit2()
+
+    public MMUnitNode FindFrontUnit2()
     {
-        MMNodeUnit ret= units2[0];
+        MMUnitNode ret = units2[0];
         foreach (var unit in units2)
         {
             if (ret.cell.row < unit.cell.row)
             {
-                ret= unit;
+                ret = unit;
             }
             else if (ret.cell.row == unit.cell.row)
             {
@@ -54,7 +54,7 @@ public partial class MMBattleManager : MonoBehaviour
             }
         }
         return ret;
-       
+
     }
 
 

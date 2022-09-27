@@ -7,8 +7,6 @@ public class MMNode : MonoBehaviour
 {
     public MMNodeState state;
 
-    
-
 
     private void Start()
     {
@@ -83,7 +81,6 @@ public class MMNode : MonoBehaviour
         float x = -parent.FindWidth() / 2 + this.FindWidth() / 2 + offset;
         float y = transform.localPosition.y;
         transform.localPosition = new Vector2(x, y);
-
     }
 
     public void MoveToRight(float offset = 0f)
@@ -93,10 +90,8 @@ public class MMNode : MonoBehaviour
         float x = parent.FindWidth() / 2 - this.FindWidth() / 2 - offset;
         float y = transform.localPosition.y;
         transform.localPosition = new Vector2(x, y);
-
     }
-
-
+    
     public void MoveToBottom(float offset = 0f)
     {
         MMNode parent = FindParent();
@@ -104,7 +99,6 @@ public class MMNode : MonoBehaviour
         float x = transform.localPosition.x;
         float y = -parent.FindHeight() / 2 + this.FindHeight() / 2 + offset;
         transform.localPosition = new Vector2(x, y);
-
     }
 
 
@@ -118,6 +112,47 @@ public class MMNode : MonoBehaviour
     }
 
 
+    public void MoveUp(float delta)
+    {
+        float x = transform.localPosition.x;
+        float y = transform.localPosition.y + delta;
+        transform.localPosition = new Vector2(x, y);
+    }
+
+    public void MoveDown(float delta)
+    {
+        float x = transform.localPosition.x;
+        float y = transform.localPosition.y - delta;
+        transform.localPosition = new Vector2(x, y);
+    }
+
+    public void MoveLeft(float delta)
+    {
+        float x = transform.localPosition.x - delta;
+        float y = transform.localPosition.y;
+        transform.localPosition = new Vector2(x, y);
+    }
+
+    public void MoveRight(float delta)
+    {
+        float x = transform.localPosition.x + delta;
+        float y = transform.localPosition.y;
+        transform.localPosition = new Vector2(x, y);
+    }
+
+    public void MoveToCenterY()
+    {
+        float x = transform.localPosition.x;
+        transform.localPosition = new Vector2(x, 0);
+    }
+
+    public void MoveToCenterX()
+    {
+        float y = transform.localPosition.y;
+        transform.localPosition = new Vector2(0, y);
+    }
+
+
 
     public void SetParent(MMNode parent)
     {
@@ -125,6 +160,11 @@ public class MMNode : MonoBehaviour
         this.transform.localPosition = Vector3.zero;
     }
 
+
+    public void SetActive(bool flag)
+    {
+        this.gameObject.SetActive(flag);
+    }
 
 
     public void EnterState(MMNodeState s)

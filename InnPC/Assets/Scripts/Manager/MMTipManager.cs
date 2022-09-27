@@ -18,7 +18,7 @@ public class MMTipManager : MMNode
     public void CreateTip(string s)
     {
         GameObject obj = Resources.Load("Prefabs/MMTipNode") as GameObject;
-        MMNodeTip tip = Instantiate(obj).GetComponent<MMNodeTip>();
+        MMTipNode tip = Instantiate(obj).GetComponent<MMTipNode>();
         tip.Show(s);
     }
 

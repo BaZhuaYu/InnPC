@@ -21,7 +21,7 @@ public class MMUtility : MonoBehaviour
 }
 
 
-public enum MMBattleState
+public enum MMBattlePhase
 {
     Begin,
     PlayerRound,
@@ -52,6 +52,7 @@ public enum MMNodeState
 
 public enum MMArea
 {
+    None,
     Single,
     Row,
     Col,
@@ -60,10 +61,29 @@ public enum MMArea
 }
 
 
-public enum MMBattleUXState
+public enum MMBattleState
 {
     Normal,
     SelectSour,
     SourMoved,
     SelectCard,
+}
+
+
+public enum MMUnitState
+{
+    Rage,
+    Normal,
+    Weak,
+    Stunned,
+    Dead
+}
+
+
+public enum MMUnitPhase
+{
+    Normal,
+    Combo,
+    Actived,
+    Stunned
 }
