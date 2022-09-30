@@ -52,7 +52,7 @@ public partial class MMUnitNode : MMNode, IPointerDownHandler, IPointerUpHandler
         {
 
         }
-        else if (MMBattleManager.instance.state == MMBattleState.SelectCard)
+        else if (MMBattleManager.instance.state == MMBattleState.SelectSkill)
         {
             if (this.group == 2)
             {
@@ -61,7 +61,7 @@ public partial class MMUnitNode : MMNode, IPointerDownHandler, IPointerUpHandler
                 //    MMBattleManager.instance.ClearTargetCell();
                 //}
                 MMBattleManager.instance.SetTarget(this);
-                MMBattleManager.instance.PlayCard();
+                MMBattleManager.instance.PlaySkill();
             }
         }
 

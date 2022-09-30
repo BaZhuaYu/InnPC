@@ -36,7 +36,7 @@ public class MMCardManager : MonoBehaviour
     {
         for (int i = 0; i < 20; i++)
         {
-            MMCard card = MMCard.Create(i % 3 + 1);
+            MMSkill card = MMSkill.Create(i % 3 + 1);
             deck.AddCard(card);
         }
     }
@@ -85,7 +85,7 @@ public class MMCardManager : MonoBehaviour
     }
 
 
-    public void ShowHandCards(List<MMCardNode> cards)
+    public void ShowHandCards(List<MMSkillNode> cards)
     {
         foreach(var card in cards)
         {
@@ -120,12 +120,12 @@ public class MMCardManager : MonoBehaviour
             }
         }
 
-        MMCardNode card = deck.cards[0];
+        MMSkillNode card = deck.cards[0];
         DrawCard(card);
     }
 
 
-    public void PlayCard(MMCardNode card)
+    public void PlayCard(MMSkillNode card)
     {
         hand.RemoveCard(card);
         used.AddCard(card);
@@ -149,7 +149,7 @@ public class MMCardManager : MonoBehaviour
 
 
 
-    public void DrawCard(MMCardNode card)
+    public void DrawCard(MMSkillNode card)
     {
         deck.RemoveCard(card);
         hand.AddCard(card);

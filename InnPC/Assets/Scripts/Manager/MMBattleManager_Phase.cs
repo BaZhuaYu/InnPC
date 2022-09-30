@@ -9,10 +9,12 @@ public partial class MMBattleManager
     {
         foreach (var unit in units1)
         {
+            unit.ConfigState();
             unit.ConfigSkill();
         }
         foreach (var unit in units2)
         {
+            unit.ConfigState();
             unit.ConfigSkill();
         }
     }
@@ -30,6 +32,8 @@ public partial class MMBattleManager
         {
             unit.tempCell = unit.cell;
         }
+
+        AutoSelectSour();
     }
 
 
@@ -46,14 +50,32 @@ public partial class MMBattleManager
             if (unit.unitState == MMUnitState.Stunned)
             {
                 unit.IncreaspAPToMax();
+            }
+            else
+            {
+                //unit.IncreaseAP();
+            }
+
+            if(unit.unitState != MMUnitState.Rage)
+            {
                 unit.EnterState(MMUnitState.Normal);
             }
+            
         }
+
         foreach (var unit in units2)
         {
             if (unit.unitState == MMUnitState.Stunned)
             {
                 unit.IncreaspAPToMax();
+            }
+            else
+            {
+                unit.IncreaseAP();
+            }
+
+            if (unit.unitState != MMUnitState.Rage)
+            {
                 unit.EnterState(MMUnitState.Normal);
             }
         }

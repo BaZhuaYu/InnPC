@@ -7,7 +7,7 @@ public class MMCardHand : MMNode
 
     public static MMCardHand instance;
 
-    public List<MMCardNode> cards;
+    public List<MMSkillNode> cards;
     
 
     private void Awake()
@@ -21,13 +21,13 @@ public class MMCardHand : MMNode
         float offset = 10f;
         for(int i = 0; i < cards.Count; i++)
         {
-            MMCardNode card = cards[i];
+            MMSkillNode card = cards[i];
             card.MoveToLeft((offset + card.FindWidth())* (float)i);
         }
     }
 
     
-    public void AddCard(MMCardNode card)
+    public void AddCard(MMSkillNode card)
     {
         this.cards.Add(card);
         card.SetParent(this);
@@ -35,7 +35,7 @@ public class MMCardHand : MMNode
         UpdateUI();
     }
 
-    public void RemoveCard(MMCardNode card)
+    public void RemoveCard(MMSkillNode card)
     {
         this.cards.Remove(card);
     }
@@ -49,7 +49,7 @@ public class MMCardHand : MMNode
 
     public void Clear()
     {
-        this.cards = new List<MMCardNode>();
+        this.cards = new List<MMSkillNode>();
     }
     
 }

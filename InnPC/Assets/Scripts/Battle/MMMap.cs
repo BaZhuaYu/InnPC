@@ -75,7 +75,10 @@ public partial class MMMap : MMNode
 
     public void Clear()
     {
-
+        foreach(var cell in cells)
+        {
+            cell.Clear();
+        }
     }
 
 

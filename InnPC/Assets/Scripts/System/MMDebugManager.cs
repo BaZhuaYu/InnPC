@@ -18,7 +18,7 @@ public class MMDebugManager : MonoBehaviour
     }
 
 
-    public static void FatalError(string s = "")
+    public static void FatalError(string s)
     {
 
     }

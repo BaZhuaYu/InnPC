@@ -18,43 +18,70 @@ public partial class MMBattleManager : MonoBehaviour
         {
             SetSource(unit);
             yield return new WaitForSeconds(1f);
+            
+            unit.ConfigSkill();
 
-            SetTarget(FindRandomUnit1());
-            yield return new WaitForSeconds(1f);
+            if(unit.skill == 1)
+            {
+                SetSelectSkill(unit.cards[0]);
+                yield return new WaitForSeconds(1f);
 
-            targetUnit.DecreaseHP(3);
-            yield return new WaitForSeconds(1f);
+                SetTarget(FindRandomUnit1());
+                yield return new WaitForSeconds(1f);
 
-            ClearSource();
-            ClearTarget();
+                PlaySkill();
+            }
+            else if (unit.skill == 2)
+            {
+                SetSelectSkill(unit.cards[1]);
+                yield return new WaitForSeconds(1f);
+
+                SetTarget(FindRandomUnit1());
+                yield return new WaitForSeconds(1f);
+
+                PlaySkill();
+            }
+            else
+            {
+                EnterState(MMBattleState.SourDone);
+            }
         }
 
         yield return new WaitForSeconds(1.0f);
         OnClickMainButton();
-        yield return new WaitForSeconds(1.0f);
-        OnClickMainButton();
+        //yield return new WaitForSeconds(1.0f);
+        //OnClickMainButton();
     }
 
-
-    public MMUnitNode FindFrontUnit2()
+    
+    public MMUnitNode FindFrontUnitOfGroup(int group)
     {
-        MMUnitNode ret = units2[0];
-        foreach (var unit in units2)
+        MMUnitNode ret;
+
+        if (group == 1)
         {
-            if (ret.cell.row < unit.cell.row)
+            ret = units1[0];
+            foreach (var unit in units1)
             {
-                ret = unit;
-            }
-            else if (ret.cell.row == unit.cell.row)
-            {
-                if (ret.cell.col < unit.cell.col)
+                if (unit.cell.id < ret.cell.row)
                 {
                     ret = unit;
                 }
             }
         }
+        else
+        {
+            ret = units2[0];
+            foreach (var unit in units2)
+            {
+                if (unit.cell.id > ret.cell.row)
+                {
+                    ret = unit;
+                }
+            }
+        }
+        
         return ret;
-
     }
 
 

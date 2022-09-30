@@ -79,6 +79,41 @@ public partial class MMMap : MMNode
         return ret;
     }
 
+
+    public List<MMCell> FindCellsInColLessThanCell(MMCell cell, int dis)
+    {
+        List<MMCell> ret = new List<MMCell>();
+
+        for (int i = 1; i <= dis; i++)
+        {
+            MMCell c = this.FindCellInXY(cell.row - i, cell.col);
+            if (c != null)
+            {
+                ret.Add(c);
+            }
+        }
+
+        return ret;
+    }
+
+    public List<MMCell> FindCellsInColGreaterThanCell(MMCell cell, int dis)
+    {
+        List<MMCell> ret = new List<MMCell>();
+
+        for (int i = 1; i <= dis; i++)
+        {
+            MMCell c = this.FindCellInXY(cell.row + i, cell.col);
+            if (c != null)
+            {
+                ret.Add(c);
+            }
+        }
+
+        return ret;
+    }
+
+
+
     public List<MMCell> FindCellsInRows(List<int> rows)
     {
         List<MMCell> ret = new List<MMCell>();

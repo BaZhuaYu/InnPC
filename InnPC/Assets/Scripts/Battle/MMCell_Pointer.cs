@@ -32,7 +32,7 @@ public partial class MMCell : MMNode, IPointerEnterHandler, IPointerExitHandler,
                 MMBattleManager.instance.EnterState(MMBattleState.SourMoved);
             }
         }
-        else if (MMBattleManager.instance.state == MMBattleState.SelectCard)
+        else if (MMBattleManager.instance.state == MMBattleState.SelectSkill)
         {
             if(this.nodeUnit == null)
             {

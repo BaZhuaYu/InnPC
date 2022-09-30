@@ -45,7 +45,15 @@ public class MMNode : MonoBehaviour
     }
 
 
+    public virtual void OpenUI()
+    {
+        this.gameObject.SetActive(true);
+    }
 
+    public virtual void CloseUI()
+    {
+        this.gameObject.SetActive(false);
+    }
 
 
 
@@ -55,7 +63,7 @@ public class MMNode : MonoBehaviour
         MMNode ret = transform.parent.GetComponent<MMNode>();
         if (ret == null)
         {
-            MMDebugManager.FatalError();
+            MMDebugManager.FatalError("");
         }
 
         return ret;
@@ -152,7 +160,11 @@ public class MMNode : MonoBehaviour
         transform.localPosition = new Vector2(0, y);
     }
 
-
+    public void SetSize(Vector2 size)
+    {
+        GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size.x);
+        GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size.y);
+    }
 
     public void SetParent(MMNode parent)
     {

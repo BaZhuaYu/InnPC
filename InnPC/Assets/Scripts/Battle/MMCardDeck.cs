@@ -7,7 +7,7 @@ public class MMCardDeck : MMNode
 {
     public static MMCardDeck instance;
 
-    public List<MMCardNode> cards;
+    public List<MMSkillNode> cards;
 
     public Text textCount;
     
@@ -35,9 +35,9 @@ public class MMCardDeck : MMNode
 
     
 
-    public void AddCard(MMCard card)
+    public void AddCard(MMSkill card)
     {
-        MMCardNode node = MMCardNode.Create();
+        MMSkillNode node = MMSkillNode.Create();
         node.Accept(card);
         AddCard(node);
     }
@@ -56,14 +56,14 @@ public class MMCardDeck : MMNode
 
 
 
-    public void AddCard(MMCardNode card)
+    public void AddCard(MMSkillNode card)
     {
         this.cards.Add(card);
         card.SetParent(this);
         card.gameObject.SetActive(false);
     }
 
-    public void RemoveCard(MMCardNode card)
+    public void RemoveCard(MMSkillNode card)
     {
         this.cards.Remove(card);
     }
@@ -71,11 +71,11 @@ public class MMCardDeck : MMNode
 
     public void Shuffle()
     {
-        List<MMCardNode> ret = new List<MMCardNode>();
+        List<MMSkillNode> ret = new List<MMSkillNode>();
 
         for(int i = 0; i < cards.Count; i++)
         {
-            MMCardNode card = cards[i];
+            MMSkillNode card = cards[i];
             this.cards.Remove(card);
             int index = Random.Range(0, cards.Count - 1);
             cards.Insert(index, card);

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public partial class MMCard
+public partial class MMSkill
 {
     public string key;
     public int id;
@@ -13,12 +13,17 @@ public partial class MMCard
 
     public int value;
     public MMArea area;
+    public List<MMSkillKeyWord> keywords;
+
+    public int tempATK;
+    public int tempDEF;
 
     
 
-    public static MMCard Create(int id)
+    public static MMSkill Create(int id)
     {
-        MMCard ret = new MMCard();
+        MMSkill ret = new MMSkill();
+        ret.keywords = new List<MMSkillKeyWord>();
         ret.LoadData(id);
         return ret;
     }

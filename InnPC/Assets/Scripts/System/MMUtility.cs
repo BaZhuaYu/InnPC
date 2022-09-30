@@ -21,6 +21,7 @@ public class MMUtility : MonoBehaviour
 }
 
 
+
 public enum MMBattlePhase
 {
     Begin,
@@ -61,12 +62,19 @@ public enum MMArea
 }
 
 
+public enum MMSkillKeyWord
+{
+    Ultimate
+}
+
+
 public enum MMBattleState
 {
     Normal,
     SelectSour,
     SourMoved,
-    SelectCard,
+    SelectSkill,
+    SourDone
 }
 
 
@@ -86,4 +94,13 @@ public enum MMUnitPhase
     Combo,
     Actived,
     Stunned
+}
+
+
+public enum MMRewardType
+{
+    Gold,
+    Unit,
+    Skill,
+    Card
 }

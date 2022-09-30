@@ -27,7 +27,7 @@ public partial class MMUnit
 
     public int attackRange;
 
-    public List<int> cards;
+    public List<int> skills;
     
 
     public static MMUnit Create(int id)

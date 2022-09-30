@@ -7,6 +7,11 @@ public partial class MMUnitNode : MMNode
     
     public void EnterState(MMUnitState s)
     {
+        if(this.unitState == MMUnitState.Dead)
+        {
+            return;
+        }
+        
         if(unitState == s)
         {
             return;
@@ -20,24 +25,18 @@ public partial class MMUnitNode : MMNode
         switch (unitState)
         {
             case MMUnitState.Rage:
-                HandleSkill1();
-                this.iconRage.SetActive(true);
                 break;
             case MMUnitState.Normal:
-                HandleSkill2();
                 break;
             case MMUnitState.Weak:
-                HandleSkill2();
-                this.iconWeak.SetActive(true);
                 break;
             case MMUnitState.Stunned:
-                HandleSkill0();
                 break;
             case MMUnitState.Dead:
-                HandleSkill0();
-                break;
+                return;
         }
 
+        UpdateUI();
     }
 
 

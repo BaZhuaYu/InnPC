@@ -8,19 +8,46 @@ public partial class MMUnitNode : MMNode
     public int skill = 0;
 
 
+    public void ConfigState()
+    {
+        if(this.maxAP == 0)
+        {
+            EnterState(MMUnitState.Weak);
+        }
+        else
+        {
+            if(this.ap == this.maxAP)
+            {
+                EnterState(MMUnitState.Rage);
+            }
+            else if(this.ap > 0)
+            {
+                if(this.unitState != MMUnitState.Rage)
+                {
+                    EnterState(MMUnitState.Normal);
+                }
+            }
+            else
+            {
+                EnterState(MMUnitState.Weak);
+            }
+        }
+    }
+
+
     public void ConfigSkill()
     {
         if (this.unitState == MMUnitState.Rage)
         {
-            skill = 2;
+            skill = 1;
         }
         else if (this.unitState == MMUnitState.Normal)
         {
-            skill = 1;
+            skill = 2;
         }
         else if (this.unitState == MMUnitState.Weak)
         {
-            skill = 1;
+            skill = 2;
         }
         else if (this.unitState == MMUnitState.Stunned)
         {
@@ -32,63 +59,5 @@ public partial class MMUnitNode : MMNode
         }
     }
 
-
-    public void HandleAction()
-    {
-        if (skill == 1)
-        {
-            HandleSkill1();
-            if(this.unitState == MMUnitState.Rage)
-            {
-                EnterState(MMUnitState.Normal);
-            }
-        }
-        else if (skill == 2)
-        {
-            HandleSkill2();
-        }
-        else if (skill == 2)
-        {
-            HandleSkill3();
-        }
-        else if (skill == 2)
-        {
-            HandleSkill4();
-        }
-        else
-        {
-            HandleSkill0();
-        }
-    }
-
-
-
-
-    public void HandleSkill0()
-    {
-
-    }
-
-    public void HandleSkill1()
-    {
-
-    }
-
-    public void HandleSkill2()
-    {
-
-    }
-
-    public void HandleSkill3()
-    {
-        this.IncreaseAP();
-    }
-
-    public void HandleSkill4()
-    {
-        for (int i = 0; i < maxAP; i++)
-        {
-            IncreaseAP();
-        }
-    }
+    
 }

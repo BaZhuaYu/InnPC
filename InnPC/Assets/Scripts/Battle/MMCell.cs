@@ -28,8 +28,7 @@ public partial class MMCell : MMNode
         EnterHighlight(MMNodeHighlight.Normal);
     }
 
-
-
+    
     public void AcceptUnit(MMUnit unit)
     {
         MMUnitNode node = MMUnitNode.Create();
@@ -58,8 +57,11 @@ public partial class MMCell : MMNode
 
     public void Clear()
     {
-        this.nodeUnit.cell = null;
-        this.nodeUnit = null;
+        if(this.nodeUnit != null)
+        {
+            this.nodeUnit.cell = null;
+            this.nodeUnit = null;
+        }   
     }
 
 

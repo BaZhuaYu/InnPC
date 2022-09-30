@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class MMCardUsed : MMNode
 {
-    public List<MMCardNode> cards;
+    public List<MMSkillNode> cards;
 
     public Text textCount;
 
@@ -32,14 +32,14 @@ public class MMCardUsed : MMNode
     }
 
 
-    public void AddCard(MMCardNode card)
+    public void AddCard(MMSkillNode card)
     {
         this.cards.Add(card);
         card.SetParent(this);
         card.gameObject.SetActive(false);
     }
 
-    public void RemoveCard(MMCardNode card)
+    public void RemoveCard(MMSkillNode card)
     {
         this.cards.Remove(card);
     }
@@ -54,6 +54,6 @@ public class MMCardUsed : MMNode
     public void Clear()
     {
         this.cards.Clear();
-        this.cards = new List<MMCardNode>();
+        this.cards = new List<MMSkillNode>();
     }
 }

@@ -2,8 +2,80 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public partial class MMCard
+public partial class MMSkill
 {
+
+    public static List<MMSkill> skills;
+
+    public static List<MMSkill> FindAll()
+    {
+        if (skills == null)
+        {
+            skills = new List<MMSkill>();
+            List<int> ids = new List<int>() { 1, 2, 3 };
+            foreach (var id in ids)
+            {
+                MMSkill skill = MMSkill.Create(id);
+                skills.Add(skill);
+            }
+        }
+
+        return skills;
+    }
+
+
+    public static MMSkill FindRandomOne()
+    {
+        skills = FindAll();
+        if (skills.Count == 0)
+        {
+            MMDebugManager.FatalError("FindRandom: ");
+        }
+
+        return skills[Random.Range(0, skills.Count)];
+    }
+
+
+    public static List<MMSkill> FindRandomCount(int count)
+    {
+        skills = FindAll();
+        if (count > skills.Count)
+        {
+            MMDebugManager.FatalError("FindRandom: " + count);
+        }
+
+        List<MMSkill> ret = new List<MMSkill>();
+
+        while (ret.Count < count)
+        {
+            MMSkill skill = FindRandomOne();
+            if (CheckHasOne(ret, skill) == false)
+            {
+                ret.Add(skill);
+            }
+        }
+
+        return ret;
+    }
+
+
+    public static bool CheckHasOne(List<MMSkill> units, MMSkill one)
+    {
+        foreach (var unit in units)
+        {
+            if (unit.id == one.id)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+
+
+
 
     public void LoadData(int id)
     {
@@ -63,6 +135,7 @@ public partial class MMCard
             this.displayName = "黑白判官";
             this.displayNote = "对目标造成2点伤害，恢复2点生命";
             area = MMArea.Single;
+            this.keywords.Add(MMSkillKeyWord.Ultimate);
         }
         else if (id == 10201)
         {
@@ -71,6 +144,7 @@ public partial class MMCard
             this.displayName = "临危不乱";
             this.displayNote = "对横排目标造成伤害";
             area = MMArea.Beside;
+            this.keywords.Add(MMSkillKeyWord.Ultimate);
         }
         else if (id == 10301)
         {
@@ -79,6 +153,7 @@ public partial class MMCard
             this.displayName = "恩赐劫";
             this.displayNote = "对目标以及身后单位造成伤害";
             area = MMArea.Behind;
+            this.keywords.Add(MMSkillKeyWord.Ultimate);
         }
         else if (id == 10401)
         {
@@ -87,6 +162,16 @@ public partial class MMCard
             this.displayName = "母辛后裔";
             this.displayNote = "召唤鹿小九";
             area = MMArea.None;
+            this.keywords.Add(MMSkillKeyWord.Ultimate);
+        }
+        else if (id == 15101)
+        {
+            this.id = id;
+            this.key = "Card_" + id;
+            this.displayName = "稻草人";
+            this.displayNote = "无";
+            area = MMArea.None;
+            this.keywords.Add(MMSkillKeyWord.Ultimate);
         }
         else if (id == 16101)
         {
@@ -95,6 +180,9 @@ public partial class MMCard
             this.displayName = "丐帮弟子";
             this.displayNote = "近战攻击";
             area = MMArea.Single;
+
+            tempATK = 2;
+            tempDEF = 2;
         }
         else
         {
