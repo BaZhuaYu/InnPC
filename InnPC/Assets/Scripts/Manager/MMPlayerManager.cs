@@ -65,5 +65,18 @@ public class MMPlayerManager : MonoBehaviour
     }
 
 
+    public bool HasUnit(MMUnit unit)
+    {
+        foreach(var temp in units)
+        {
+            if(unit.id == temp.id)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 
 }

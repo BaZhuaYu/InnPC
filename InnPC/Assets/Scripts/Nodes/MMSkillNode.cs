@@ -65,6 +65,7 @@ public partial class MMSkillNode : MMNode
         this.textName.text = "";
         this.textNote.text = "";
         this.name = "Card_0";
+        this.gameObject.transform.SetParent(null);
     }
     
 

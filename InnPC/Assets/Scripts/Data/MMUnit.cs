@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public partial class MMUnit
 {
 
@@ -37,5 +38,8 @@ public partial class MMUnit
         ret.LoadData();
         return ret;
     }
+
+
+    
 
 }

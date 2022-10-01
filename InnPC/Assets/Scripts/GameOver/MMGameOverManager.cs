@@ -20,6 +20,7 @@ public class MMGameOverManager : MMNode
     public Button mainButton;
     public Text mainText;
     
+    public List<MMButton> buttons;
 
     void Start()
     {
@@ -70,11 +71,12 @@ public class MMGameOverManager : MMNode
             mainText.text = "重新战斗";
         }
 
-
+        buttons = new List<MMButton>();
         float offset = 200f;
         foreach(var reward in rewards)
         {
             MMButton button = MMButton.Create();
+            buttons.Add(button);
             button.SetParent(this);
             button.MoveUp(offset);
             offset -= 100;
@@ -105,6 +107,16 @@ public class MMGameOverManager : MMNode
     }
 
 
+    public void Clear()
+    {
+        foreach(var button in buttons)
+        {
+            button.RemoveFromParent();
+        }
+    }
+
+
+
     public void OnClickMainButton()
     {
         if (isWin)
@@ -123,6 +135,7 @@ public class MMGameOverManager : MMNode
     public void OnClickRewardGoldButton()
     {
         RemoveReward(MMRewardType.Gold);
+        Clear();
     }
 
     public void OnClickRewardUnitButton()
@@ -130,6 +143,7 @@ public class MMGameOverManager : MMNode
         MMRewardPanel.instance.OpenUI();
         MMRewardPanel.instance.LoadUnitPanel();
         RemoveReward(MMRewardType.Unit);
+        Clear();
     }
 
     public void OnClickRewardSkillButton()
@@ -137,11 +151,13 @@ public class MMGameOverManager : MMNode
         MMRewardPanel.instance.OpenUI();
         MMRewardPanel.instance.LoadSkillPanel();
         RemoveReward(MMRewardType.Skill);
+        Clear();
     }
 
     public void OnClickRewardCardButton()
     {
         RemoveReward(MMRewardType.Card);
+        Clear();
     }
 
 

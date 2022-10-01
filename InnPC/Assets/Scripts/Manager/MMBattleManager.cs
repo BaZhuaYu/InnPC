@@ -38,16 +38,17 @@ public partial class MMBattleManager : MonoBehaviour
 
     private void Start()
     {
-        level = 0;
-
-        LoadLevel();
-        EnterPhase(MMBattlePhase.Begin);
         main.onClick.AddListener(OnClickMainButton);
+
+        EnterPhase(MMBattlePhase.Begin);
     }
 
+    
 
     public void LoadLevel()
     {
+        level = 0;
+
         if (this.level == 0)
         {
             LoadLevel0();
@@ -102,6 +103,7 @@ public partial class MMBattleManager : MonoBehaviour
 
     public void EnterState(MMBattleState state)
     {
+
         this.state = state;
 
         MMDebugManager.Log(this.state + "");

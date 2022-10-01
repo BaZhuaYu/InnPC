@@ -9,10 +9,20 @@ public class MMRewardUnit : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         Debug.Log("MMRewardUnit");
+        
         MMUnitNode node = GetComponent<MMUnitNode>();
         MMUnit unit = node.unit;
+
+
+        if(MMPlayerManager.instance.HasUnit(unit))
+        {
+            MMTipManager.instance.CreateTip("已拥有该角色");
+            return;
+        }
+
+
         MMPlayerManager.instance.units.Add(unit);
-        Destroy(this.gameObject);
+        node.SetActive(false);
 
         MMRewardPanel.instance.CloseUI();
         MMGameOverManager.instance.UpdateUI();

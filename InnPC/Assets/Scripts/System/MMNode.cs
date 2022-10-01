@@ -69,6 +69,11 @@ public class MMNode : MonoBehaviour
         return ret;
     }
 
+    public void RemoveFromParent()
+    {
+        this.gameObject.transform.SetParent(null);
+    }
+
 
     public float FindWidth()
     {

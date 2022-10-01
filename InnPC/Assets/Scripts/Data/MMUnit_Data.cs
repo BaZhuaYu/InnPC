@@ -5,42 +5,41 @@ using UnityEngine;
 public partial class MMUnit
 {
 
-    public static List<MMUnit> units;
+    public static List<MMUnit> all;
 
 
     public static List<MMUnit> FindAll()
     {
-        if(units == null)
+        if(all == null)
         {
-            units = new List<MMUnit>();
+            all = new List<MMUnit>();
             List<int> ids = new List<int>() { 10100, 10200, 10300, 10400, 10500, 10600, 10700, 10800 };
             foreach(var id in ids)
             {
                 MMUnit unit = MMUnit.Create(id);
-                units.Add(unit);
+                all.Add(unit);
             }
         }
 
-        return units;
+        return all;
     }
 
 
     public static MMUnit FindRandomOne()
     {
-        units = FindAll();
-        if(units.Count == 0)
+        if (all.Count == 0)
         {
-            MMDebugManager.FatalError("FindRandom: ");
+            MMDebugManager.FatalError("FindRandom: All is Empty");
         }
 
-        return units[Random.Range(0, units.Count)];
+        return all[Random.Range(0, all.Count)];
     }
-
+    
 
     public static List<MMUnit> FindRandomCount(int count)
     {
-        units = FindAll();
-        if (count > units.Count)
+        all = FindAll();
+        if (count > all.Count)
         {
             MMDebugManager.FatalError("FindRandom: " + count);
         }
@@ -50,7 +49,7 @@ public partial class MMUnit
         while(ret.Count < count)
         {
             MMUnit unit = FindRandomOne();
-            if(CheckHasOne(ret, unit) == false)
+            if(CheckListHasOne(ret, unit) == false)
             {
                 ret.Add(unit);
             }
@@ -58,9 +57,9 @@ public partial class MMUnit
 
         return ret;
     }
+    
 
-
-    public static bool CheckHasOne(List<MMUnit> units, MMUnit one)
+    public static bool CheckListHasOne(List<MMUnit> units, MMUnit one)
     {
         foreach(var unit in units)
         {
@@ -72,6 +71,9 @@ public partial class MMUnit
 
         return false;
     }
+
+
+
 
 
 
