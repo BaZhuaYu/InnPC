@@ -64,7 +64,7 @@ public partial class MMUnitNode : MMNode
 
     public void Reload()
     {
-        LoadImage("Units/" + unit.key);
+        LoadImage("Units/" + unit.key + "QS");
 
         this.id = unit.id;
         this.key = unit.key;

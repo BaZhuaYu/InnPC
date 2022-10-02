@@ -12,15 +12,20 @@ public partial class MMUnit
     {
         if(all == null)
         {
-            all = new List<MMUnit>();
-            List<int> ids = new List<int>() { 10100, 10200, 10300, 10400, 10500, 10600, 10700, 10800 };
-            foreach(var id in ids)
+            //all = new List<MMUnit>();
+            //List<int> ids = new List<int>() { 10100, 10200, 10300, 10400, 10500, 10600, 10700, 10800 };
+            //foreach(var id in ids)
+            //{
+            //    MMUnit unit = MMUnit.Create(id);
+            //    all.Add(unit);
+            //}
+
+            foreach (var temp in MMUnitData.allValues.Values)
             {
-                MMUnit unit = MMUnit.Create(id);
-                all.Add(unit);
+                all.Add(MMUnit.CreateFromString(temp));
             }
         }
-
+        
         return all;
     }
 

@@ -6,15 +6,7 @@ using UnityEngine.UI;
 public class MMTipNode : MMNode
 {
     public Text note;
-
-
-
-    public void ShowBattleLog(string s)
-    {
-        Debug.Log(s);
-    }
-
-
+    
 
     public void Show(string s)
     {   

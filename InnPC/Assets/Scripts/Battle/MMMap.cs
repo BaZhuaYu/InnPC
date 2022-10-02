@@ -18,11 +18,15 @@ public partial class MMMap : MMNode
     {
         instance = this;
 
-        row = 9;
+        row = 7;
         col = 4;
         cells = new List<MMCell>();
         LoadData();
         LoadCells();
+
+
+        SetSize(new Vector2(row * 100, col * 100));
+        MoveToCenterX();
     }
 
     

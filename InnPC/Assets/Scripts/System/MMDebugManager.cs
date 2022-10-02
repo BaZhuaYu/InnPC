@@ -5,13 +5,6 @@ using UnityEngine;
 public class MMDebugManager : MonoBehaviour
 {
 
-    public static MMDebugManager instance;
-
-    private void Awake()
-    {
-        instance = this;
-    }
-
     public static void Log(string s)
     {
         Debug.Log(s);
@@ -20,20 +13,8 @@ public class MMDebugManager : MonoBehaviour
 
     public static void FatalError(string s)
     {
-
+        Debug.LogError(s);
     }
 
-
-    public void OnClick() {
-        ShowSourceTarget();
-    }
-        
-
-
-    public void ShowSourceTarget()
-    {
-        
-    }
-
-
+    
 }

@@ -38,6 +38,8 @@ public partial class MMBattleManager : MonoBehaviour
 
     private void Start()
     {
+        level = 0;
+
         main.onClick.AddListener(OnClickMainButton);
 
         EnterPhase(MMBattlePhase.Begin);
@@ -47,8 +49,7 @@ public partial class MMBattleManager : MonoBehaviour
 
     public void LoadLevel()
     {
-        level = 0;
-
+        
         if (this.level == 0)
         {
             LoadLevel0();
@@ -303,24 +304,20 @@ public partial class MMBattleManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                Debug.Log("Input.GetKey(KeyCode.Alpha1");
                 SetSelectSkill(MMCardManager.instance.hand.cards[0]);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                Debug.Log("Input.GetKey(KeyCode.Alpha2");
                 SetSelectSkill(MMCardManager.instance.hand.cards[1]);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha3))
             {
-                Debug.Log("Input.GetKey(KeyCode.Alpha3");
                 SetSelectSkill(MMCardManager.instance.hand.cards[2]);
             }
-            else if (Input.GetKeyDown(KeyCode.Alpha4))
-            {
-                Debug.Log("Input.GetKey(KeyCode.Alpha4");
-                SetSelectSkill(MMCardManager.instance.hand.cards[3]);
-            }
+            //else if (Input.GetKeyDown(KeyCode.Alpha4))
+            //{
+            //    SetSelectSkill(MMCardManager.instance.hand.cards[3]);
+            //}
         }
         
     }

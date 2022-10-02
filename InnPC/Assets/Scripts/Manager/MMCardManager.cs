@@ -28,17 +28,16 @@ public class MMCardManager : MonoBehaviour
         used = MMCardUsed.instance;
 
         LoadDeck();
-
     }
 
 
     public void LoadDeck()
     {
-        for (int i = 0; i < 20; i++)
-        {
-            MMSkill card = MMSkill.Create(i % 3 + 1);
-            deck.AddCard(card);
-        }
+        //for (int i = 0; i < 20; i++)
+        //{
+        //    MMSkill card = MMSkill.Create(i % 3 + 1);
+        //    deck.AddCard(card);
+        //}
     }
 
     

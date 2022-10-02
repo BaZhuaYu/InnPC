@@ -11,13 +11,19 @@ public partial class MMSkill
     {
         if (skills == null)
         {
-            skills = new List<MMSkill>();
-            List<int> ids = new List<int>() { 1, 2, 3 };
-            foreach (var id in ids)
-            {
-                MMSkill skill = MMSkill.Create(id);
-                skills.Add(skill);
-            }
+
+            //MMSkill skill2 = JsonUtility.FromJson<MMSkill>(s);
+            //Debug.Log(skill2.id);
+
+            return new List<MMSkill>();
+
+            //skills = new List<MMSkill>();
+            //List<int> ids = new List<int>() { 1, 2, 3 };
+            //foreach (var id in ids)
+            //{
+            //    MMSkill skill = MMSkill.Create(id);
+            //    skills.Add(skill);
+            //}
         }
 
         return skills;

@@ -180,14 +180,17 @@ public partial class MMBattleManager : MonoBehaviour
 
     public List<MMUnitNode> FindSortedUnits1()
     {
+        int row = MMMap.instance.row;
+        int col = MMMap.instance.col;
+
         List<MMUnitNode> ret = new List<MMUnitNode>();
 
         List<int> indexes = new List<int>();
-        for (int i = 8; i >= 0; i--)
+        for (int i = row - 1; i >= 0; i--)
         {
-            for (int j = 0; j < 4; j++)
+            for (int j = 0; j < col; j++)
             {
-                indexes.Add(i * 4 + j);
+                indexes.Add(i * col + j);
             }
         }
 
@@ -206,14 +209,17 @@ public partial class MMBattleManager : MonoBehaviour
 
     public List<MMUnitNode> FindSortedUnits2()
     {
+        int row = MMMap.instance.row;
+        int col = MMMap.instance.col;
+
         List<MMUnitNode> ret = new List<MMUnitNode>();
 
         List<int> indexes = new List<int>();
-        for (int i = 0; i <= 8; i++)
+        for (int i = 0; i <= row - 1; i++)
         {
-            for (int j = 0; j < 4; j++)
+            for (int j = 0; j < col; j++)
             {
-                indexes.Add(i * 4 + j);
+                indexes.Add(i * col + j);
             }
         }
 
