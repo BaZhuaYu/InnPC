@@ -13,7 +13,7 @@ public partial class MMSkillNode : MMNode, IBeginDragHandler, IDragHandler, IEnd
     
     public void OnPointerClick(PointerEventData eventData)
     {
-        MMBattleState state = MMBattleManager.instance.state;
+        MMBattleState state = MMBattleManager.Instance.state;
 
         if ((state == MMBattleState.SelectSour || state == MMBattleState.SourMoved) == false)
         {
@@ -24,7 +24,7 @@ public partial class MMSkillNode : MMNode, IBeginDragHandler, IDragHandler, IEnd
 
         if (this.keywords.Contains(MMSkillKeyWord.Ultimate))
         {
-            if (MMBattleManager.instance.sourceUnit.unitState != MMUnitState.Rage)
+            if (MMBattleManager.Instance.sourceUnit.unitState != MMUnitState.Rage)
             {
                 MMTipManager.instance.CreateTip("不能使用这张卡牌：需要Rage状态");
                 return;
@@ -32,7 +32,7 @@ public partial class MMSkillNode : MMNode, IBeginDragHandler, IDragHandler, IEnd
         }
 
 
-        MMBattleManager.instance.SetSelectSkill(this);
+        MMBattleManager.Instance.SetSelectingSkill(this);
         
     }
 

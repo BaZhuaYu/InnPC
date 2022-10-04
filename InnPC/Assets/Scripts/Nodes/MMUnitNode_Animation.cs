@@ -19,18 +19,18 @@ public partial class MMUnitNode : MMNode
         MMUnitNode unit;
         if(this.group == 1)
         {
-            unit = MMBattleManager.instance.FindFrontUnitOfGroup(2);
+            unit = MMBattleManager.Instance.FindFrontUnitOfGroup(2);
         }
         else
         {
-            unit = MMBattleManager.instance.FindFrontUnitOfGroup(1);
+            unit = MMBattleManager.Instance.FindFrontUnitOfGroup(1);
         }
         
         for (int i = this.cell.row; i < unit.cell.row; i++)
         {
             rows.Add(i);
         }
-        return MMMap.instance.FindCellsInRows(rows);
+        return MMMap.Instance.FindCellsInRows(rows);
 
         //return MMMap.instance.FindCellsWithinDistance(this.cell, this.spd);
     }
@@ -42,7 +42,7 @@ public partial class MMUnitNode : MMNode
         List<MMCell> cells = FindMoveCells();
         foreach (var cell in cells)
         {
-            cell.EnterState(MMNodeState.Blue);
+            cell.HandleState(MMNodeState.Blue);
         }
     }
 
@@ -52,7 +52,7 @@ public partial class MMUnitNode : MMNode
         List<MMCell> cells = FindMoveCells();
         foreach (var cell in cells)
         {
-            cell.EnterState(MMNodeState.Normal);
+            cell.HandleState(MMNodeState.Normal);
         }
     }
 
@@ -66,11 +66,11 @@ public partial class MMUnitNode : MMNode
 
         if (this.group == 1)
         {
-            return MMMap.instance.FindCellsInColGreaterThanCell(this.cell, this.attackRange);
+            return MMMap.Instance.FindCellsInColGreaterThanCell(this.cell, this.attackRange);
         }
         else
         {
-            return MMMap.instance.FindCellsInColLessThanCell(this.cell, this.attackRange);
+            return MMMap.Instance.FindCellsInColLessThanCell(this.cell, this.attackRange);
         }
     }
 
@@ -79,12 +79,12 @@ public partial class MMUnitNode : MMNode
         List<MMCell> cells = FindAttackCells();
         foreach (var cell in cells)
         {
-            cell.EnterState(MMNodeState.Blue);
-            if (cell.nodeUnit != null)
+            cell.HandleState(MMNodeState.Blue);
+            if (cell.unitNode != null)
             {
-                if (cell.nodeUnit.group != this.group)
+                if (cell.unitNode.group != this.group)
                 {
-                    cell.EnterHighlight(MMNodeHighlight.Red);
+                    cell.HandleHighlight(MMNodeHighlight.Red);
                 }
                 //else
                 //{
@@ -100,10 +100,10 @@ public partial class MMUnitNode : MMNode
         List<MMCell> cells = FindAttackCells();
         foreach (var cell in cells)
         {
-            cell.EnterState(MMNodeState.Normal);
-            if (cell.nodeUnit != null)
+            cell.HandleState(MMNodeState.Normal);
+            if (cell.unitNode != null)
             {
-                cell.EnterHighlight(MMNodeHighlight.Normal);
+                cell.HandleHighlight(MMNodeHighlight.Normal);
             }
         }
     }

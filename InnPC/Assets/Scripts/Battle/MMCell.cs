@@ -7,15 +7,14 @@ using UnityEngine.EventSystems;
 
 public partial class MMCell : MMNode
 {
-    public MMUnitNode nodeUnit;
+    public MMUnitNode unitNode;
+
     public int id;
 
     public int row;
     public int col;
 
     public Text labelID;
-
-    public MMNodeHighlight highlight;
 
 
     private void Awake()
@@ -25,7 +24,8 @@ public partial class MMCell : MMNode
 
     private void Start()
     {
-        EnterHighlight(MMNodeHighlight.Normal);
+        HandleState(MMNodeState.Normal);
+        HandleHighlight(MMNodeHighlight.Normal);
     }
 
     
@@ -44,7 +44,7 @@ public partial class MMCell : MMNode
             node.cell.Clear();
         }
 
-        this.nodeUnit = node;
+        this.unitNode = node;
         node.cell = this;
         node.SetParent(this);
     }
@@ -57,10 +57,10 @@ public partial class MMCell : MMNode
 
     public void Clear()
     {
-        if(this.nodeUnit != null)
+        if(this.unitNode != null)
         {
-            this.nodeUnit.cell = null;
-            this.nodeUnit = null;
+            this.unitNode.cell = null;
+            this.unitNode = null;
         }   
     }
 
@@ -76,38 +76,7 @@ public partial class MMCell : MMNode
         return cell;
     }
 
-    public void EnterHighlight(MMNodeHighlight s)
-    {
-        this.highlight = s;
-        switch (s)
-        {
-            case MMNodeHighlight.Normal:
-                GetComponent<Outline>().effectColor = new Color(0f, 0f, 0f, 0f);
-                this.transform.SetSiblingIndex(0);
-                break;
-            case MMNodeHighlight.Red:
-                GetComponent<Outline>().effectColor = new Color(1f, 0f, 0f, 1f);
-                this.transform.SetSiblingIndex(100);
-                break;
-            case MMNodeHighlight.Yellow:
-                GetComponent<Outline>().effectColor = new Color(1f, 0.5f, 0f, 1f);
-                this.transform.SetSiblingIndex(100);
-                break;
-            case MMNodeHighlight.Blue:
-                GetComponent<Outline>().effectColor = new Color(0f, 0f, 1f, 1f);
-                this.transform.SetSiblingIndex(100);
-                break;
-            case MMNodeHighlight.Green:
-                GetComponent<Outline>().effectColor = new Color(0f, 1f, 0f, 1f);
-                this.transform.SetSiblingIndex(100);
-                break;
-        }
-
-    }
-
-
-
-
+    
 
     public int FindDistanceFromCell(MMCell cell)
     {

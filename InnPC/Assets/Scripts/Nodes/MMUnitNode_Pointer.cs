@@ -10,13 +10,13 @@ public partial class MMUnitNode : MMNode, IPointerDownHandler, IPointerUpHandler
     public void OnPointerClick(PointerEventData eventData)
     {
 
-        if(MMBattleManager.instance.phase == MMBattlePhase.Begin)
+        if(MMBattleManager.Instance.phase == MMBattlePhase.Begin)
         {
             return;
         }
 
 
-        if (MMBattleManager.instance.state == MMBattleState.Normal)
+        if (MMBattleManager.Instance.state == MMBattleState.Normal)
         {
             if (this.group == 1)
             {
@@ -24,20 +24,20 @@ public partial class MMUnitNode : MMNode, IPointerDownHandler, IPointerUpHandler
                 //{
                 //    MMBattleManager.instance.ClearSourceCell();
                 //}
-                MMBattleManager.instance.SetSource(this);
-                MMBattleManager.instance.EnterState(MMBattleState.SelectSour);
+                MMBattleManager.Instance.SetSource(this);
+                MMBattleManager.Instance.EnterState(MMBattleState.SelectSour);
             }
         }
-        else if (MMBattleManager.instance.state == MMBattleState.SelectSour)
+        else if (MMBattleManager.Instance.state == MMBattleState.SelectSour)
         {
             if (this.group == 1)
             {
-                if (MMBattleManager.instance.sourceUnit != null)
+                if (MMBattleManager.Instance.sourceUnit != null)
                 {
-                    MMBattleManager.instance.ClearSource();
+                    MMBattleManager.Instance.ClearSource();
                 }
-                MMBattleManager.instance.SetSource(this);
-                MMBattleManager.instance.EnterState(MMBattleState.SelectSour);
+                MMBattleManager.Instance.SetSource(this);
+                MMBattleManager.Instance.EnterState(MMBattleState.SelectSour);
             }
             //else if (this.group == 2)
             //{
@@ -48,11 +48,11 @@ public partial class MMUnitNode : MMNode, IPointerDownHandler, IPointerUpHandler
             //    MMBattleManager.instance.SetTargetCell(this.cell);
             //}
         }
-        else if (MMBattleManager.instance.state == MMBattleState.SourMoved)
+        else if (MMBattleManager.Instance.state == MMBattleState.SourMoved)
         {
 
         }
-        else if (MMBattleManager.instance.state == MMBattleState.SelectSkill)
+        else if (MMBattleManager.Instance.state == MMBattleState.SelectSkill)
         {
             if (this.group == 2)
             {
@@ -60,8 +60,8 @@ public partial class MMUnitNode : MMNode, IPointerDownHandler, IPointerUpHandler
                 //{
                 //    MMBattleManager.instance.ClearTargetCell();
                 //}
-                MMBattleManager.instance.SetTarget(this);
-                MMBattleManager.instance.PlaySkill();
+                MMBattleManager.Instance.SetTarget(this);
+                MMBattleManager.Instance.PlaySkill();
             }
         }
 
@@ -93,9 +93,9 @@ public partial class MMUnitNode : MMNode, IPointerDownHandler, IPointerUpHandler
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        if(MMBattleManager.instance.phase == MMBattlePhase.Begin)
+        if(MMBattleManager.Instance.phase == MMBattlePhase.Begin)
         {
-            MMCell cell = MMMap.instance.FindCellAtPosition(eventData.position);
+            MMCell cell = MMMap.Instance.FindCellAtPosition(eventData.position);
             cell.Accept(this);
         }
     }
@@ -108,7 +108,7 @@ public partial class MMUnitNode : MMNode, IPointerDownHandler, IPointerUpHandler
             return false;
         }
 
-        if(target.nodeUnit != null)
+        if(target.unitNode != null)
         {
             return false;
         }

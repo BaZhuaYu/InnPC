@@ -5,7 +5,9 @@ using UnityEngine.UI;
 
 public partial class MMSkillNode : MMNode
 {
-    
+
+    public MMUnitNode unit;
+
     public MMSkill skill;
 
     public MMNode icon;
@@ -23,23 +25,23 @@ public partial class MMSkillNode : MMNode
     public int tempATK;
     public int tempDEF;
 
+    public MMSkillState state;
+
+
+    public bool isReady;
+
 
 
     public void Accept(MMSkill skill)
     {
+
+        if(this.skill != null)
+        {
+            Clear();
+        }
+
         this.skill = skill;
 
-        this.id = skill.id;
-        this.key = skill.key;
-        this.area = skill.area;
-
-        this.tempATK = skill.tempATK;
-        this.tempDEF = skill.tempDEF;
-
-        this.keywords = skill.keywords;
-
-        this.name = "Card_" + id;
-        
         Reload();
     } 
 
@@ -52,10 +54,20 @@ public partial class MMSkillNode : MMNode
             return;
         }
 
+        this.id = skill.id;
+        this.key = skill.key;
+        this.area = skill.area;
 
-        this.textName.text = skill.displayName;
-        this.textNote.text = skill.displayNote;
-        icon.LoadImage("Cards/" + key);
+        this.tempATK = skill.tempATK;
+        this.tempDEF = skill.tempDEF;
+
+        this.keywords = skill.keywords;
+
+        this.name = "Card_" + id;
+
+        ConfigReady();
+        UpdateUI();
+
     }
 
 
@@ -67,7 +79,49 @@ public partial class MMSkillNode : MMNode
         this.name = "Card_0";
         this.gameObject.transform.SetParent(null);
     }
-    
+
+
+    private void UpdateUI()
+    {
+        this.textName.text = skill.displayName;
+        this.textNote.text = skill.displayNote;
+        icon.LoadImage("Cards/" + key);
+    }
+
+
+    private void ConfigReady()
+    {
+        if(this.keywords.Contains(MMSkillKeyWord.Ultimate))
+        {
+            if(this.unit.unitState == MMUnitState.Rage)
+            {
+                isReady = true;
+            }
+            else
+            {
+                isReady = false;
+            }
+        }
+        else
+        {
+            isReady = true;
+        }
+    }
+
+
+    public void EnterState(MMSkillState s)
+    {
+        this.state = s;
+
+    }
+
+
+
+
+
+
+
+
 
     public static MMSkillNode Create()
     {
@@ -76,5 +130,20 @@ public partial class MMSkillNode : MMNode
         return obj.GetComponent<MMSkillNode>();
     }
 
-    
+
+    public static MMSkillNode Create(MMSkill skill)
+    {
+        MMSkillNode node = MMSkillNode.Create();
+        node.Accept(skill);
+        return node;
+    }
+
+
+    public static MMSkillNode Create(int id)
+    {
+        MMSkill skill = MMSkill.Create(id);
+        return Create(skill);
+    }
+
+
 }

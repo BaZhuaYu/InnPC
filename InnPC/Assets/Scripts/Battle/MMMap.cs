@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public partial class MMMap : MMNode
 {
-    public static MMMap instance;
+    public static MMMap Instance;
     
     public int row;
 
@@ -16,17 +16,18 @@ public partial class MMMap : MMNode
 
     private void Awake()
     {
-        instance = this;
+        Instance = this;
 
         row = 7;
         col = 4;
         cells = new List<MMCell>();
+
         LoadData();
         LoadCells();
 
 
         SetSize(new Vector2(row * 100, col * 100));
-        MoveToCenterX();
+        MoveToCenter();
     }
 
     
@@ -42,15 +43,15 @@ public partial class MMMap : MMNode
             
             cell.name = "Cell" + i;
             cell.id = i;
-            cell.row = i / 4;
-            cell.col = i % 4;
+            cell.row = i / col;
+            cell.col = i % col;
             cell.SetParent(this);
             cells.Add(cell);
             
             cell.labelID.text = "" + i;
             
-            cell.MoveToLeft((float)(cell.row) * cell.FindWidth());
-            cell.MoveToTop((float)(cell.col) * cell.FindHeight());
+            cell.MoveToParentLeftOffset((float)(cell.row) * cell.FindWidth());
+            cell.MoveToParentTopOffset((float)(cell.col) * cell.FindHeight());
             
         }
     }

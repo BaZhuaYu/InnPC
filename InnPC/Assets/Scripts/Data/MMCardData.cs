@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MMLevelData : MonoBehaviour
+public class MMCardData : MonoBehaviour
 {
 
     public static Dictionary<string, int> allKeys;

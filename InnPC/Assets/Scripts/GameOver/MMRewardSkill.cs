@@ -20,7 +20,7 @@ public class MMRewardSkill : MonoBehaviour, IPointerClickHandler
         }
 
         MMRewardPanel.instance.CloseUI();
-        MMGameOverManager.instance.UpdateUI();
+        MMGameOverManager.Instance.UpdateUI();
     }
 
     

@@ -8,6 +8,7 @@ public class MMRewardPanel : MMNode
     public static MMRewardPanel instance;
 
     List<MMUnitNode> unitNodes;
+    List<MMCardNode> cardNodes;
     MMSkillNode skillNode;
 
 
@@ -70,7 +71,7 @@ public class MMRewardPanel : MMNode
         skillNode.SetParent(this);
         skillNode.MoveUp(50);
         
-        List<MMUnitNode> nodes = MMPlayerManager.instance.CreateAllUnitNodes();
+        List<MMUnitNode> nodes = MMPlayerManager.Instance.CreateAllUnitNodes();
         foreach (var unit in nodes)
         {
             unit.SetParent(this);

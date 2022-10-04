@@ -8,8 +8,7 @@ public partial class MMBattleManager : MonoBehaviour
     public void SetSource(MMUnitNode unit)
     {
         sourceUnit = unit;
-        sourceUnit.cell.EnterHighlight(MMNodeHighlight.Green);
-        MMCardManager.instance.ShowHandCards(sourceUnit.cards);
+        sourceUnit.cell.HandleHighlight(MMNodeHighlight.Green);
         sourceUnit.ShowMoveCells();
         sourceUnit.ShowAttackCells();
     }
@@ -18,27 +17,27 @@ public partial class MMBattleManager : MonoBehaviour
     public void SetTarget(MMUnitNode unit)
     {
         targetUnit = unit;
-        targetUnit.cell.EnterHighlight(MMNodeHighlight.Red);
+        targetUnit.cell.HandleHighlight(MMNodeHighlight.Red);
 
         sourceUnit.HideMoveCells();
         sourceUnit.HideAttackCells();
-        sourceUnit.cell.EnterHighlight(MMNodeHighlight.Green);
+        sourceUnit.cell.HandleHighlight(MMNodeHighlight.Green);
     }
 
 
-    public void SetSelectSkill(MMSkillNode card)
+    public void SetSelectingSkill(MMSkillNode skill)
     {
-        this.selectedSkill = card;
-        card.MoveUp(20);
+        this.selectingSkill = skill;
+        skill.MoveUp(20);
         sourceUnit.ShowAttackCells();
 
-        if (card.area == MMArea.None)
+        if (skill.area == MMArea.None)
         {
-            MMBattleManager.instance.PlaySkill();
+            MMBattleManager.Instance.PlaySkill();
         }
         else
         {
-            MMBattleManager.instance.EnterState(MMBattleState.SelectSkill);
+            MMBattleManager.Instance.EnterState(MMBattleState.SelectSkill);
         }
     }
 
@@ -50,11 +49,10 @@ public partial class MMBattleManager : MonoBehaviour
         {
             return;
         }
-        sourceUnit.cell.EnterState(MMNodeState.Normal);
-        sourceUnit.cell.EnterHighlight(MMNodeHighlight.Normal);
+        sourceUnit.cell.HandleState(MMNodeState.Normal);
+        sourceUnit.cell.HandleHighlight(MMNodeHighlight.Normal);
         sourceUnit.HideMoveCells();
         sourceUnit.HideAttackCells();
-        MMCardManager.instance.HideHandCards();
         sourceUnit = null;
     }
 
@@ -65,8 +63,8 @@ public partial class MMBattleManager : MonoBehaviour
         {
             return;
         }
-        targetUnit.cell.EnterState(MMNodeState.Normal);
-        targetUnit.cell.EnterHighlight(MMNodeHighlight.Normal);
+        targetUnit.cell.HandleState(MMNodeState.Normal);
+        targetUnit.cell.HandleHighlight(MMNodeHighlight.Normal);
         targetUnit = null;
     }
 
@@ -117,11 +115,11 @@ public partial class MMBattleManager : MonoBehaviour
 
         if (CheckGameLost())
         {
-            MMGameOverManager.instance.SetLost();
+            MMGameOverManager.Instance.SetLost();
         }
         else if (CheckGameWin())
         {
-            MMGameOverManager.instance.SetWin();
+            MMGameOverManager.Instance.SetWin();
         }
         else
         {
@@ -180,8 +178,8 @@ public partial class MMBattleManager : MonoBehaviour
 
     public List<MMUnitNode> FindSortedUnits1()
     {
-        int row = MMMap.instance.row;
-        int col = MMMap.instance.col;
+        int row = MMMap.Instance.row;
+        int col = MMMap.Instance.col;
 
         List<MMUnitNode> ret = new List<MMUnitNode>();
 
@@ -196,10 +194,10 @@ public partial class MMBattleManager : MonoBehaviour
 
         foreach (var index in indexes)
         {
-            MMCell cell = MMMap.instance.FindCellOfIndex(index);
-            if (cell.nodeUnit != null && cell.nodeUnit.group == 1)
+            MMCell cell = MMMap.Instance.FindCellOfIndex(index);
+            if (cell.unitNode != null && cell.unitNode.group == 1)
             {
-                ret.Add(cell.nodeUnit);
+                ret.Add(cell.unitNode);
             }
         }
 
@@ -209,8 +207,8 @@ public partial class MMBattleManager : MonoBehaviour
 
     public List<MMUnitNode> FindSortedUnits2()
     {
-        int row = MMMap.instance.row;
-        int col = MMMap.instance.col;
+        int row = MMMap.Instance.row;
+        int col = MMMap.Instance.col;
 
         List<MMUnitNode> ret = new List<MMUnitNode>();
 
@@ -226,10 +224,10 @@ public partial class MMBattleManager : MonoBehaviour
 
         foreach (var index in indexes)
         {
-            MMCell cell = MMMap.instance.FindCellOfIndex(index);
-            if (cell.nodeUnit != null && cell.nodeUnit.group == 2)
+            MMCell cell = MMMap.Instance.FindCellOfIndex(index);
+            if (cell.unitNode != null && cell.unitNode.group == 2)
             {
-                ret.Add(cell.nodeUnit);
+                ret.Add(cell.unitNode);
             }
         }
 

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public partial class MMBattleManager : MonoBehaviour
 {
 
-    public static MMBattleManager instance;
+    public static MMBattleManager Instance;
 
     public MMNode background;
     public Button main;
@@ -22,7 +22,7 @@ public partial class MMBattleManager : MonoBehaviour
     public List<MMUnitNode> units2;
 
 
-    public MMSkillNode selectedSkill;
+    public MMSkillNode selectingSkill;
     public MMUnitNode sourceUnit;
     public MMUnitNode targetUnit;
     
@@ -32,7 +32,7 @@ public partial class MMBattleManager : MonoBehaviour
 
     private void Awake()
     {
-        instance = this;
+        Instance = this;
     }
 
 
@@ -46,7 +46,6 @@ public partial class MMBattleManager : MonoBehaviour
     }
 
     
-
     public void LoadLevel()
     {
         
@@ -69,12 +68,19 @@ public partial class MMBattleManager : MonoBehaviour
     }
 
 
+    public void LoadCard()
+    {
 
-    
+    }
+
+
+
+
+
 
     public void PlaySkill()
     {
-        if (this.selectedSkill == null)
+        if (this.selectingSkill == null)
         {
             MMTipManager.instance.CreateTip("没有选择技能");
             return;
@@ -86,16 +92,17 @@ public partial class MMBattleManager : MonoBehaviour
             return;
         }
 
-        if (selectedSkill.area == MMArea.None)
+        if (selectingSkill.area == MMArea.None)
         {
-            selectedSkill.ExecuteEffect(sourceUnit.cell, null);
+            selectingSkill.ExecuteEffect(sourceUnit.cell, null);
         }
         else
         {
-            selectedSkill.ExecuteEffect(sourceUnit.cell, targetUnit.cell);
+            selectingSkill.ExecuteEffect(sourceUnit.cell, targetUnit.cell);
         }
 
-        MMCardManager.instance.PlayCard(selectedSkill);
+        //MMCardPanel.Instance.PlayCard(selectedSkill);
+        MMSkillPanel.Instance.PlaySkill(selectingSkill);
         OnSourActionDone();
     }
 
@@ -200,7 +207,9 @@ public partial class MMBattleManager : MonoBehaviour
 
     public void DrawSkill(int count)
     {
-        MMCardManager.instance.Draw(count);
+        //MMCardPanel.Instance.Draw(count);
+
+        MMSkillPanel.Instance.Accept(sourceUnit.cards);
     }
 
 
@@ -208,7 +217,7 @@ public partial class MMBattleManager : MonoBehaviour
     {
         //this.sourceUnit.HideAttackCells();
         //selectedCard.MoveDown(20);
-        this.selectedSkill = null;
+        this.selectingSkill = null;
         //EnterUXState(MMBattleUXState.SourMoved);
     }
 
@@ -231,7 +240,7 @@ public partial class MMBattleManager : MonoBehaviour
         
         units1.Clear();
         units2.Clear();
-        MMMap.instance.Clear();
+        MMMap.Instance.Clear();
         
     }
 
@@ -304,15 +313,15 @@ public partial class MMBattleManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                SetSelectSkill(MMCardManager.instance.hand.cards[0]);
+                SetSelectingSkill(sourceUnit.cards[0]);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                SetSelectSkill(MMCardManager.instance.hand.cards[1]);
+                SetSelectingSkill(sourceUnit.cards[1]);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha3))
             {
-                SetSelectSkill(MMCardManager.instance.hand.cards[2]);
+                SetSelectingSkill(sourceUnit.cards[2]);
             }
             //else if (Input.GetKeyDown(KeyCode.Alpha4))
             //{
@@ -325,13 +334,13 @@ public partial class MMBattleManager : MonoBehaviour
 
     private void UpdateUI()
     {
-        foreach (var cell in MMMap.instance.cells)
+        foreach (var cell in MMMap.Instance.cells)
         {
-            cell.EnterState(MMNodeState.Normal);
-            cell.EnterHighlight(MMNodeHighlight.Normal);
+            cell.HandleState(MMNodeState.Normal);
+            cell.HandleHighlight(MMNodeHighlight.Normal);
         }
 
-        foreach (var card in MMCardManager.instance.hand.cards)
+        foreach (var card in MMCardPanel.Instance.hand)
         {
             card.MoveToCenterY();
         }
@@ -341,16 +350,16 @@ public partial class MMBattleManager : MonoBehaviour
             case MMBattleState.Normal:
                 break;
             case MMBattleState.SelectSour:
-                sourceUnit.cell.EnterHighlight(MMNodeHighlight.Green);
+                sourceUnit.cell.HandleHighlight(MMNodeHighlight.Green);
                 sourceUnit.ShowMoveCells();
                 break;
             case MMBattleState.SourMoved:
-                sourceUnit.cell.EnterHighlight(MMNodeHighlight.Green);
+                sourceUnit.cell.HandleHighlight(MMNodeHighlight.Green);
                 break;
             case MMBattleState.SelectSkill:
-                sourceUnit.cell.EnterHighlight(MMNodeHighlight.Green);
+                sourceUnit.cell.HandleHighlight(MMNodeHighlight.Green);
                 sourceUnit.ShowAttackCells();
-                selectedSkill.MoveUp(20);
+                selectingSkill.MoveUp(20);
                 break;
         }
 

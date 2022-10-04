@@ -14,18 +14,18 @@ public class MMRewardUnit : MonoBehaviour, IPointerClickHandler
         MMUnit unit = node.unit;
 
 
-        if(MMPlayerManager.instance.HasUnit(unit))
+        if(MMPlayerManager.Instance.HasUnit(unit))
         {
             MMTipManager.instance.CreateTip("已拥有该角色");
             return;
         }
 
 
-        MMPlayerManager.instance.units.Add(unit);
+        MMPlayerManager.Instance.units.Add(unit);
         node.SetActive(false);
 
         MMRewardPanel.instance.CloseUI();
-        MMGameOverManager.instance.UpdateUI();
+        MMGameOverManager.Instance.UpdateUI();
     }
 
 }

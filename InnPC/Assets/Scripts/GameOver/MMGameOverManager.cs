@@ -5,11 +5,11 @@ using UnityEngine.UI;
 
 public class MMGameOverManager : MMNode
 {
-    public static MMGameOverManager instance;
+    public static MMGameOverManager Instance;
 
     private void Awake()
     {
-        instance = this;
+        Instance = this;
     }
 
     public List<MMRewardType> rewards;
@@ -121,13 +121,13 @@ public class MMGameOverManager : MMNode
     {
         if (isWin)
         {
-            MMBattleManager.instance.level += 1;
+            MMBattleManager.Instance.level += 1;
         }
 
         this.SetActive(false);
-        MMBattleManager.instance.Clear();
-        MMBattleManager.instance.LoadLevel();
-        MMBattleManager.instance.EnterPhase(MMBattlePhase.Begin);
+        MMBattleManager.Instance.Clear();
+        MMBattleManager.Instance.LoadLevel();
+        MMBattleManager.Instance.EnterPhase(MMBattlePhase.Begin);
     }
 
 

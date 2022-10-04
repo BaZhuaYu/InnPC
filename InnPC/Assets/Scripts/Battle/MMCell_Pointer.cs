@@ -24,17 +24,17 @@ public partial class MMCell : MMNode, IPointerEnterHandler, IPointerExitHandler,
         //}
 
 
-        if (MMBattleManager.instance.state == MMBattleState.SelectSour)
+        if (MMBattleManager.Instance.state == MMBattleState.SelectSour)
         {
-            if (MMBattleManager.instance.sourceUnit.FindMoveCells().Contains(this))
+            if (MMBattleManager.Instance.sourceUnit.FindMoveCells().Contains(this))
             {
-                this.Accept(MMBattleManager.instance.sourceUnit);
-                MMBattleManager.instance.EnterState(MMBattleState.SourMoved);
+                this.Accept(MMBattleManager.Instance.sourceUnit);
+                MMBattleManager.Instance.EnterState(MMBattleState.SourMoved);
             }
         }
-        else if (MMBattleManager.instance.state == MMBattleState.SelectSkill)
+        else if (MMBattleManager.Instance.state == MMBattleState.SelectSkill)
         {
-            if(this.nodeUnit == null)
+            if(this.unitNode == null)
             {
                 MMTipManager.instance.CreateTip("没有目标");
             }

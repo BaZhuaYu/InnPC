@@ -124,7 +124,7 @@ public partial class MMBattleManager : MonoBehaviour
             node1.group = 1;
             node1.Accept(unit1);
             units1.Add(node1);
-            MMMap.instance.FindCellOfIndex(i).Accept(node1);
+            MMMap.Instance.FindCellOfIndex(i).Accept(node1);
         }
 
         for (int i = 0; i < 4; i++)
@@ -134,7 +134,7 @@ public partial class MMBattleManager : MonoBehaviour
             node2.group = 2;
             node2.Accept(unit2);
             units2.Add(node2);
-            MMMap.instance.FindCellOfIndex(32 + i).Accept(node2);
+            MMMap.Instance.FindCellOfIndex(32 + i).Accept(node2);
         }
     }
 
@@ -144,13 +144,13 @@ public partial class MMBattleManager : MonoBehaviour
     public void LoadPlayerUnits()
     {
         int i = 1;
-        foreach (var unit in MMPlayerManager.instance.units)
+        foreach (var unit in MMPlayerManager.Instance.units)
         {
             MMUnitNode node = MMUnitNode.Create();
             node.group = 1;
             node.Accept(unit);
             units1.Add(node);
-            MMMap.instance.FindCellOfIndex(i++).Accept(node);
+            MMMap.Instance.FindCellOfIndex(i++).Accept(node);
         }
     }
 
@@ -162,7 +162,7 @@ public partial class MMBattleManager : MonoBehaviour
         node2.group = 2;
         node2.Accept(unit2);
         units2.Add(node2);
-        MMMap.instance.FindCellOfIndex(pos).Accept(node2);
+        MMMap.Instance.FindCellOfIndex(pos).Accept(node2);
     }
 
     

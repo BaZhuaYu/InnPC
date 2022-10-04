@@ -5,24 +5,27 @@ using UnityEngine;
 public class MMPlayerManager : MonoBehaviour
 {
 
-    public static MMPlayerManager instance;
+    public static MMPlayerManager Instance;
 
     private void Awake()
     {
-        instance = this;
+        Instance = this;
     }
 
 
     public List<MMUnit> units;
 
-    public List<MMSkill> cards;
+    public List<MMSkill> skills;
+
+    public List<MMCard> cards;
 
 
-    
+
     void Start()
     {
         units = new List<MMUnit>();
-        cards = new List<MMSkill>();
+        skills = new List<MMSkill>();
+        cards = new List<MMCard>();
 
         LoadData();
     }

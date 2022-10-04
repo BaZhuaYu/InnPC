@@ -27,7 +27,16 @@ public partial class MMSkill
     public int tempATK;
     public int tempDEF;
 
-    
+
+
+
+    public void ExecuteEffect()
+    {
+
+    }
+
+
+
 
     public static MMSkill Create(int id)
     {
@@ -37,12 +46,6 @@ public partial class MMSkill
         }
 
         return CreateFromString(MMSkillData.allValues[id]);
-    }
-
-    
-    public void ExecuteEffect()
-    {
-
     }
 
 
@@ -68,7 +71,6 @@ public partial class MMSkill
         return skill;
     }
 
-    
 
     public static MMArea DeserializeArea(string s)
     {

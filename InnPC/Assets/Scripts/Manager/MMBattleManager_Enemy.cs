@@ -23,7 +23,7 @@ public partial class MMBattleManager : MonoBehaviour
 
             if(unit.skill == 1)
             {
-                SetSelectSkill(unit.cards[0]);
+                SetSelectingSkill(unit.cards[0]);
                 yield return new WaitForSeconds(1f);
 
                 SetTarget(FindRandomUnit1());
@@ -33,7 +33,7 @@ public partial class MMBattleManager : MonoBehaviour
             }
             else if (unit.skill == 2)
             {
-                SetSelectSkill(unit.cards[1]);
+                SetSelectingSkill(unit.cards[1]);
                 yield return new WaitForSeconds(1f);
 
                 SetTarget(FindRandomUnit1());

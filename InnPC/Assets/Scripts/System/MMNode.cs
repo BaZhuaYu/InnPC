@@ -5,23 +5,23 @@ using UnityEngine.UI;
 
 public class MMNode : MonoBehaviour
 {
-    public MMNodeState state;
+
+    public MMNodeState nodeState;
+
+    public MMNodeHighlight nodeHighlight;
 
 
     private void Start()
     {
-        //EnterState(MMNodeState.Normal);
-        state = MMNodeState.Normal;
+        nodeHighlight = MMNodeHighlight.Normal;
+        nodeState = MMNodeState.Normal;
     }
-
 
 
     public void LoadImage(string key)
     {
         GetComponent<Image>().sprite = Resources.Load<Sprite>(key);
     }
-
-
 
 
     public bool ContainsPoints(Vector2 pos)
@@ -87,7 +87,7 @@ public class MMNode : MonoBehaviour
     }
 
 
-    public void MoveToLeft(float offset = 0f)
+    public void MoveToParentLeftOffset(float offset = 0f)
     {
         MMNode parent = FindParent();
 
@@ -96,7 +96,7 @@ public class MMNode : MonoBehaviour
         transform.localPosition = new Vector2(x, y);
     }
 
-    public void MoveToRight(float offset = 0f)
+    public void MoveToParentRightOffset(float offset = 0f)
     {
         MMNode parent = FindParent();
 
@@ -105,7 +105,7 @@ public class MMNode : MonoBehaviour
         transform.localPosition = new Vector2(x, y);
     }
     
-    public void MoveToBottom(float offset = 0f)
+    public void MoveToParentBottomOffset(float offset = 0f)
     {
         MMNode parent = FindParent();
 
@@ -115,7 +115,7 @@ public class MMNode : MonoBehaviour
     }
 
 
-    public void MoveToTop(float offset = 0f)
+    public void MoveToParentTopOffset(float offset = 0f)
     {
         MMNode parent = FindParent();
 
@@ -153,6 +153,11 @@ public class MMNode : MonoBehaviour
         transform.localPosition = new Vector2(x, y);
     }
 
+    public void MoveToCenter()
+    {
+        transform.localPosition = new Vector2(0, 0);
+    }
+
     public void MoveToCenterY()
     {
         float x = transform.localPosition.x;
@@ -184,9 +189,9 @@ public class MMNode : MonoBehaviour
     }
 
 
-    public void EnterState(MMNodeState s)
+    public void HandleState(MMNodeState s)
     {
-        this.state = s;
+        this.nodeState = s;
         switch (s)
         {
             case MMNodeState.Normal:
@@ -209,7 +214,34 @@ public class MMNode : MonoBehaviour
     }
 
 
+    public void HandleHighlight(MMNodeHighlight s)
+    {
+        this.nodeHighlight = s;
+        switch (s)
+        {
+            case MMNodeHighlight.Normal:
+                GetComponent<Outline>().effectColor = new Color(0f, 0f, 0f, 0f);
+                this.transform.SetSiblingIndex(0);
+                break;
+            case MMNodeHighlight.Red:
+                GetComponent<Outline>().effectColor = new Color(1f, 0f, 0f, 1f);
+                this.transform.SetSiblingIndex(100);
+                break;
+            case MMNodeHighlight.Yellow:
+                GetComponent<Outline>().effectColor = new Color(1f, 0.5f, 0f, 1f);
+                this.transform.SetSiblingIndex(100);
+                break;
+            case MMNodeHighlight.Blue:
+                GetComponent<Outline>().effectColor = new Color(0f, 0f, 1f, 1f);
+                this.transform.SetSiblingIndex(100);
+                break;
+            case MMNodeHighlight.Green:
+                GetComponent<Outline>().effectColor = new Color(0f, 1f, 0f, 1f);
+                this.transform.SetSiblingIndex(100);
+                break;
+        }
 
-    
+    }
+
 
 }

@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class MMUtility : MonoBehaviour
 {
     
-
     public static Text CreateText(string name)
     {
         GameObject obj = new GameObject(name);
@@ -16,9 +15,37 @@ public class MMUtility : MonoBehaviour
         return ret;
     }
 
-    
-    
+
+    public static bool CheckListHasOne<T>(List<T> all, T one)
+    {
+        //foreach(var temp in all)
+        //{
+        //    if (temp == one)
+        //    {
+        //        return true;
+        //    }
+        //}
+
+        return false;
+    }
+
+    public static bool CheckListNotHasOne<T>(List<T> all, T one)
+    {
+        return !CheckListHasOne<T>(all, one);
+    }
+
+
 }
+
+
+
+public enum MMSkillState
+{
+    Ready,
+    NotReady,
+    Used
+}
+
 
 
 

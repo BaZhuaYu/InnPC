@@ -5,9 +5,11 @@ using UnityEngine;
 public class MMDataManager : MonoBehaviour
 {
 
+    public static MMDataManager Instance;
 
     private void Awake()
     {
+        Instance = this;
 
         string[] skillData = MMDataManager.ReadFile("Data/InnPC - Skill");
         Debug.Log(skillData);
@@ -31,10 +33,8 @@ public class MMDataManager : MonoBehaviour
 
     public static string[] ReadFile(string f)
     {
-        Debug.Log(f);
         TextAsset textAsset = Resources.Load<TextAsset>(f);
         string[] lines = textAsset.text.Split('\n');
-        Debug.Log(textAsset.text);
         return lines;
     }
     
@@ -43,8 +43,6 @@ public class MMDataManager : MonoBehaviour
     {
         allKeys = new Dictionary<string, int>();
         allValues = new Dictionary<int, string>();
-
-        MMUnit.all = new List<MMUnit>();
 
         int index = 0;
         foreach (var s in ss)
@@ -69,4 +67,6 @@ public class MMDataManager : MonoBehaviour
             index++;
         }
     }
+
+
 }

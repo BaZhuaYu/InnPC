@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class MMDebugManager : MonoBehaviour
 {
-
     public static void Log(string s)
     {
         Debug.Log(s);
@@ -15,6 +14,4 @@ public class MMDebugManager : MonoBehaviour
     {
         Debug.LogError(s);
     }
-
-    
 }

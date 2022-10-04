@@ -13,7 +13,7 @@ public class MMTipNode : MMNode
         note.text = s;
         //this.SetParent(MMBattleManager.instance.background);
 
-        this.transform.SetParent(MMBattleManager.instance.background.transform.parent);
+        this.transform.SetParent(MMBattleManager.Instance.background.transform.parent);
 
         this.transform.localPosition = new Vector3(0, 495f, 0);
         this.transform.SetSiblingIndex(100);
