@@ -10,6 +10,8 @@ public class MMNode : MonoBehaviour
 
     public MMNodeHighlight nodeHighlight;
 
+    public string userinfo;
+
 
     private void Start()
     {

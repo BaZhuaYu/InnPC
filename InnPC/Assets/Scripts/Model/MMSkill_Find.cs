@@ -7,10 +7,27 @@ public partial class MMSkill
 
     public static List<MMSkill> all;
 
+
+    public static void Init()
+    {
+        all = new List<MMSkill>();
+        foreach (var temp in MMSkillData.allValues.Values)
+        {
+            all.Add(MMSkill.CreateFromString(temp));
+        }
+
+        if (all.Count == 0)
+        {
+            MMDebugManager.FatalError("public static List<MMSkill> FindAll()");
+        }
+    }
+    
+
     public static List<MMSkill> FindAll()
     {
         if (all == null)
         {
+            all = new List<MMSkill>();
             foreach (var temp in MMSkillData.allValues.Values)
             {
                 all.Add(MMSkill.CreateFromString(temp));

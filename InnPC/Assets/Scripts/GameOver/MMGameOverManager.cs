@@ -38,8 +38,52 @@ public class MMGameOverManager : MMNode
         isLost = false;
 
         rewards = new List<MMRewardType>();
+        rewards.Add(MMRewardType.Gold);
+        rewards.Add(MMRewardType.Item);
         rewards.Add(MMRewardType.Unit);
         rewards.Add(MMRewardType.Skill);
+
+
+        buttons = new List<MMButton>();
+        foreach (var reward in rewards)
+        {
+            MMButton button = MMButton.Create();
+            buttons.Add(button);
+            button.SetParent(this);
+            button.SetSize(new Vector2(200, 80));
+            button.userinfo = reward + "";
+            Debug.Log("Add " + reward);
+
+            switch (reward)
+            {
+                case MMRewardType.Gold:
+                    button.SetText("奖励金币");
+                    //button.userinfo = "Gold";
+                    button.AddClickAction(OnClickRewardGoldButton);
+                    break;
+                case MMRewardType.Unit:
+                    button.SetText("奖励英雄");
+                    //button.userinfo = "Unit";
+                    button.AddClickAction(OnClickRewardUnitButton);
+                    break;
+                case MMRewardType.Skill:
+                    button.SetText("奖励技能");
+                    //button.userinfo = reward.ToString();
+                    button.AddClickAction(OnClickRewardSkillButton);
+                    break;
+                case MMRewardType.Card:
+                    button.SetText("奖励卡牌");
+                    //button.userinfo = "Card";
+                    button.AddClickAction(OnClickRewardCardButton);
+                    break;
+                case MMRewardType.Item:
+                    button.SetText("奖励物品");
+                    //button.userinfo = "Item";
+                    button.AddClickAction(OnClickRewardItemButton);
+                    break;
+            }
+        }
+
 
         this.SetActive(true);
 
@@ -71,36 +115,13 @@ public class MMGameOverManager : MMNode
             mainText.text = "重新战斗";
         }
 
-        buttons = new List<MMButton>();
+        
         float offset = 200f;
-        foreach(var reward in rewards)
+        foreach(var button in buttons)
         {
-            MMButton button = MMButton.Create();
-            buttons.Add(button);
-            button.SetParent(this);
+            button.MoveToCenter();
             button.MoveUp(offset);
             offset -= 100;
-            button.SetSize(new Vector2(200, 80));
-
-            switch(reward)
-            {
-                case MMRewardType.Gold:
-                    button.SetText("奖励金币");
-                    button.AddClickAction(OnClickRewardGoldButton);
-                    break;
-                case MMRewardType.Unit:
-                    button.SetText("奖励英雄");
-                    button.AddClickAction(OnClickRewardUnitButton);
-                    break;
-                case MMRewardType.Skill:
-                    button.SetText("奖励技能");
-                    button.AddClickAction(OnClickRewardSkillButton);
-                    break;
-                case MMRewardType.Card:
-                    button.SetText("奖励卡牌");
-                    button.AddClickAction(OnClickRewardCardButton);
-                    break;
-            }
             
         }
 
@@ -135,7 +156,6 @@ public class MMGameOverManager : MMNode
     public void OnClickRewardGoldButton()
     {
         RemoveReward(MMRewardType.Gold);
-        Clear();
     }
 
     public void OnClickRewardUnitButton()
@@ -143,7 +163,6 @@ public class MMGameOverManager : MMNode
         MMRewardPanel.instance.OpenUI();
         MMRewardPanel.instance.LoadUnitPanel();
         RemoveReward(MMRewardType.Unit);
-        Clear();
     }
 
     public void OnClickRewardSkillButton()
@@ -151,14 +170,22 @@ public class MMGameOverManager : MMNode
         MMRewardPanel.instance.OpenUI();
         MMRewardPanel.instance.LoadSkillPanel();
         RemoveReward(MMRewardType.Skill);
-        Clear();
+        
     }
 
     public void OnClickRewardCardButton()
     {
         RemoveReward(MMRewardType.Card);
-        Clear();
     }
+
+
+    public void OnClickRewardItemButton()
+    {
+        MMRewardPanel.instance.OpenUI();
+        MMRewardPanel.instance.LoadItemPanel();
+        RemoveReward(MMRewardType.Item);
+    }
+
 
 
 
@@ -172,5 +199,23 @@ public class MMGameOverManager : MMNode
                 break;
             }
         }
+
+        RemoveButton(type);
+        UpdateUI();
     }
+
+    public void RemoveButton(MMRewardType type)
+    {
+        Debug.Log("RemoveButton " + type);
+        foreach (var button in buttons)
+        {
+            if (button.userinfo == type + "")
+            {
+                buttons.Remove(button);
+                Destroy(button.gameObject);
+                break;
+            }
+        }
+    }
+
 }

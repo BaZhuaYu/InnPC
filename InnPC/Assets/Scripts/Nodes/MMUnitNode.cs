@@ -40,11 +40,15 @@ public partial class MMUnitNode : MMNode
 
     public int attackRange;
 
-    public List<MMSkillNode> cards;
+    public List<MMSkillNode> skills;
 
     public MMUnitState unitState;
 
     public MMUnitPhase unitPhase;
+
+    public  List<MMBuff> buffs;
+
+
 
     public MMNode iconRage;
     public MMNode iconWeak;
@@ -58,12 +62,7 @@ public partial class MMUnitNode : MMNode
     public void Accept(MMUnit unit)
     {
         this.unit = unit;
-        Reload();
-    }
 
-
-    public void Reload()
-    {
         LoadImage("Units/" + unit.key + "QS");
 
         this.id = unit.id;
@@ -84,17 +83,25 @@ public partial class MMUnitNode : MMNode
 
         attackRange = unit.attackRange;
 
-        cards = new List<MMSkillNode>();
+        skills = new List<MMSkillNode>();
         foreach (var id in unit.skills)
         {
             MMSkill card = MMSkill.Create(id);
             MMSkillNode node = MMSkillNode.Create();
             node.Accept(card);
-            cards.Add(node);
+            skills.Add(node);
         }
-        
+
+        buffs = new List<MMBuff>();
+
         EnterState(MMUnitState.Normal);
 
+        Reload();
+    }
+
+
+    public void Reload()
+    {
         UpdateUI();
     }
 
@@ -104,6 +111,9 @@ public partial class MMUnitNode : MMNode
         this.cell.Clear();
         this.gameObject.transform.SetParent(null);
     }
+
+
+
 
 
     public void IncreaseHP(int value)
@@ -128,12 +138,18 @@ public partial class MMUnitNode : MMNode
     {
         if (ap == maxAP)
         {
-            return;
+            EnterState(MMUnitState.Rage);
         }
+        else if (ap == maxAP - 1)
+        {
+            EnterState(MMUnitState.Rage);
+        }
+        
         this.ap += 1;
 
-        if (this.ap == maxAP)
+        if (this.ap >= maxAP)
         {
+            this.ap = this.maxAP;
             EnterState(MMUnitState.Rage);
         }
 
@@ -142,17 +158,20 @@ public partial class MMUnitNode : MMNode
 
     public void DecreaseAP()
     {
-
         if (ap == 0)
         {
             EnterState(MMUnitState.Stunned);
-            return;
+        }
+        else if (ap == 1)
+        {
+            EnterState(MMUnitState.Weak);
         }
 
         this.ap -= 1;
 
-        if (this.ap == 0)
+        if (this.ap <= 0)
         {
+            this.ap = 0;
             EnterState(MMUnitState.Stunned);
         }
 

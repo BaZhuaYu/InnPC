@@ -20,6 +20,8 @@ public partial class MMSkillNode : MMNode
 
     public MMArea area;
 
+    public MMTriggerTime time;
+
     public List<MMSkillKeyWord> keywords;
 
     public int tempATK;
@@ -31,6 +33,11 @@ public partial class MMSkillNode : MMNode
     public bool isReady;
 
 
+    private void Start()
+    {
+        keywords = new List<MMSkillKeyWord>();
+    }
+
 
     public void Accept(MMSkill skill)
     {
@@ -41,7 +48,7 @@ public partial class MMSkillNode : MMNode
         }
 
         this.skill = skill;
-
+        
         Reload();
     } 
 
@@ -65,7 +72,7 @@ public partial class MMSkillNode : MMNode
 
         this.name = "Card_" + id;
 
-        ConfigReady();
+        //ConfigReady();
         UpdateUI();
 
     }

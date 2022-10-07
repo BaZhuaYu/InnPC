@@ -145,33 +145,49 @@ public partial class MMSkillNode : MMNode
     {
         target.unitNode.DecreaseHP(source.unitNode.atk + this.tempATK);
 
-        bool flag1 = (target.unitNode.unitState != MMUnitState.Stunned);
-        //敌方单位受到物理伤害减少1点行动力
-        if(target.unitNode.group == 2)
-        {
-            target.unitNode.DecreaseAP();
-        }
-
-        bool flag2 = (target.unitNode.unitState == MMUnitState.Stunned);
-
-        if(flag1 && flag2)
-        {
-            source.unitNode.EnterPhase(MMUnitPhase.Combo);
-        }
-
-
         //眩晕状态不还击
         if (target.unitNode.unitState != MMUnitState.Stunned)
         {
             int value2 = Mathf.Max(target.unitNode.atk - this.tempDEF, 0);
             source.unitNode.DecreaseHP(value2);
         }
+
+
+        //Target从Weak状态进入Stunned的状态时，Source可以连击
+        bool flag1 = (target.unitNode.unitState == MMUnitState.Weak);
+        if (target.unitNode.group == 2)
+        {
+            target.unitNode.DecreaseAP();
+        }
+        bool flag2 = (target.unitNode.unitState == MMUnitState.Stunned);
+        if (flag1 && flag2)
+        {
+            source.unitNode.EnterPhase(MMUnitPhase.Combo);
+        }
+
+
+        //bool flag1 = (target.unitNode.unitState != MMUnitState.Stunned);
+        ////敌方单位受到物理伤害减少1点行动力
+        //if(target.unitNode.group == 2)
+        //{
+        //    target.unitNode.DecreaseAP();
+        //}
+
+        //bool flag2 = (target.unitNode.unitState == MMUnitState.Stunned);
+
+        //if(flag1 && flag2)
+        //{
+        //    source.unitNode.EnterPhase(MMUnitPhase.Combo);
+        //}
+
+
+        ////眩晕状态不还击
+        //if (target.unitNode.unitState != MMUnitState.Stunned)
+        //{
+        //    int value2 = Mathf.Max(target.unitNode.atk - this.tempDEF, 0);
+        //    source.unitNode.DecreaseHP(value2);
+        //}
     }
-
-
-
-
-
 
 
 

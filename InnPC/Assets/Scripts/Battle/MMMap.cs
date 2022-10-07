@@ -22,25 +22,32 @@ public partial class MMMap : MMNode
         col = 4;
         cells = new List<MMCell>();
 
+
+        SetSize(new Vector2(row * 150, col * 150));
+
         LoadData();
         LoadCells();
-
-
-        SetSize(new Vector2(row * 100, col * 100));
-        MoveToCenter();
+        
     }
 
-    
+    private void Start()
+    {
+        MoveToCenter();
+        MoveUp(125f);
+    }
+
+
 
     public void LoadCells()
     {
-        GameObject prefabCell = Resources.Load("Prefabs/MMCell") as GameObject;
+        //GameObject prefabCell = Resources.Load("Prefabs/MMCell") as GameObject;
         for (int i = 0; i < row * col; i++)
         {
-            GameObject node = Instantiate(prefabCell);
-            MMCell cell = node.GetComponent<MMCell>();
+            //GameObject node = Instantiate(prefabCell);
+            //MMCell cell = node.GetComponent<MMCell>();
+            MMCell cell = MMCell.Create();
             //cell.gameObject.transform.SetParent(this.transform);
-            
+
             cell.name = "Cell" + i;
             cell.id = i;
             cell.row = i / col;

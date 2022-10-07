@@ -48,23 +48,8 @@ public partial class MMBattleManager : MonoBehaviour
     
     public void LoadLevel()
     {
-        
-        if (this.level == 0)
-        {
-            LoadLevel0();
-        }
-        else if(this.level==1)
-        {
-            LoadLevel1();
-        }
-        else if (this.level == 2)
-        {
-            LoadLevel2();
-        }
-        else if (this.level == 3)
-        {
-            LoadLevel3();
-        }
+        LoadPlayerUnits();
+        LoadLevel(this.level);
     }
 
 
@@ -124,6 +109,7 @@ public partial class MMBattleManager : MonoBehaviour
                 break;
             case MMBattleState.SelectSour:
                 sourceUnit.tempCell.Accept(sourceUnit);
+                DrawSkill();
                 sourceUnit.ShowMoveCells();
                 break;
             case MMBattleState.SourMoved:
@@ -188,6 +174,7 @@ public partial class MMBattleManager : MonoBehaviour
                 ShowButton("End Turn");
                 ShowTitle("PlayerRound");
                 main.enabled = true;
+                OnPhaseBegin();
                 OnPhasePlayerRound();
                 break;
             case MMBattlePhase.EnemyRound:
@@ -205,11 +192,11 @@ public partial class MMBattleManager : MonoBehaviour
     }
 
 
-    public void DrawSkill(int count)
+    public void DrawSkill()
     {
         //MMCardPanel.Instance.Draw(count);
 
-        MMSkillPanel.Instance.Accept(sourceUnit.cards);
+        MMSkillPanel.Instance.Accept(sourceUnit.skills);
     }
 
 
@@ -251,7 +238,6 @@ public partial class MMBattleManager : MonoBehaviour
 
     public void AutoSelectSour()
     {
-
         List<MMUnitNode> units = FindSortedUnits1();
         foreach (var unit in units)
         {
@@ -313,15 +299,15 @@ public partial class MMBattleManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                SetSelectingSkill(sourceUnit.cards[0]);
+                SetSelectingSkill(sourceUnit.skills[0]);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                SetSelectingSkill(sourceUnit.cards[1]);
+                SetSelectingSkill(sourceUnit.skills[1]);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha3))
             {
-                SetSelectingSkill(sourceUnit.cards[2]);
+                SetSelectingSkill(sourceUnit.skills[2]);
             }
             //else if (Input.GetKeyDown(KeyCode.Alpha4))
             //{
@@ -359,7 +345,7 @@ public partial class MMBattleManager : MonoBehaviour
             case MMBattleState.SelectSkill:
                 sourceUnit.cell.HandleHighlight(MMNodeHighlight.Green);
                 sourceUnit.ShowAttackCells();
-                selectingSkill.MoveUp(20);
+                MMSkillPanel.Instance.SetSelectedSkill(selectingSkill);
                 break;
         }
 
@@ -378,4 +364,22 @@ public partial class MMBattleManager : MonoBehaviour
     }
 
     
+
+
+
+    public void BroadCast(MMTriggerTime time)
+    {
+        foreach(var unit in units1)
+        {
+            foreach(var skill in unit.skills)
+            {
+                if(skill.time == time)
+                {
+                    skill.ExecuteEffect(sourceUnit.cell, targetUnit.cell);
+                }
+            }
+        }
+    }
+
+
 }

@@ -8,10 +8,26 @@ public partial class MMUnit
     public static List<MMUnit> all;
 
 
+    public static void Init()
+    {
+        all = new List<MMUnit>();
+        foreach (var temp in MMUnitData.allValues.Values)
+        {
+            all.Add(MMUnit.CreateFromString(temp));
+        }
+
+        if (all.Count == 0)
+        {
+            MMDebugManager.FatalError("public static List<MMUnit> FindAll()");
+        }
+    }
+
+
     public static List<MMUnit> FindAll()
     {
         if(all == null)
         {
+            all = new List<MMUnit>();
             foreach (var temp in MMUnitData.allValues.Values)
             {
                 all.Add(MMUnit.CreateFromString(temp));

@@ -44,8 +44,9 @@ public class MMCardNode : MMNode
 
     public void Reload()
     {
-        
-
+        this.textName.text = card.displayName;
+        this.textNote.text = card.displayNote;
+        icon.LoadImage("Cards/" + key);
     }
 
 

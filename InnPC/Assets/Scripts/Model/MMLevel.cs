@@ -14,6 +14,7 @@ public partial class MMLevel
 
     public Dictionary<int, MMUnit> enemies;
 
+    
 
 
     public static MMLevel Create(int id)
@@ -39,7 +40,7 @@ public partial class MMLevel
         level.key = values[keys["Key"]];
         level.displayName = values[keys["Name"]];
         level.displayNote = values[keys["Note"]];
-
+        level.enemies = new Dictionary<int, MMUnit>();
 
         int cellIndex = 0;
 
@@ -49,6 +50,7 @@ public partial class MMLevel
             int unitID = int.Parse(unitIDString);
             if(unitID != 0)
             {
+                Debug.Log("Add Emeny At: " + (cellIndex + 16));
                 level.enemies.Add(cellIndex + 16, MMUnit.Create(unitID));
             }
 
@@ -62,6 +64,7 @@ public partial class MMLevel
             int unitID = int.Parse(unitIDString);
             if (unitID != 0)
             {
+                Debug.Log("Add Emeny At: " + (cellIndex + 20));
                 level.enemies.Add(cellIndex + 20, MMUnit.Create(unitID));
             }
 
@@ -75,6 +78,7 @@ public partial class MMLevel
             int unitID = int.Parse(unitIDString);
             if (unitID != 0)
             {
+                Debug.Log("Add Emeny At: " + (cellIndex + 24));
                 level.enemies.Add(cellIndex + 24, MMUnit.Create(unitID));
             }
 

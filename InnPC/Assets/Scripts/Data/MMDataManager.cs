@@ -7,27 +7,36 @@ public class MMDataManager : MonoBehaviour
 
     public static MMDataManager Instance;
 
+
     private void Awake()
     {
         Instance = this;
 
         string[] skillData = MMDataManager.ReadFile("Data/InnPC - Skill");
-        Debug.Log(skillData);
-        MMSkillData.Deserialize(skillData);
-
         string[] unitData = MMDataManager.ReadFile("Data/InnPC - Unit");
-        Debug.Log(unitData);
-        MMUnitData.Deserialize(unitData);
+        string[] levelData = MMDataManager.ReadFile("Data/InnPC - Level");
+        string[] itemData = MMDataManager.ReadFile("Data/InnPC - Item");
 
-        //string[] levelData = MMDataManager.ReadFile("Data/InnPC - Level");
-        //Deserialize(levelData, out MMLevelData.allKeys, out MMLevelData.allValues);
 
+        Deserialize(skillData, out MMSkillData.allKeys, out MMSkillData.allValues);
+        Deserialize(unitData, out MMUnitData.allKeys, out MMUnitData.allValues);
+        Deserialize(levelData, out MMLevelData.allKeys, out MMLevelData.allValues);
+        Deserialize(itemData, out MMItem.allKeys, out MMItem.allValues);
+
+        MMSkill.all = new List<MMSkill>();
+        MMUnit.all = new List<MMUnit>();
+        //MMLevel.all = new List<MMLevel>();
+        MMItem.all = new List<MMItem>();
+        
     }
 
 
     void Start()
     {
-
+        
+        MMSkill.Init();
+        MMUnit.Init();
+        MMItem.Init();
     }
 
 
@@ -48,6 +57,12 @@ public class MMDataManager : MonoBehaviour
         foreach (var s in ss)
         {
             string[] values = s.Split(',');
+
+            //if(values[0] == null || values[0] == "")
+            //{
+            //    continue;
+            //}
+
             if (index == 0)
             {
                 for (int i = 0; i < values.Length; i++)

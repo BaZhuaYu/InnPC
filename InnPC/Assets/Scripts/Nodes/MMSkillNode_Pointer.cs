@@ -5,14 +5,15 @@ using UnityEngine.EventSystems;
 
 public partial class MMSkillNode : MMNode, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
 {
-
-    MMCell tempHighlight;
-    MMCell tempState;
-
-
+    
     
     public void OnPointerClick(PointerEventData eventData)
     {
+        if(eventData.button != PointerEventData.InputButton.Left)
+        {
+            return;
+        }
+
         MMBattleState state = MMBattleManager.Instance.state;
 
         if ((state == MMBattleState.SelectSour || state == MMBattleState.SourMoved) == false)
@@ -35,6 +36,7 @@ public partial class MMSkillNode : MMNode, IBeginDragHandler, IDragHandler, IEnd
         MMBattleManager.Instance.SetSelectingSkill(this);
         
     }
+
 
 
     public void OnPointerDown(PointerEventData eventData)

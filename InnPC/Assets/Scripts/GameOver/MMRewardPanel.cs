@@ -10,6 +10,7 @@ public class MMRewardPanel : MMNode
     List<MMUnitNode> unitNodes;
     List<MMCardNode> cardNodes;
     MMSkillNode skillNode;
+    MMItemNode itemNode;
 
 
     private void Awake()
@@ -70,9 +71,10 @@ public class MMRewardPanel : MMNode
         skillNode.Accept(skill);
         skillNode.SetParent(this);
         skillNode.MoveUp(50);
-        
-        List<MMUnitNode> nodes = MMPlayerManager.Instance.CreateAllUnitNodes();
-        foreach (var unit in nodes)
+
+        unitNodes = MMPlayerManager.Instance.CreateAllUnitNodes();
+        //List<MMUnitNode> nodes = MMPlayerManager.Instance.CreateAllUnitNodes();
+        foreach (var unit in unitNodes)
         {
             unit.SetParent(this);
             unit.MoveDown(100);
@@ -80,8 +82,8 @@ public class MMRewardPanel : MMNode
             rewardSkill.skill = skill;
         }
 
-        nodes[0].MoveLeft(200);
-        nodes[2].MoveRight(200);
+        unitNodes[0].MoveLeft(200);
+        unitNodes[2].MoveRight(200);
     }
 
 
@@ -89,6 +91,34 @@ public class MMRewardPanel : MMNode
     {
         Clear();
     }
+
+
+    public void LoadItemPanel()
+    {
+        Clear();
+
+        itemNode = MMItemNode.Create();
+        MMItem item = MMItem.FindRandomOne();
+        itemNode.Accept(item);
+        itemNode.SetParent(this);
+        itemNode.MoveUp(50);
+
+        unitNodes = MMPlayerManager.Instance.CreateAllUnitNodes();
+        foreach (var unit in unitNodes)
+        {
+            unit.SetParent(this);
+            unit.MoveDown(100);
+            MMRewardItem rewardItem = unit.gameObject.AddComponent<MMRewardItem>();
+            rewardItem.item = itemNode;
+        }
+
+        unitNodes[0].MoveLeft(200);
+        unitNodes[2].MoveRight(200);
+    }
+
+
+
+
 
 
     public void Clear()
@@ -109,10 +139,14 @@ public class MMRewardPanel : MMNode
             skillNode.Clear();
             skillNode = null;
         }
-        
+
+        if (itemNode != null)
+        {
+            itemNode.Clear();
+            itemNode = null;
+        }
+
     }
-
-
-
+    
 
 }

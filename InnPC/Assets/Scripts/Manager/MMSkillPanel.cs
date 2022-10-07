@@ -27,6 +27,7 @@ public class MMSkillPanel : MMNode
 
     public void Accept(List<MMSkillNode> skills)
     {
+        Clear();
         this.skills = skills;
         Reload();
     }
@@ -73,8 +74,10 @@ public class MMSkillPanel : MMNode
 
     public void PlaySkill(MMSkillNode skill)
     {
-
+        skill.state = MMSkillState.Used;
+        this.selectingSkill = null;
+        Reload();
     }
-
+    
 
 }

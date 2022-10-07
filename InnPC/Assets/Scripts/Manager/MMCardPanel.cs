@@ -41,9 +41,7 @@ public class MMCardPanel : MMNode
         }   
     }
 
-
-
-
+    
     public void DrawCard(int count)
     {
         StartCoroutine(WaitForSecond(count));

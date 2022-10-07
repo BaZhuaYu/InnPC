@@ -26,7 +26,10 @@ public partial class MMCard
 
     public static MMCard Create(int id)
     {
-        return new MMCard();
+        MMCard ret = new MMCard();
+        ret.id = id;
+        ret.LoadData();
+        return ret;
     }
 
 }

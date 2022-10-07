@@ -112,6 +112,8 @@ public partial class MMBattleManager : MonoBehaviour
             }
         }
 
+        MMSkillPanel.Instance.Clear();
+
 
         if (CheckGameLost())
         {

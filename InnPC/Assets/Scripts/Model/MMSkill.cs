@@ -18,16 +18,17 @@ public partial class MMSkill
     public string displayNote;
     public int cost;
     public string icon;
-
+    public int prob;
 
     public int value;
+    public MMTriggerTime time;
     public MMArea area;
     public List<MMSkillKeyWord> keywords;
 
     public int tempATK;
     public int tempDEF;
 
-
+    
 
 
     public void ExecuteEffect()
@@ -60,7 +61,9 @@ public partial class MMSkill
         skill.key = values[keys["Key"]];
         skill.displayName = values[keys["Name"]];
         skill.displayNote = values[keys["Note"]];
-        
+
+        int.TryParse(values[keys["Prob"]], out skill.prob);
+
         int.TryParse(values[keys["Cost"]], out skill.cost);
         int.TryParse(values[keys["Value"]], out skill.value);
         int.TryParse(values[keys["TempATK"]], out skill.tempATK);

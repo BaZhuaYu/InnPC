@@ -23,7 +23,7 @@ public partial class MMBattleManager : MonoBehaviour
 
             if(unit.skill == 1)
             {
-                SetSelectingSkill(unit.cards[0]);
+                SetSelectingSkill(unit.skills[0]);
                 yield return new WaitForSeconds(1f);
 
                 SetTarget(FindRandomUnit1());
@@ -33,7 +33,7 @@ public partial class MMBattleManager : MonoBehaviour
             }
             else if (unit.skill == 2)
             {
-                SetSelectingSkill(unit.cards[1]);
+                SetSelectingSkill(unit.skills[1]);
                 yield return new WaitForSeconds(1f);
 
                 SetTarget(FindRandomUnit1());
@@ -63,7 +63,7 @@ public partial class MMBattleManager : MonoBehaviour
             ret = units1[0];
             foreach (var unit in units1)
             {
-                if (unit.cell.id < ret.cell.row)
+                if (unit.cell.id > ret.cell.id)
                 {
                     ret = unit;
                 }
@@ -74,7 +74,7 @@ public partial class MMBattleManager : MonoBehaviour
             ret = units2[0];
             foreach (var unit in units2)
             {
-                if (unit.cell.id > ret.cell.row)
+                if (unit.cell.id < ret.cell.id)
                 {
                     ret = unit;
                 }

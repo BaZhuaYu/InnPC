@@ -124,10 +124,11 @@ public enum MMUnitPhase
 }
 
 
-public enum MMRewardType
+public enum MMRewardType : int
 {
     Gold,
     Unit,
     Skill,
-    Card
+    Card,
+    Item
 }
