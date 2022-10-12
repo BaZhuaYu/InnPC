@@ -9,16 +9,21 @@ public partial class MMItem
     public static Dictionary<int, string> allValues;
 
     public static List<MMItem> all;
-    public static List<MMItem> all1;
+    public static List<MMItem> items;
 
 
     public static void Init()
     {
         all = new List<MMItem>();
+        items = new List<MMItem>();
         foreach (var temp in allValues.Values)
         {
             MMItem item = MMItem.CreateFromString(temp);
             all.Add(item);
+            if (item.prob > 0)
+            {
+                items.Add(item);
+            }
         }
 
         if (all.Count == 0)
@@ -30,33 +35,14 @@ public partial class MMItem
 
     public static List<MMItem> FindAll()
     {
-        if(all == null)
-        {
-            all = new List<MMItem>();
-            foreach (var temp in allValues.Values)
-            {
-                MMItem item = MMItem.CreateFromString(temp);
-                all.Add(item);
-                if(item.prob > 0)
-                {
-                    all1.Add(item);
-                }
-            }
-
-            if (all.Count == 0)
-            {
-                MMDebugManager.FatalError("public static List<MMSkill> FindAll()");
-            }
-        }
-
-        return all;
+        return items;
     }
 
 
 
     public static MMItem FindRandomOne()
     {
-        return all[Random.Range(0, all.Count)];
+        return items[Random.Range(0, items.Count)];
     }
 
 
@@ -64,7 +50,7 @@ public partial class MMItem
     {
         List<MMItem> ret = new List<MMItem>();
 
-        if (count > all.Count)
+        if (count > items.Count)
         {
             MMDebugManager.FatalError("FindRandom: " + count);
         }

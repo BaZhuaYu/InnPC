@@ -18,11 +18,17 @@ public partial class MMSkillNode : MMNode
     public int id;
     public string key;
 
+    public string displayName;
+    public string displayNote;
+
     public MMArea area;
 
     public MMTriggerTime time;
 
     public List<MMSkillKeyWord> keywords;
+
+    public MMEffectType effectType;
+    public int value;
 
     public int tempATK;
     public int tempDEF;
@@ -63,7 +69,12 @@ public partial class MMSkillNode : MMNode
 
         this.id = skill.id;
         this.key = skill.key;
+        this.displayName = skill.displayName;
+        this.displayNote = skill.displayNote;
         this.area = skill.area;
+
+        this.effectType = skill.effect;
+        this.value = skill.value;
 
         this.tempATK = skill.tempATK;
         this.tempDEF = skill.tempDEF;
@@ -71,6 +82,8 @@ public partial class MMSkillNode : MMNode
         this.keywords = skill.keywords;
 
         this.name = "Card_" + id;
+
+        this.time = skill.time;
 
         //ConfigReady();
         UpdateUI();

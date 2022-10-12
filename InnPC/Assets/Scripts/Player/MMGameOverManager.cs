@@ -19,6 +19,7 @@ public class MMGameOverManager : MMNode
 
     public Button mainButton;
     public Text mainText;
+    public Text goldText;
     
     public List<MMButton> buttons;
 
@@ -38,11 +39,14 @@ public class MMGameOverManager : MMNode
         isLost = false;
 
         rewards = new List<MMRewardType>();
-        rewards.Add(MMRewardType.Gold);
-        rewards.Add(MMRewardType.Item);
+        //rewards.Add(MMRewardType.Gold);
+        
         rewards.Add(MMRewardType.Unit);
         rewards.Add(MMRewardType.Skill);
+        //rewards.Add(MMRewardType.Item);
 
+        MMPlayerManager.Instance.gold += MMBattleManager.Instance.level + 2;
+        MMPlayerManager.Instance.level += 1;
 
         buttons = new List<MMButton>();
         foreach (var reward in rewards)
@@ -52,33 +56,27 @@ public class MMGameOverManager : MMNode
             button.SetParent(this);
             button.SetSize(new Vector2(200, 80));
             button.userinfo = reward + "";
-            Debug.Log("Add " + reward);
 
             switch (reward)
             {
                 case MMRewardType.Gold:
                     button.SetText("奖励金币");
-                    //button.userinfo = "Gold";
                     button.AddClickAction(OnClickRewardGoldButton);
                     break;
                 case MMRewardType.Unit:
                     button.SetText("奖励英雄");
-                    //button.userinfo = "Unit";
                     button.AddClickAction(OnClickRewardUnitButton);
                     break;
                 case MMRewardType.Skill:
                     button.SetText("奖励技能");
-                    //button.userinfo = reward.ToString();
                     button.AddClickAction(OnClickRewardSkillButton);
                     break;
                 case MMRewardType.Card:
                     button.SetText("奖励卡牌");
-                    //button.userinfo = "Card";
                     button.AddClickAction(OnClickRewardCardButton);
                     break;
                 case MMRewardType.Item:
                     button.SetText("奖励物品");
-                    //button.userinfo = "Item";
                     button.AddClickAction(OnClickRewardItemButton);
                     break;
             }
@@ -122,9 +120,9 @@ public class MMGameOverManager : MMNode
             button.MoveToCenter();
             button.MoveUp(offset);
             offset -= 100;
-            
         }
 
+        goldText.text = MMPlayerManager.Instance.gold + "";
     }
 
 
@@ -142,6 +140,7 @@ public class MMGameOverManager : MMNode
     {
         if (isWin)
         {
+            MMPlayerManager.Instance.level += 1;
             MMBattleManager.Instance.level += 1;
         }
 
@@ -155,35 +154,68 @@ public class MMGameOverManager : MMNode
 
     public void OnClickRewardGoldButton()
     {
-        RemoveReward(MMRewardType.Gold);
+        //RemoveReward(MMRewardType.Gold);
     }
+
+
 
     public void OnClickRewardUnitButton()
     {
+        if(MMPlayerManager.Instance.gold < 8)
+        {
+            MMTipManager.instance.CreateTip("金币不足");
+            return;
+        }
+
+        MMPlayerManager.Instance.gold -= 8;
+        
         MMRewardPanel.instance.OpenUI();
         MMRewardPanel.instance.LoadUnitPanel();
-        RemoveReward(MMRewardType.Unit);
+        //RemoveReward(MMRewardType.Unit);
+
+        UpdateUI();
     }
 
-    public void OnClickRewardSkillButton()
-    {
-        MMRewardPanel.instance.OpenUI();
-        MMRewardPanel.instance.LoadSkillPanel();
-        RemoveReward(MMRewardType.Skill);
-        
-    }
 
     public void OnClickRewardCardButton()
     {
-        RemoveReward(MMRewardType.Card);
+        //RemoveReward(MMRewardType.Card);
+    }
+
+
+
+    public void OnClickRewardSkillButton()
+    {
+        if (MMPlayerManager.Instance.gold < 3)
+        {
+            MMTipManager.instance.CreateTip("金币不足");
+            return;
+        }
+
+        MMPlayerManager.Instance.gold -= 3;
+
+
+        MMRewardPanel.instance.OpenUI();
+        MMRewardPanel.instance.LoadSkillPanel();
+        //RemoveReward(MMRewardType.Skill);
+        UpdateUI();
     }
 
 
     public void OnClickRewardItemButton()
     {
+        if (MMPlayerManager.Instance.gold < 2)
+        {
+            MMTipManager.instance.CreateTip("金币不足");
+            return;
+        }
+
+        MMPlayerManager.Instance.gold -= 2;
+
         MMRewardPanel.instance.OpenUI();
         MMRewardPanel.instance.LoadItemPanel();
-        RemoveReward(MMRewardType.Item);
+        //RemoveReward(MMRewardType.Item);
+        UpdateUI();
     }
 
 
@@ -200,7 +232,7 @@ public class MMGameOverManager : MMNode
             }
         }
 
-        RemoveButton(type);
+        //RemoveButton(type);
         UpdateUI();
     }
 

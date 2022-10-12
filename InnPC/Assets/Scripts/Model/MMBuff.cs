@@ -6,28 +6,39 @@ using UnityEngine;
 public enum MMTriggerTime
 {
     None,
-    OnRoundBegin,
+    Gain,               //1
+    OnBattleBegin,      //2
+    OnRoundBegin,       //3
+    OnRoundEnd,
     OnNormalAttack,
     BeforeNormalAttack,
     AfterNormalAttack,
-    OnTargetDead,
+    OnDead,
+    OnKillTarget,
+    OnSummon,
+
 
 }
 
-public enum MMEffect
+
+public enum MMArea
 {
-    Attack,
-    InHP,
-    DeHP,
-    InAP,
-    DeAP,
-    InATK,
-    DeATK,
-    AddUnit,
-    AddHand,
-    AddBuff,
-
+    None,
+    Single,
+    Row,
+    Col,
+    Beside,
+    Behind,
+    Target,
+    RaceUnits
 }
+
+
+public enum MMSkillKeyWord
+{
+    Ultimate
+}
+
 
 public enum MMBuff
 {

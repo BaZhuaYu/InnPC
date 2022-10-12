@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 public class MMRewardSkill : MonoBehaviour, IPointerClickHandler
 {
 
-    public MMSkill skill;
+    public MMSkillNode skill;
 
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -14,10 +14,15 @@ public class MMRewardSkill : MonoBehaviour, IPointerClickHandler
         MMUnit unit = node.unit;
         unit.skills.Add(skill.id);
 
-        foreach(var skill in unit.skills)
+        if(skill.time == MMTriggerTime.Gain)
         {
-            Debug.Log(skill);
+            skill.skill.ExecuteEffect(unit);
+            //skill.Create(node, null);
+            
         }
+
+        //MMBattleManager.Instance.BroadCast(MMTriggerTime.Gain);
+
 
         MMRewardPanel.instance.CloseUI();
         MMGameOverManager.Instance.UpdateUI();

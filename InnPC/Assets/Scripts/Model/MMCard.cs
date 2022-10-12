@@ -32,4 +32,7 @@ public partial class MMCard
         return ret;
     }
 
+
+
+
 }

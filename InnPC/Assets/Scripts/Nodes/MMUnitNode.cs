@@ -38,6 +38,9 @@ public partial class MMUnitNode : MMNode
     public int mag;
     public int spd;
 
+    public int race;
+    public int clss;
+
     public int attackRange;
 
     public List<MMSkillNode> skills;
@@ -62,6 +65,7 @@ public partial class MMUnitNode : MMNode
     public void Accept(MMUnit unit)
     {
         this.unit = unit;
+        
 
         LoadImage("Units/" + unit.key + "QS");
 
@@ -75,11 +79,15 @@ public partial class MMUnitNode : MMNode
         hp = unit.hp;
         maxAP = unit.maxAP;
         ap = unit.ap;
+        ap = maxAP;
 
         atk = unit.atk;
         def = unit.def;
         mag = unit.mag;
         spd = unit.spd;
+
+        race = unit.race;
+        clss = unit.clss;
 
         attackRange = unit.attackRange;
 
@@ -178,6 +186,18 @@ public partial class MMUnitNode : MMNode
         UpdateUI();
     }
 
+    public void IncreaseATK(int value)
+    {
+        this.atk += value;
+        UpdateUI();
+    }
+
+    public void DecreaseATK(int value)
+    {
+        this.atk -= value;
+        UpdateUI();
+    }
+
     public void IncreaseDEF(int value)
     {
         this.def += value;
@@ -262,6 +282,21 @@ public partial class MMUnitNode : MMNode
         GameObject obj = Instantiate(Resources.Load("Prefabs/MMUnitNode") as GameObject);
         return obj.GetComponent<MMUnitNode>();
     }
+
+    public static MMUnitNode CreateFromUnit(MMUnit unit)
+    {
+        MMUnitNode node = MMUnitNode.Create();
+        node.Accept(unit);
+        return node;
+    }
+
+    public static MMUnitNode CreateFromID(int id)
+    {
+        MMUnit unit = MMUnit.Create(id);
+        return MMUnitNode.CreateFromUnit(unit);
+    }
+
+
 
 
     public bool CheckHasAP()

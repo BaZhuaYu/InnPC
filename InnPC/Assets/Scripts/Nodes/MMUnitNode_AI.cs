@@ -60,4 +60,20 @@ public partial class MMUnitNode : MMNode
     }
 
     
+
+    public MMUnitNode FindTarget()
+    {
+        List<MMCell> cells = MMMap.Instance.FindCellsInCol(this.cell.col) ;
+        foreach(var cell in cells)
+        {
+            if (cell.unitNode != null)
+            {
+                return cell.unitNode;
+            }
+        }
+
+        return null;
+    }
+
+
 }

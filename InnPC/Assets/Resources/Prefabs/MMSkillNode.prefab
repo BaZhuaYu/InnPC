@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6420770214547159740}
   - component: {fileID: -7990104207826015219}
   m_Layer: 5
-  m_Name: MMNodeCard
+  m_Name: MMSkillNode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -91,12 +91,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5605c7f35a431c646a43b466340fd3f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  state: 0
+  nodeState: 0
+  nodeHighlight: 0
+  userinfo: 
+  unit: {fileID: 0}
+  skill:
+    key: 
+    id: 0
+    displayName: 
+    displayNote: 
+    cost: 0
+    icon: 
+    prob: 0
+    value: 0
+    time: 0
+    area: 0
+    keywords: 
+    tempATK: 0
+    tempDEF: 0
   icon: {fileID: 5567223979541993396}
   textName: {fileID: 3297490941305406541}
   textNote: {fileID: 1968559637708534008}
   id: 0
   key: 
+  area: 0
+  time: 0
+  keywords: 
+  tempATK: 0
+  tempDEF: 0
+  state: 0
+  isReady: 0
 --- !u!1 &6497145732581425366
 GameObject:
   m_ObjectHideFlags: 0
@@ -264,7 +288,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 186771d003c973b4c8e6b04790937335, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  state: 0
+  nodeState: 0
+  nodeHighlight: 0
+  userinfo: 
 --- !u!1 &6971792740770739761
 GameObject:
   m_ObjectHideFlags: 0
@@ -343,4 +369,4 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u666E\u901A\u653B\u51FB"
+  m_Text: "\u9ED8\u8BA4\u6280\u80FD"

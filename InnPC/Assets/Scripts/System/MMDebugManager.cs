@@ -14,4 +14,11 @@ public class MMDebugManager : MonoBehaviour
     {
         Debug.LogError(s);
     }
+
+
+    public void GMWin()
+    {
+        MMBattleManager.Instance.CheckGameWin();
+    }
+
 }

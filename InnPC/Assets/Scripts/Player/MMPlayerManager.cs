@@ -13,6 +13,10 @@ public class MMPlayerManager : MonoBehaviour
     }
 
 
+    public int gold;
+
+    public int level;
+
     public List<MMUnit> units;
 
     public List<MMSkill> skills;
@@ -23,6 +27,10 @@ public class MMPlayerManager : MonoBehaviour
 
     void Start()
     {
+        gold = 110;
+
+        level = 1;
+
         units = new List<MMUnit>();
         skills = new List<MMSkill>();
         cards = new List<MMCard>();
@@ -33,7 +41,7 @@ public class MMPlayerManager : MonoBehaviour
 
     public void LoadData()
     {
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 4; i++)
         {
             MMUnit unit1 = MMUnit.Create((i + 1) * 100 + 10000);
             units.Add(unit1);

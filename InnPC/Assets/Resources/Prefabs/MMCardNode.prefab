@@ -93,6 +93,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeState: 0
   nodeHighlight: 0
+  userinfo: 
   card:
     key: 
     id: 0
@@ -282,6 +283,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeState: 0
   nodeHighlight: 0
+  userinfo: 
 --- !u!1 &8501474331055171697
 GameObject:
   m_ObjectHideFlags: 0
@@ -360,4 +362,4 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u666E\u901A\u653B\u51FB"
+  m_Text: "\u9ED8\u8BA4\u5361\u724C"

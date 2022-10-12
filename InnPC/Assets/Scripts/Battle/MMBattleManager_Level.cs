@@ -19,7 +19,7 @@ public partial class MMBattleManager : MonoBehaviour
 
     public void LoadPlayerUnits()
     {
-        int i = 1;
+        int i = 0;
         foreach (var unit in MMPlayerManager.Instance.units)
         {
             MMUnitNode node = MMUnitNode.Create();

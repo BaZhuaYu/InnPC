@@ -93,24 +93,8 @@ public partial class MMBattleManager : MonoBehaviour
         
         EnterState(MMBattleState.Normal);
 
+        ClearUnits();
         
-        for (int i = 0; i < units1.Count; i++)
-        {
-            if (units1[i].unitState == MMUnitState.Dead)
-            {
-                units1[i].Clear();
-                this.units1.Remove(units1[i]);
-            }
-        }
-
-        for (int i = 0; i < units2.Count; i++)
-        {
-            if (units2[i].unitState == MMUnitState.Dead)
-            {
-                units2[i].Clear();
-                this.units2.Remove(units2[i]);
-            }
-        }
 
         MMSkillPanel.Instance.Clear();
 
@@ -128,6 +112,28 @@ public partial class MMBattleManager : MonoBehaviour
             AutoSelectSour();
         }
         
+    }
+
+
+    public void ClearUnits()
+    {
+        for (int i = 0; i < units1.Count; i++)
+        {
+            if (units1[i].unitState == MMUnitState.Dead)
+            {
+                units1[i].Clear();
+                this.units1.Remove(units1[i]);
+            }
+        }
+
+        for (int i = 0; i < units2.Count; i++)
+        {
+            if (units2[i].unitState == MMUnitState.Dead)
+            {
+                units2[i].Clear();
+                this.units2.Remove(units2[i]);
+            }
+        }
     }
 
 

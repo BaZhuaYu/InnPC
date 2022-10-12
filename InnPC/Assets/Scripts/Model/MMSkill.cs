@@ -20,6 +20,7 @@ public partial class MMSkill
     public string icon;
     public int prob;
 
+    public MMEffectType effect;
     public int value;
     public MMTriggerTime time;
     public MMArea area;
@@ -28,12 +29,26 @@ public partial class MMSkill
     public int tempATK;
     public int tempDEF;
 
-    
 
 
-    public void ExecuteEffect()
+
+    public void ExecuteEffect(MMUnit unit)
     {
-
+        switch (effect)
+        {
+            case MMEffectType.InATK:
+                unit.atk += 1;
+                break;
+            case MMEffectType.InHP:
+                unit.maxHP += 1;
+                unit.hp += 1;
+                break;
+            case MMEffectType.InAP:
+                unit.ap += 1;
+                break;
+            default:
+                break;
+        }
     }
 
 
@@ -41,35 +56,35 @@ public partial class MMSkill
 
     public static MMSkill Create(int id)
     {
-        if(MMSkillData.allValues.ContainsKey(id) == false)
+        if (allValues.ContainsKey(id) == false)
         {
             MMDebugManager.FatalError("MMSkill Create: " + id);
         }
 
-        return CreateFromString(MMSkillData.allValues[id]);
+        return CreateFromString(allValues[id]);
     }
 
 
     public static MMSkill CreateFromString(string s)
     {
-        Dictionary<string, int> keys = MMSkillData.allKeys;
-
         string[] values = s.Split(',');
 
         MMSkill skill = new MMSkill();
-        skill.id = int.Parse(values[keys["ID"]]);
-        skill.key = values[keys["Key"]];
-        skill.displayName = values[keys["Name"]];
-        skill.displayNote = values[keys["Note"]];
+        skill.id = int.Parse(values[allKeys["ID"]]);
+        skill.key = values[allKeys["Key"]];
+        skill.displayName = values[allKeys["Name"]];
+        skill.displayNote = values[allKeys["Note"]];
 
-        int.TryParse(values[keys["Prob"]], out skill.prob);
+        int.TryParse(values[allKeys["Prob"]], out skill.prob);
 
-        int.TryParse(values[keys["Cost"]], out skill.cost);
-        int.TryParse(values[keys["Value"]], out skill.value);
-        int.TryParse(values[keys["TempATK"]], out skill.tempATK);
-        int.TryParse(values[keys["TempDEF"]], out skill.tempDEF);
+        int.TryParse(values[allKeys["Cost"]], out skill.cost);
+        int.TryParse(values[allKeys["Value"]], out skill.value);
+        int.TryParse(values[allKeys["TempATK"]], out skill.tempATK);
+        int.TryParse(values[allKeys["TempDEF"]], out skill.tempDEF);
 
-        skill.area = DeserializeArea(values[keys["Area"]]);
+        skill.effect = DeserializeEffectType(values[allKeys["Effect"]]);
+        skill.area = DeserializeArea(values[allKeys["Area"]]);
+        skill.time = DeserializeTriggerTime(values[allKeys["Time"]]);
 
         return skill;
     }
@@ -77,8 +92,10 @@ public partial class MMSkill
 
     public static MMArea DeserializeArea(string s)
     {
-        switch(s)
+        switch (s)
         {
+            case "None":
+                return MMArea.None;
             case "Single":
                 return MMArea.Single;
             case "Row":
@@ -90,8 +107,80 @@ public partial class MMSkill
             case "Behind":
                 return MMArea.Behind;
         }
-        return MMArea.None;
+        return MMArea.Single;
     }
 
-    
+
+    public static MMTriggerTime DeserializeTriggerTime(string s)
+    {
+        switch (s)
+        {
+            case "Gain":
+                return MMTriggerTime.Gain;
+            case "OnRoundBegin":
+                return MMTriggerTime.OnRoundBegin;
+            case "OnRoundEnd":
+                return MMTriggerTime.OnRoundEnd;
+            case "OnNormalAttack":
+                return MMTriggerTime.OnNormalAttack;
+            case "BeforeNormalAttack":
+                return MMTriggerTime.BeforeNormalAttack;
+            case "AfterNormalAttack":
+                return MMTriggerTime.AfterNormalAttack;
+            case "OnTargetDead":
+                return MMTriggerTime.OnKillTarget;
+            case "OnDead":
+                return MMTriggerTime.OnDead;
+            case "OnSummon":
+                return MMTriggerTime.OnSummon;
+        }
+
+        return MMTriggerTime.None;
+    }
+
+
+
+    public static MMEffectType DeserializeEffectType(string s)
+    {
+
+        //Attack,
+        //InHP,
+        //DeHP,
+        //InAP,
+        //DeAP,
+        //InATK,
+        //DeATK,
+        //Summon,
+
+
+        //AddUnit,
+        //AddHand,
+        //AddBuff,
+
+        switch (s)
+        {
+            case "1":
+                return MMEffectType.Attack;
+            case "2":
+                return MMEffectType.InHP;
+            case "3":
+                return MMEffectType.DeHP;
+            case "4":
+                return MMEffectType.InAP;
+            case "5":
+                return MMEffectType.DeAP;
+            case "6":
+                return MMEffectType.InATK;
+            case "7":
+                return MMEffectType.DeATK;
+            case "8":
+                return MMEffectType.Damage;
+            case "9":
+                return MMEffectType.Summon;
+
+        }
+
+        return MMEffectType.None;
+    }
+
 }

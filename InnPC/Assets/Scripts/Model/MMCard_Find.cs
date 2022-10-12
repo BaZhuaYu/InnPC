@@ -4,7 +4,8 @@ using UnityEngine;
 
 public partial class MMCard
 {
-
+    public static Dictionary<string, int> allKeys;
+    public static Dictionary<int, string> allValues;
 
     public void LoadData()
     {
@@ -35,7 +36,5 @@ public partial class MMCard
         }
     }
 
-
-
-
+    
 }

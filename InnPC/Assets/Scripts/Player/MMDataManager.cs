@@ -17,16 +17,10 @@ public class MMDataManager : MonoBehaviour
         string[] levelData = MMDataManager.ReadFile("Data/InnPC - Level");
         string[] itemData = MMDataManager.ReadFile("Data/InnPC - Item");
 
-
-        Deserialize(skillData, out MMSkillData.allKeys, out MMSkillData.allValues);
-        Deserialize(unitData, out MMUnitData.allKeys, out MMUnitData.allValues);
-        Deserialize(levelData, out MMLevelData.allKeys, out MMLevelData.allValues);
+        Deserialize(skillData, out MMSkill.allKeys, out MMSkill.allValues);
+        Deserialize(unitData, out MMUnit.allKeys, out MMUnit.allValues);
+        Deserialize(levelData, out MMLevel.allKeys, out MMLevel.allValues);
         Deserialize(itemData, out MMItem.allKeys, out MMItem.allValues);
-
-        MMSkill.all = new List<MMSkill>();
-        MMUnit.all = new List<MMUnit>();
-        //MMLevel.all = new List<MMLevel>();
-        MMItem.all = new List<MMItem>();
         
     }
 

@@ -42,12 +42,14 @@ public class MMItemNode : MMNode
 
         this.effect = item.effect;
         this.value = item.value;
+
+        Reload();
     }
 
     public void Reload()
     {
-        textNote.text = displayName;
-        LoadImage(key);
+        textName.text = displayName;
+        //this.icon.sprite = //LoadImage(key);
     }
 
     public void Clear()

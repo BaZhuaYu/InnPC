@@ -18,13 +18,13 @@ public class MMUtility : MonoBehaviour
 
     public static bool CheckListHasOne<T>(List<T> all, T one)
     {
-        //foreach(var temp in all)
-        //{
-        //    if (temp == one)
-        //    {
-        //        return true;
-        //    }
-        //}
+        foreach (var temp in all)
+        {
+            if (temp.Equals(one))
+            {
+                return true;
+            }
+        }
 
         return false;
     }
@@ -77,22 +77,6 @@ public enum MMNodeState
     Green
 }
 
-
-public enum MMArea
-{
-    None,
-    Single,
-    Row,
-    Col,
-    Beside,
-    Behind
-}
-
-
-public enum MMSkillKeyWord
-{
-    Ultimate
-}
 
 
 public enum MMBattleState

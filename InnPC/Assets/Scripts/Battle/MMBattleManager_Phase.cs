@@ -7,6 +7,7 @@ public partial class MMBattleManager
 
     public void OnPhaseBegin()
     {
+        BroadCast(MMTriggerTime.OnRoundBegin, null);
         foreach (var unit in units1)
         {
             unit.ConfigState();
@@ -79,6 +80,8 @@ public partial class MMBattleManager
                 unit.EnterState(MMUnitState.Normal);
             }
         }
+
+        BroadCast(MMTriggerTime.OnRoundEnd, null);
     }
 
 

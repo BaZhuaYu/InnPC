@@ -19,32 +19,30 @@ public partial class MMLevel
 
     public static MMLevel Create(int id)
     {
-        if (MMLevelData.allValues.ContainsKey(id) == false)
+        if (allValues.ContainsKey(id) == false)
         {
             MMDebugManager.FatalError("MMSkill Create: " + id);
         }
 
-        return CreateFromString(MMLevelData.allValues[id]);
+        return CreateFromString(allValues[id]);
     }
 
 
 
     public static MMLevel CreateFromString(string s)
     {
-        Dictionary<string, int> keys = MMLevelData.allKeys;
-
         string[] values = s.Split(',');
 
         MMLevel level = new MMLevel();
-        level.id = int.Parse(values[keys["ID"]]);
-        level.key = values[keys["Key"]];
-        level.displayName = values[keys["Name"]];
-        level.displayNote = values[keys["Note"]];
+        level.id = int.Parse(values[allKeys["ID"]]);
+        level.key = values[allKeys["Key"]];
+        level.displayName = values[allKeys["Name"]];
+        level.displayNote = values[allKeys["Note"]];
         level.enemies = new Dictionary<int, MMUnit>();
 
         int cellIndex = 0;
 
-        string[] row4 = values[keys["Row4"]].Split(';');
+        string[] row4 = values[allKeys["Row4"]].Split(';');
         foreach(var unitIDString in row4)
         {
             int unitID = int.Parse(unitIDString);
@@ -58,7 +56,7 @@ public partial class MMLevel
         }
 
         cellIndex = 0;
-        string[] row5 = values[keys["Row5"]].Split(';');
+        string[] row5 = values[allKeys["Row5"]].Split(';');
         foreach (var unitIDString in row5)
         {
             int unitID = int.Parse(unitIDString);
@@ -72,7 +70,7 @@ public partial class MMLevel
         }
 
         cellIndex = 0;
-        string[] row6 = values[keys["Row6"]].Split(';');
+        string[] row6 = values[allKeys["Row6"]].Split(';');
         foreach (var unitIDString in row6)
         {
             int unitID = int.Parse(unitIDString);

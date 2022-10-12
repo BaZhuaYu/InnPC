@@ -7,18 +7,18 @@ public class MMRewardPanel : MMNode
 
     public static MMRewardPanel instance;
 
-    List<MMUnitNode> unitNodes;
-    List<MMCardNode> cardNodes;
-    MMSkillNode skillNode;
-    MMItemNode itemNode;
-
-
     private void Awake()
     {
         instance = this;
     }
 
 
+    List<MMUnitNode> unitNodes;
+    List<MMCardNode> cardNodes;
+    MMSkillNode skillNode;
+    MMItemNode itemNode;
+
+    
     private void Start()
     {
         CloseUI();
@@ -79,7 +79,7 @@ public class MMRewardPanel : MMNode
             unit.SetParent(this);
             unit.MoveDown(100);
             MMRewardSkill rewardSkill = unit.gameObject.AddComponent<MMRewardSkill>();
-            rewardSkill.skill = skill;
+            rewardSkill.skill = skillNode;
         }
 
         unitNodes[0].MoveLeft(200);

@@ -33,7 +33,7 @@ public partial class MMMap : MMNode
         MMDebugManager.Log("FindCellOfIndex: X " + x + " Y " + y);
         return null;
     }
-    
+
 
     public MMCell FindCellAtPosition(Vector2 pos)
     {
@@ -68,10 +68,11 @@ public partial class MMMap : MMNode
     {
         List<MMCell> ret = new List<MMCell>();
 
-        for(int i = 1; i <= dis; i++)
+        for (int i = 1; i <= dis; i++)
         {
             MMCell c = this.FindCellInXY(cell.row + i, cell.col);
-            if (c != null) {
+            if (c != null)
+            {
                 ret.Add(c);
             }
         }
@@ -213,6 +214,69 @@ public partial class MMMap : MMNode
         if (cell1 != null)
         {
             ret.Add(cell1);
+        }
+
+        return ret;
+    }
+
+
+    public List<MMCell> FindEmptyCells()
+    {
+        List<MMCell> ret = new List<MMCell>();
+        foreach (var cell in cells)
+        {
+            if (cell.unitNode == null)
+            {
+                ret.Add(cell);
+            }
+        }
+
+        return ret;
+    }
+
+
+    public List<MMCell> FindEmptyCellInRow(int row)
+    {
+        List<MMCell> ret = new List<MMCell>();
+        List<MMCell> rowcells = FindCellsInRow(row);
+        foreach (var cell in rowcells)
+        {
+            if (cell.unitNode == null)
+            {
+                ret.Add(cell);
+            }
+        }
+
+        return ret;
+    }
+
+
+    public MMCell FindRandomEmptyCellInRow(int row)
+    {
+        List<MMCell> cells = FindEmptyCellInRow(row);
+        if (cells.Count == 0)
+        {
+            MMDebugManager.FatalError("FindRandomEmptyCellInRow: " + row);
+            return null;
+        }
+
+        return cells[Random.Range(0, cells.Count)];
+
+    }
+    
+
+    public List<MMCell> FindCellsWithUnitRace(int race)
+    {
+        List<MMCell> ret = new List<MMCell>();
+        foreach (var cell in cells)
+        {
+            if (cell.unitNode != null)
+            {
+                if (cell.unitNode.race == race)
+                {
+                    ret.Add(cell);
+                }
+            }
         }
 
         return ret;

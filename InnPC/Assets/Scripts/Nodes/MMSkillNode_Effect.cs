@@ -5,6 +5,47 @@ using UnityEngine;
 public partial class MMSkillNode : MMNode
 {
 
+    public MMEffect Create(MMUnitNode source, MMUnitNode target)
+    {
+        MMEffect effect = new MMEffect();
+        effect.type = this.effectType;
+        effect.value = this.value;
+        effect.source = source;
+        effect.target = target;
+
+        switch (effect.type)
+        {
+            case MMEffectType.Attack:
+                effect.userinfo.Add("TempATK", tempATK);
+                effect.userinfo.Add("TempDEF", tempDEF);
+                break;
+            //case MMEffectType.InAP
+
+            //case MMEffectType.InAP:
+            //case MMEffectType.InHP:
+            //case MMEffectType.InATK:
+            //    effect.target = effect.source;
+                //break;
+            case MMEffectType.Summon:
+                effect.destCell = effect.source.cell;
+                break;
+            default:
+                break;
+        }
+
+        if (effect.target != null)
+        {
+            effect.sideTargets = FindSideTargets(effect.target.cell);
+        }
+
+
+        return effect;
+    }
+
+
+
+
+
 
     public List<MMCell> FindSideTargetCells(MMCell target)
     {
@@ -25,16 +66,27 @@ public partial class MMSkillNode : MMNode
             case MMArea.Behind:
                 ret = MMMap.Instance.FindCellsBehind(target);
                 break;
+            case MMArea.Target:
+                ret.Add(this.unit.FindTarget().cell);
+                //ret = MMMap.Instance.FindCellsInCol(this.unit.cell.col);
+                break;
+            case MMArea.RaceUnits:
+                ret = MMMap.Instance.FindCellsWithUnitRace(this.unit.race);
+                break;
+
         }
 
         return ret;
     }
 
 
-    public List<MMUnitNode> FindTargetUnits(MMCell tagetCell)
+
+
+
+    public List<MMUnitNode> FindSideTargets(MMCell tagetCell)
     {
         List<MMUnitNode> ret = new List<MMUnitNode>();
-        ret.Add(tagetCell.unitNode);
+        //ret.Add(tagetCell.unitNode);
 
         List<MMCell> cells = FindSideTargetCells(tagetCell);
         foreach (var cell in cells)
@@ -52,8 +104,13 @@ public partial class MMSkillNode : MMNode
 
 
 
+
+
+
+
     public void ExecuteEffect(MMCell source, MMCell target)
     {
+
         List<MMUnitNode> targets = null;
 
         if (this.area == MMArea.None)
@@ -62,10 +119,10 @@ public partial class MMSkillNode : MMNode
         }
         else
         {
-            targets = FindTargetUnits(target);
+            targets = FindSideTargets(target);
         }
 
-        
+
         if (id == 1)
         {
             foreach (var dest in targets)

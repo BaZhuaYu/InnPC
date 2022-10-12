@@ -26,6 +26,7 @@ public partial class MMBattleManager : MonoBehaviour
     public MMUnitNode sourceUnit;
     public MMUnitNode targetUnit;
     
+    //public MMLevel level;
 
     public int level;
 
@@ -38,8 +39,7 @@ public partial class MMBattleManager : MonoBehaviour
 
     private void Start()
     {
-        level = 0;
-
+        
         main.onClick.AddListener(OnClickMainButton);
 
         EnterPhase(MMBattlePhase.Begin);
@@ -48,6 +48,7 @@ public partial class MMBattleManager : MonoBehaviour
     
     public void LoadLevel()
     {
+        level = MMPlayerManager.Instance.level;
         LoadPlayerUnits();
         LoadLevel(this.level);
     }
@@ -77,14 +78,29 @@ public partial class MMBattleManager : MonoBehaviour
             return;
         }
 
+        //if (selectingSkill.area == MMArea.None)
+        //{
+        //    selectingSkill.ExecuteEffect(sourceUnit.cell, null);
+        //}
+        //else
+        //{
+        //    selectingSkill.ExecuteEffect(sourceUnit.cell, targetUnit.cell);
+        //}
+
         if (selectingSkill.area == MMArea.None)
         {
-            selectingSkill.ExecuteEffect(sourceUnit.cell, null);
+            targetUnit = sourceUnit;
+            //MMEffect effect = selectingSkill.Create(sourceUnit.cell, null);
+            //ExecuteEffect(effect);
         }
         else
         {
-            selectingSkill.ExecuteEffect(sourceUnit.cell, targetUnit.cell);
+            //MMEffect effect = selectingSkill.Create(sourceUnit.cell, targetUnit.cell);
+            //ExecuteEffect(effect);
         }
+        MMEffect effect = selectingSkill.Create(sourceUnit, targetUnit);
+        ExecuteEffect(effect);
+
 
         //MMCardPanel.Instance.PlayCard(selectedSkill);
         MMSkillPanel.Instance.PlaySkill(selectingSkill);
@@ -365,21 +381,6 @@ public partial class MMBattleManager : MonoBehaviour
 
     
 
-
-
-    public void BroadCast(MMTriggerTime time)
-    {
-        foreach(var unit in units1)
-        {
-            foreach(var skill in unit.skills)
-            {
-                if(skill.time == time)
-                {
-                    skill.ExecuteEffect(sourceUnit.cell, targetUnit.cell);
-                }
-            }
-        }
-    }
 
 
 }
