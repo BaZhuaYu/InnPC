@@ -49,7 +49,7 @@ public partial class MMMap : MMNode
             //cell.gameObject.transform.SetParent(this.transform);
 
             cell.name = "Cell" + i;
-            cell.id = i;
+            cell.index = i;
             cell.row = i / col;
             cell.col = i % col;
             cell.SetParent(this);

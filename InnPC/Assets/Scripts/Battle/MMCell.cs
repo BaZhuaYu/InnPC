@@ -9,7 +9,7 @@ public partial class MMCell : MMNode
 {
     public MMUnitNode unitNode;
 
-    public int id;
+    public int index;
 
     public int row;
     public int col;
@@ -19,7 +19,7 @@ public partial class MMCell : MMNode
 
     private void Awake()
     {
-        id = 0;
+        index = 0;
     }
 
     private void Start()
@@ -29,17 +29,32 @@ public partial class MMCell : MMNode
     }
 
 
-    public void Accept(MMUnitNode node)
+    public bool Accept(MMUnitNode node)
     {
+        if (this.unitNode != null)
+        {
+            //this.Clear();
+            return false;
+        }
+
+
+        if (node.cell == null)
+        {
+            node.tempCell = node.cell;
+        }
+
         if(node.cell != null)
         {
             node.cell.Clear();
         }
 
+        
         this.unitNode = node;
         node.cell = this;
-        node.tempCell = this;
+
         node.SetParent(this);
+
+        return true;
     }
     
 
@@ -52,6 +67,7 @@ public partial class MMCell : MMNode
     {
         if(this.unitNode != null)
         {
+            Debug.Log("Cell Clear: " + index + " Unit: " + this.unitNode.displayName);
             this.unitNode.cell = null;
             this.unitNode = null;
         }   

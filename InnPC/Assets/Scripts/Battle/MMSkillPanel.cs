@@ -35,21 +35,7 @@ public class MMSkillPanel : MMNode
 
     public void Reload()
     {
-        float offset = 0;
-        foreach (var skill in skills)
-        {
-            skill.SetParent(this);
-            skill.MoveToParentLeftOffset(offset);
-            offset += 10 + skill.FindWidth();
-
-            if(this.selectingSkill != null)
-            {
-                if(this.selectingSkill == skill)
-                {
-                    skill.MoveUp(20);
-                }
-            }
-        }
+        UpdateUI();
     }
 
 
@@ -63,6 +49,29 @@ public class MMSkillPanel : MMNode
         selectingSkill = null;
         Reload();
     }
+
+
+    public void UpdateUI()
+    {
+        float offset = 0;
+        foreach (var skill in skills)
+        {
+            skill.SetParent(this);
+            skill.MoveToCenterY();
+            skill.MoveToParentLeftOffset(offset);
+            offset += 10 + skill.FindWidth();
+
+            if (this.selectingSkill != null)
+            {
+                if (this.selectingSkill == skill)
+                {
+                    skill.MoveUp(20);
+                }
+            }
+        }
+    }
+
+
 
 
     public void SetSelectedSkill(MMSkillNode skill)

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public partial class MMBattleManager : MonoBehaviour
 {
-    
+
     public void SetSource(MMUnitNode unit)
     {
         sourceUnit = unit;
@@ -49,6 +49,13 @@ public partial class MMBattleManager : MonoBehaviour
         {
             return;
         }
+
+        if (sourceUnit.cell == null)
+        {
+            sourceUnit = null;
+            return;
+        }
+
         sourceUnit.cell.HandleState(MMNodeState.Normal);
         sourceUnit.cell.HandleHighlight(MMNodeHighlight.Normal);
         sourceUnit.HideMoveCells();
@@ -63,6 +70,13 @@ public partial class MMBattleManager : MonoBehaviour
         {
             return;
         }
+
+        if (targetUnit.cell == null)
+        {
+            targetUnit = null;
+            return;
+        }
+
         targetUnit.cell.HandleState(MMNodeState.Normal);
         targetUnit.cell.HandleHighlight(MMNodeHighlight.Normal);
         targetUnit = null;
@@ -78,7 +92,39 @@ public partial class MMBattleManager : MonoBehaviour
 
 
 
-    public void OnSourActionDone()
+    public void AutoSelectSour()
+    {
+        List<MMUnitNode> units = FindSortedUnits1();
+        foreach (var unit in units)
+        {
+            if (unit.unitPhase == MMUnitPhase.Combo)
+            {
+                SetSource(unit);
+                EnterState(MMBattleState.SelectSour);
+                return;
+            }
+        }
+
+        foreach (var unit in units)
+        {
+            if (unit.unitPhase == MMUnitPhase.Normal)
+            {
+                SetSource(unit);
+                EnterState(MMBattleState.SelectSour);
+                return;
+            }
+        }
+
+
+        if (this.sourceUnit == null)
+        {
+            MMTipManager.instance.CreateTip("己方回合行动结束");
+        }
+    }
+
+
+
+    public void HandleSourceActionDone()
     {
         sourceUnit.tempCell = sourceUnit.cell;
 
@@ -91,89 +137,38 @@ public partial class MMBattleManager : MonoBehaviour
             sourceUnit.EnterPhase(MMUnitPhase.Actived);
         }
         
-        EnterState(MMBattleState.Normal);
+        //ClearUnitsInMap();
 
-        ClearUnits();
-        
-
-        MMSkillPanel.Instance.Clear();
-
-
-        if (CheckGameLost())
+        foreach (var unit in FindAllUnits())
         {
-            MMGameOverManager.Instance.SetLost();
+            if (unit.unitState == MMUnitState.Dead)
+            {
+                List<MMEffect> effects = unit.CreateEffect(MMTriggerTime.OnDead);
+                unit.Clear();
+
+                foreach(var effect in effects)
+                {
+                    ExecuteEffect(effect);
+                }
+                
+                //BroadCastUnitSkill(MMTriggerTime.OnDead, unit);
+                
+            }
         }
-        else if (CheckGameWin())
+
+        ClearUnitsInList();
+
+        
+        if (CheckGameOver())
         {
-            MMGameOverManager.Instance.SetWin();
+
         }
         else
         {
+            EnterState(MMBattleState.Normal);
             AutoSelectSour();
         }
-        
     }
-
-
-    public void ClearUnits()
-    {
-        for (int i = 0; i < units1.Count; i++)
-        {
-            if (units1[i].unitState == MMUnitState.Dead)
-            {
-                units1[i].Clear();
-                this.units1.Remove(units1[i]);
-            }
-        }
-
-        for (int i = 0; i < units2.Count; i++)
-        {
-            if (units2[i].unitState == MMUnitState.Dead)
-            {
-                units2[i].Clear();
-                this.units2.Remove(units2[i]);
-            }
-        }
-    }
-
-
-    public bool CheckGameWin()
-    {
-        if (units2.Count == 0)
-        {
-            return true;
-        }
-
-        foreach (var unit in units2)
-        {
-            if(unit.unitState != MMUnitState.Dead)
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-
-    public bool CheckGameLost()
-    {
-        if(units1.Count == 0)
-        {
-            return true;
-        }
-
-        foreach (var unit in units1)
-        {
-            if (unit.unitState != MMUnitState.Dead)
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
 
 
 

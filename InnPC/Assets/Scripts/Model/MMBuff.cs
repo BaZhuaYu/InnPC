@@ -17,7 +17,7 @@ public enum MMTriggerTime
     OnKillTarget,
     OnSummon,
 
-
+    NormalAttackNum2,
 }
 
 

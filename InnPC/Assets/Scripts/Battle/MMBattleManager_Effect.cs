@@ -5,7 +5,7 @@ using UnityEngine;
 
 public partial class MMBattleManager : MonoBehaviour
 {
-
+    
     public List<MMUnitNode> FindAllUnits()
     {
         List<MMUnitNode> ret = new List<MMUnitNode>();
@@ -22,6 +22,7 @@ public partial class MMBattleManager : MonoBehaviour
 
         return ret;
     }
+
 
     public void BroadCast(MMTriggerTime time, MMEffect eff)
     {
@@ -64,10 +65,48 @@ public partial class MMBattleManager : MonoBehaviour
             if(skill.time == time)
             {
                 MMEffect effect = skill.Create(unit, unit);
+                
+                switch(effect.type)
+                {
+                    case MMEffectType.Summon:
+                        effect.destCell = unit.cell;
+                        break;
+                    default:
+                        break;
+                }
+
                 ExecuteEffect(effect);
             }
         }
+        
     }
+
+
+
+
+
+
+
+
+
+
+    //public IEnumerator Execute()
+    //{
+    //    while(true)
+    //    {
+    //        if (effects.Count > 0)
+    //        {
+    //            ExecuteEffect(effects[0]);
+    //            effects.RemoveAt(0);
+    //        }
+    //        yield return new WaitForSeconds(0.5f);
+    //    }
+    //}
+
+
+    //public void Trigger
+
+
 
 
 
@@ -100,8 +139,7 @@ public partial class MMBattleManager : MonoBehaviour
             case MMEffectType.DeATK:
                 this.DeATK(effect);
                 break;
-
-
+                
             case MMEffectType.Damage:
                 Damage(effect);
                 break;
@@ -109,6 +147,9 @@ public partial class MMBattleManager : MonoBehaviour
             case MMEffectType.Summon:
                 Summon(effect, null, null);
                 break;
+
+            case MMEffectType.TempATKDEF:
+
 
             default:
                 MMDebugManager.Log("Not Find" + effect.type);
@@ -127,12 +168,6 @@ public partial class MMBattleManager : MonoBehaviour
         MMUnitNode target = effect.target;
 
         target.DecreaseHP(source.atk + tempATK);
-        if (target.unitState == MMUnitState.Dead)
-        {
-            //BroadCast(MMTriggerTime.OnDead, effect);
-            //BroadCast(MMTriggerTime.OnKillTarget, effect);
-            BroadCastUnitSkill(MMTriggerTime.OnDead, target);
-        }
         foreach (var tar in effect.sideTargets)
         {
             tar.DecreaseHP(source.atk + tempATK);
@@ -148,12 +183,6 @@ public partial class MMBattleManager : MonoBehaviour
             //还击
             int value2 = Mathf.Max(target.atk - tempDEF, 0);
             source.DecreaseHP(value2);
-            if (source.unitState == MMUnitState.Dead)
-            {
-                BroadCastUnitSkill(MMTriggerTime.OnDead, source);
-                //BroadCast(MMTriggerTime.OnDead, effect);
-                //BroadCast(MMTriggerTime.OnKillTarget, effect);
-            }
         }
 
         //Target从Weak状态进入Stunned的状态时，Source可以连击
@@ -187,12 +216,6 @@ public partial class MMBattleManager : MonoBehaviour
         if (effect.target != null)
         {
             effect.target.DecreaseHP(effect.value);
-            if (effect.target.unitState == MMUnitState.Dead)
-            {
-                BroadCastUnitSkill(MMTriggerTime.OnDead, effect.target);
-                //BroadCast(MMTriggerTime.OnDead, effect);
-                //BroadCast(MMTriggerTime.OnKillTarget, effect);
-            }
         }
         foreach (var tar in effect.sideTargets)
         {
@@ -264,20 +287,32 @@ public partial class MMBattleManager : MonoBehaviour
     {
         MMUnitNode node1 = MMUnitNode.CreateFromID(effect.value);
         node1.group = effect.source.group;
+        
+        if(effect.destCell.Accept(node1) == false)
+        {
+            MMTipManager.instance.CreateTip("存在单位");
+            return;
+        }
 
-        effect.destCell.Accept(node1);
 
-        //MMCell cell1 = MMMap.Instance.FindRandomEmptyCellInRow(2);
-        //cell1.Accept(node1);
-
-        //MMUnitNode node = MMUnitNode.Create();
-        //node.Accept(unit);
-        //node.group = effect.source.group;
-        //cell.Accept(node);
+        if (node1.group == 1)
+        {
+            units1.Add(node1);
+        }
+        else
+        {
+            units2.Add(node1);
+        }
         effect.target = node1;
         BroadCast(MMTriggerTime.OnSummon, effect);
+
     }
 
 
+    private void TempATKDEF(MMEffect effect)
+    {
+        effect.target.tempATK += effect.value;
+        effect.target.tempDEF += effect.value;
+    }
 
 }

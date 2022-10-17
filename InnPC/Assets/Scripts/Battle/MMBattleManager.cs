@@ -25,8 +25,9 @@ public partial class MMBattleManager : MonoBehaviour
     public MMSkillNode selectingSkill;
     public MMUnitNode sourceUnit;
     public MMUnitNode targetUnit;
-    
+
     //public MMLevel level;
+    
 
     public int level;
 
@@ -39,7 +40,6 @@ public partial class MMBattleManager : MonoBehaviour
 
     private void Start()
     {
-        
         main.onClick.AddListener(OnClickMainButton);
 
         EnterPhase(MMBattlePhase.Begin);
@@ -101,10 +101,9 @@ public partial class MMBattleManager : MonoBehaviour
         MMEffect effect = selectingSkill.Create(sourceUnit, targetUnit);
         ExecuteEffect(effect);
 
-
         //MMCardPanel.Instance.PlayCard(selectedSkill);
         MMSkillPanel.Instance.PlaySkill(selectingSkill);
-        OnSourActionDone();
+        MMBattleManager.Instance.EnterState(MMBattleState.SourDone);
     }
 
 
@@ -122,6 +121,9 @@ public partial class MMBattleManager : MonoBehaviour
                 ClearSource();
                 ClearSelectSkill();
                 ClearTarget();
+                MMSkillPanel.Instance.Clear();
+                //MMSkillPanel.Instance.CloseUI();
+                //MMCardPanel.Instance.OpenUI();
                 break;
             case MMBattleState.SelectSour:
                 sourceUnit.tempCell.Accept(sourceUnit);
@@ -137,6 +139,7 @@ public partial class MMBattleManager : MonoBehaviour
                 break;
             case MMBattleState.SourDone:
                 sourceUnit.tempCell = sourceUnit.cell;
+                HandleSourceActionDone();
                 EnterState(MMBattleState.Normal);
                 return;
         }
@@ -218,10 +221,8 @@ public partial class MMBattleManager : MonoBehaviour
 
     public void ClearSelectSkill()
     {
-        //this.sourceUnit.HideAttackCells();
-        //selectedCard.MoveDown(20);
         this.selectingSkill = null;
-        //EnterUXState(MMBattleUXState.SourMoved);
+        MMSkillPanel.Instance.selectingSkill = null;
     }
 
 
@@ -247,42 +248,7 @@ public partial class MMBattleManager : MonoBehaviour
         
     }
 
-
-
     
-
-
-    public void AutoSelectSour()
-    {
-        List<MMUnitNode> units = FindSortedUnits1();
-        foreach (var unit in units)
-        {
-            if (unit.unitPhase == MMUnitPhase.Combo)
-            {
-                SetSource(unit);
-                EnterState(MMBattleState.SelectSour);
-                return;
-            }
-        }
-
-        foreach (var unit in units)
-        {
-            if (unit.unitPhase == MMUnitPhase.Normal)
-            {
-                SetSource(unit);
-                EnterState(MMBattleState.SelectSour);
-                return;
-            }
-        }
-
-
-        if (this.sourceUnit == null)
-        {
-            MMTipManager.instance.CreateTip("己方回合行动结束");
-        }
-    }
-
-
 
     public void OnClickButtonBack()
     {
@@ -342,10 +308,7 @@ public partial class MMBattleManager : MonoBehaviour
             cell.HandleHighlight(MMNodeHighlight.Normal);
         }
 
-        foreach (var card in MMCardPanel.Instance.hand)
-        {
-            card.MoveToCenterY();
-        }
+        MMSkillPanel.Instance.UpdateUI();
 
         switch (this.state)
         {

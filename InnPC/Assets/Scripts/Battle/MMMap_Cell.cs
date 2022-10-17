@@ -9,7 +9,7 @@ public partial class MMMap : MMNode
     {
         foreach (var cell in cells)
         {
-            if (cell.id == index)
+            if (cell.index == index)
             {
                 return cell;
             }
@@ -184,12 +184,8 @@ public partial class MMMap : MMNode
     {
         List<MMCell> ret = new List<MMCell>();
 
-        MMCell cell1 = FindCellOfIndex(cell.id - 1);
-        MMCell cell2 = FindCellOfIndex(cell.id + 1);
-
-        Debug.Log(cell.id);
-        Debug.Log(cell1.id);
-        Debug.Log(cell2.id);
+        MMCell cell1 = FindCellOfIndex(cell.index - 1);
+        MMCell cell2 = FindCellOfIndex(cell.index + 1);
 
         if (cell1.row == cell.row)
         {

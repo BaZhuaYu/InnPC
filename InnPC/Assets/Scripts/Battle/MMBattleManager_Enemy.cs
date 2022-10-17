@@ -63,7 +63,7 @@ public partial class MMBattleManager : MonoBehaviour
             ret = units1[0];
             foreach (var unit in units1)
             {
-                if (unit.cell.id > ret.cell.id)
+                if (unit.cell.index > ret.cell.index)
                 {
                     ret = unit;
                 }
@@ -74,7 +74,7 @@ public partial class MMBattleManager : MonoBehaviour
             ret = units2[0];
             foreach (var unit in units2)
             {
-                if (unit.cell.id < ret.cell.id)
+                if (unit.cell.index < ret.cell.index)
                 {
                     ret = unit;
                 }

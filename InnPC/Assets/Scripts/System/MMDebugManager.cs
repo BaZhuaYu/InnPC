@@ -21,4 +21,14 @@ public class MMDebugManager : MonoBehaviour
         MMBattleManager.Instance.CheckGameWin();
     }
 
+
+    public void PrintUnits()
+    {
+        foreach(var unit in MMBattleManager.Instance.units2)
+        {
+            Debug.Log("Unit: " + unit.displayName);
+            Debug.Log("Cell: " + unit.cell.index);
+        }
+    }
+
 }

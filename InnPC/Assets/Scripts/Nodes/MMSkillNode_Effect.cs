@@ -28,6 +28,7 @@ public partial class MMSkillNode : MMNode
                 //break;
             case MMEffectType.Summon:
                 effect.destCell = effect.source.cell;
+                effect.userinfo.Add("CellID", 1);
                 break;
             default:
                 break;
@@ -43,6 +44,7 @@ public partial class MMSkillNode : MMNode
     }
 
 
+    
 
 
 

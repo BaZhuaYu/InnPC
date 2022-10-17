@@ -23,8 +23,7 @@ public partial class MMBattleManager
     
     public void OnPhasePlayerRound()
     {
-        //MMCardManager.instance.Draw(4);
-        //SetSourceCell(units1[0].cell);
+        
         foreach (var unit in units1)
         {
             unit.tempCell = unit.cell;
@@ -33,7 +32,6 @@ public partial class MMBattleManager
         {
             unit.tempCell = unit.cell;
         }
-
         AutoSelectSour();
     }
 

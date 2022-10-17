@@ -51,7 +51,8 @@ public partial class MMUnitNode : MMNode
 
     public  List<MMBuff> buffs;
 
-
+    public int tempATK;
+    public int tempDEF;
 
     public MMNode iconRage;
     public MMNode iconWeak;
@@ -62,10 +63,13 @@ public partial class MMUnitNode : MMNode
     public List<MMNode> iconsSP;
 
 
+    public List<MMSkillNode> skillHistory;
+
+
     public void Accept(MMUnit unit)
     {
         this.unit = unit;
-        
+        this.name = "MMUnitNode_" + unit.id;
 
         LoadImage("Units/" + unit.key + "QS");
 
@@ -101,6 +105,7 @@ public partial class MMUnitNode : MMNode
         }
 
         buffs = new List<MMBuff>();
+        skillHistory = new List<MMSkillNode>();
 
         EnterState(MMUnitState.Normal);
 
@@ -116,8 +121,12 @@ public partial class MMUnitNode : MMNode
 
     public void Clear()
     {
+        Debug.Log("Unit Clear: " + displayName + " Cell: " + this.cell.index);
         this.cell.Clear();
-        this.gameObject.transform.SetParent(null);
+        
+        GameObject aa = GameObject.Find("DeadUnit");
+        this.gameObject.transform.SetParent(aa.transform);
+        this.SetParent(aa.GetComponent<MMNode>());
     }
 
 
@@ -316,5 +325,58 @@ public partial class MMUnitNode : MMNode
             IncreaseAP();
         }
     }
+
+
+    public void PlaySkill(MMSkillNode skill)
+    {
+        this.skillHistory.Add(skill);
+
+        List<MMSkillNode> aa = skillHistory.FindAll( a => a.effectType == MMEffectType.Attack);
+
+        if(skill.time == MMTriggerTime.NormalAttackNum2)
+        {
+            if((aa.Count % 2) == 0)
+            {
+                MMEffect effect = skill.Create(null, null);
+
+            }
+        }
+    }
+
+
+    public List<MMEffect> CreateEffect(MMTriggerTime time)
+    {
+        List<MMEffect> ret = new List<MMEffect>();
+
+        foreach (var skill in skills)
+        {
+            if(skill.time == time)
+            {
+                MMEffect effect = skill.Create(this, null);
+                ret.Add(effect);
+            }
+        }
+
+        return ret;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public bool HasSkill(int id)
+    {
+        return true;
+    }
+
 
 }

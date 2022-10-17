@@ -15,12 +15,13 @@ public enum MMEffectType
     DeATK,
     Damage,     //8
     Summon,     //9
-
+    TempATKDEF,     //10
 
     AddUnit,
     AddHand,
     AddBuff,
 
+    AttackNum,   //14
 }
 
 

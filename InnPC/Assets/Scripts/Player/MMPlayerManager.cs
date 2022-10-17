@@ -27,7 +27,7 @@ public class MMPlayerManager : MonoBehaviour
 
     void Start()
     {
-        gold = 110;
+        gold = 0;
 
         level = 1;
 
@@ -41,7 +41,7 @@ public class MMPlayerManager : MonoBehaviour
 
     public void LoadData()
     {
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 3; i++)
         {
             MMUnit unit1 = MMUnit.Create((i + 1) * 100 + 10000);
             units.Add(unit1);

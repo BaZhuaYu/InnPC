@@ -9,6 +9,7 @@ public partial class MMUnitNode : MMNode, IPointerDownHandler, IPointerUpHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        Debug.Log(this);
 
         if(MMBattleManager.Instance.phase == MMBattlePhase.Begin)
         {
