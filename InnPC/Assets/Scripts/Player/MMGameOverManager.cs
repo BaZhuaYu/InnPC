@@ -40,13 +40,15 @@ public class MMGameOverManager : MMNode
 
         rewards = new List<MMRewardType>();
         //rewards.Add(MMRewardType.Gold);
-        
-        rewards.Add(MMRewardType.Unit);
+
+        rewards.Add(MMRewardType.Item);
         rewards.Add(MMRewardType.Skill);
-        //rewards.Add(MMRewardType.Item);
+        rewards.Add(MMRewardType.Unit);
+        
+        
 
         MMPlayerManager.Instance.gold += MMBattleManager.Instance.level + 2;
-        MMPlayerManager.Instance.level += 1;
+        MMPlayerManager.Instance.level += 0;
 
         buttons = new List<MMButton>();
         foreach (var reward in rewards)

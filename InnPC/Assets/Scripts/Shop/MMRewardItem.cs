@@ -14,23 +14,13 @@ public class MMRewardItem : MonoBehaviour, IPointerClickHandler
         MMUnitNode node = GetComponent<MMUnitNode>();
         MMUnit unit = node.unit;
 
-
-        switch(item.effect)
-        {
-            case 1:
-                unit.atk += 1;
-                break;
-            case 2:
-                unit.maxHP += 1;
-                unit.hp += 1;
-                break;
-            case 3:
-                unit.ap += 1;
-                break;
-            default:
-                break;
-        }
+        MMEffect effect = item.CreateEffect();
+        effect.source = node;
+        effect.target = node;
         
+        MMBattleManager.Instance.ExecuteEffectOnGain(effect);
+
+
         MMRewardPanel.instance.CloseUI();
         MMGameOverManager.Instance.UpdateUI();
     }

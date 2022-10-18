@@ -6,9 +6,14 @@ public class MMDebugManager : MonoBehaviour
 {
     public static void Log(string s)
     {
+        return;
         Debug.Log(s);
     }
 
+    public static void Warning(string s)
+    {
+        Debug.LogWarning(s);
+    }
 
     public static void FatalError(string s)
     {

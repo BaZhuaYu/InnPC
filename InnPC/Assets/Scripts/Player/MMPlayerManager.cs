@@ -27,9 +27,9 @@ public class MMPlayerManager : MonoBehaviour
 
     void Start()
     {
-        gold = 0;
+        gold = 100;
 
-        level = 1;
+        level = 0;
 
         units = new List<MMUnit>();
         skills = new List<MMSkill>();

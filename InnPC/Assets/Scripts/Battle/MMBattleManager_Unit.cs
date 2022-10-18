@@ -25,21 +25,7 @@ public partial class MMBattleManager : MonoBehaviour
     }
 
 
-    public void SetSelectingSkill(MMSkillNode skill)
-    {
-        this.selectingSkill = skill;
-        skill.MoveUp(20);
-        sourceUnit.ShowAttackCells();
-
-        if (skill.area == MMArea.None)
-        {
-            MMBattleManager.Instance.PlaySkill();
-        }
-        else
-        {
-            MMBattleManager.Instance.EnterState(MMBattleState.SelectSkill);
-        }
-    }
+    
 
 
 
@@ -143,31 +129,12 @@ public partial class MMBattleManager : MonoBehaviour
         {
             if (unit.unitState == MMUnitState.Dead)
             {
-                List<MMEffect> effects = unit.CreateEffect(MMTriggerTime.OnDead);
+                BroadCastOnDead(unit);
                 unit.Clear();
-
-                foreach(var effect in effects)
-                {
-                    ExecuteEffect(effect);
-                }
-                
-                //BroadCastUnitSkill(MMTriggerTime.OnDead, unit);
-                
             }
         }
 
-        ClearUnitsInList();
-
         
-        if (CheckGameOver())
-        {
-
-        }
-        else
-        {
-            EnterState(MMBattleState.Normal);
-            AutoSelectSour();
-        }
     }
 
 

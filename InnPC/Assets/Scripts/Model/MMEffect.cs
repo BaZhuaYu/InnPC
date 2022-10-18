@@ -7,12 +7,13 @@ public enum MMEffectType
 {
     None,       //0
     Attack,     //1
-    InHP,       //2
-    DeHP,       //3
-    InAP,       //4
-    DeAP,
-    InATK,      //6
+    InATK,      //2
     DeATK,
+    InHP,       //4
+    DeHP,       //
+    InAP,       //6
+    DeAP,
+
     Damage,     //8
     Summon,     //9
     TempATKDEF,     //10
@@ -22,6 +23,8 @@ public enum MMEffectType
     AddBuff,
 
     AttackNum,   //14
+    HengSao,        
+    GuanChuan,
 }
 
 

@@ -24,32 +24,35 @@ public partial class MMBattleManager : MonoBehaviour
     }
 
 
-    public void BroadCast(MMTriggerTime time, MMEffect eff)
+    public void BroadCast(MMTriggerTime time)
     {
+        MMDebugManager.Log("" + time);
+
         foreach (var unit in FindAllUnits())
         {
             foreach (var skill in unit.skills)
             {
                 if (skill.time == time)
                 {
+                    MMDebugManager.Warning("Unit:" + unit.displayName + " skill: " + skill.displayName);
                     //skill.ExecuteEffect(sourceUnit.cell, targetUnit.cell);
-                    MMEffect effect = skill.Create(unit, unit);
+                    MMEffect effect = skill.CreateEffect();
 
-                    switch (time)
-                    {
-                        case MMTriggerTime.OnSummon:
-                            if (unit == eff.source)
-                            {
-                                effect = skill.Create(unit, eff.target);
-                            }
-                            break;
-                        case MMTriggerTime.OnDead:
-                            Debug.Log("" + unit.displayName + "  " + skill.displayName + "  " + time);
-                            break;
-                        default:
-                            //effect = skill.Create(unit, null);
-                            break;
-                    }
+                    //switch (time)
+                    //{
+                    //    case MMTriggerTime.OnSummon:
+                    //        if (unit == eff.source)
+                    //        {
+                    //            effect = skill.Create(unit, eff.target);
+                    //        }
+                    //        break;
+                    //    case MMTriggerTime.OnDead:
+                    //        Debug.Log("" + unit.displayName + "  " + skill.displayName + "  " + time);
+                    //        break;
+                    //    default:
+                    //        //effect = skill.Create(unit, null);
+                    //        break;
+                    //}
 
                     ExecuteEffect(effect);
                 }
@@ -58,13 +61,24 @@ public partial class MMBattleManager : MonoBehaviour
     }
 
 
+    public void BroadCastOnDead(MMUnitNode unit)
+    {
+        List<MMEffect> effects = unit.CreateEffect(MMTriggerTime.OnDead);
+        
+        foreach (var effect in effects)
+        {
+            ExecuteEffect(effect);
+        }
+    }
+    
+
     public void BroadCastUnitSkill(MMTriggerTime time, MMUnitNode unit)
     {
         foreach(var skill in unit.skills)
         {
             if(skill.time == time)
             {
-                MMEffect effect = skill.Create(unit, unit);
+                MMEffect effect = skill.CreateEffect();
                 
                 switch(effect.type)
                 {
@@ -83,10 +97,35 @@ public partial class MMBattleManager : MonoBehaviour
 
 
 
+    public void ExecuteEffectOnGain(MMEffect effect)
+    {
+        switch (effect.type)
+        {
+            case MMEffectType.InATK:
+                effect.target.unit.atk += 1;
+                break;
+            case MMEffectType.InHP:
+                effect.target.unit.maxHP += 1;
+                effect.target.unit.hp += 1;
+                break;
+            case MMEffectType.InAP:
+                effect.target.unit.ap += 1;
+                break;    
+            default:
+                break;
+        }
+    }
 
 
+    public void ExecuteEffectOnSummon(MMEffect effect)
+    {
 
+    }
 
+    public void ExecuteEffectOnDead(MMEffect effect)
+    {
+
+    }
 
 
 
@@ -105,7 +144,6 @@ public partial class MMBattleManager : MonoBehaviour
 
 
     //public void Trigger
-
 
 
 
@@ -168,34 +206,59 @@ public partial class MMBattleManager : MonoBehaviour
         MMUnitNode target = effect.target;
 
         target.DecreaseHP(source.atk + tempATK);
-        foreach (var tar in effect.sideTargets)
+        if(source.hengsao > 0)
         {
-            tar.DecreaseHP(source.atk + tempATK);
+            List<MMCell> cells = MMMap.Instance.FindCellsBeside(target.cell);
+            foreach(var cell in cells)
+            {
+                if(cell.unitNode != null)
+                {
+                    cell.unitNode.DecreaseHP(source.hengsao);
+                }
+            }
+            //List<MMUnitNode> units = source.find
+        }
+        if (source.guanchuan > 0)
+        {
+            List<MMCell> cells = MMMap.Instance.FindCellsBehind(target.cell);
+            foreach (var cell in cells)
+            {
+                if (cell.unitNode != null)
+                {
+                    cell.unitNode.DecreaseHP(source.guanchuan);
+                }
+            }
+            //List<MMUnitNode> units = source.find
         }
 
 
-        if (target.unitState != MMUnitState.Stunned)
-        {
-            //眩晕状态不还击    
-        }
-        else
-        {
-            //还击
-            int value2 = Mathf.Max(target.atk - tempDEF, 0);
-            source.DecreaseHP(value2);
-        }
+
+        //if (target.unitState != MMUnitState.Stunned)
+        //{
+        //    //眩晕状态不还击    
+        //}
+        //else
+        //{
+        //    //还击
+        //    int value2 = Mathf.Max(target.atk - tempDEF, 0);
+        //    source.DecreaseHP(value2);
+        //}
+        //还击
+        int value2 = Mathf.Max(target.atk - tempDEF, 0);
+        source.DecreaseHP(value2);
+
 
         //Target从Weak状态进入Stunned的状态时，Source可以连击
-        bool flag1 = (target.unitState == MMUnitState.Weak);
-        if (target.group == 2)
-        {
-            target.DecreaseAP();
-        }
-        bool flag2 = (target.unitState == MMUnitState.Stunned);
-        if (flag1 && flag2)
-        {
-            source.EnterPhase(MMUnitPhase.Combo);
-        }
+        //bool flag1 = (target.unitState == MMUnitState.Weak);
+        //if (target.group == 2)
+        //{
+        //    target.DecreaseAP();
+        //}
+        //bool flag2 = (target.unitState == MMUnitState.Stunned);
+        //if (flag1 && flag2)
+        //{
+        //    source.EnterPhase(MMUnitPhase.Combo);
+        //}
     }
 
 
@@ -287,24 +350,37 @@ public partial class MMBattleManager : MonoBehaviour
     {
         MMUnitNode node1 = MMUnitNode.CreateFromID(effect.value);
         node1.group = effect.source.group;
+
+        MMCell c;
+        int row;
+
         
-        if(effect.destCell.Accept(node1) == false)
-        {
-            MMTipManager.instance.CreateTip("存在单位");
-            return;
-        }
+        
+
+        //if(effect.destCell.Accept(node1) == false)
+        //{
+        //    MMTipManager.instance.CreateTip("存在单位");
+        //    return;
+        //}
 
 
         if (node1.group == 1)
         {
+            row = 3 - node1.clss;
+            c = MMMap.Instance.FindRandomEmptyCellInRow(row);
             units1.Add(node1);
         }
         else
         {
+            row = node1.clss + 3;
+            c = MMMap.Instance.FindRandomEmptyCellInRow(row);
             units2.Add(node1);
         }
+
+        c.Accept(node1);
         effect.target = node1;
-        BroadCast(MMTriggerTime.OnSummon, effect);
+        //BroadCast(MMTriggerTime.OnSummon, effect);
+        ExecuteEffectOnSummon(effect);
 
     }
 

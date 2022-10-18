@@ -14,15 +14,14 @@ public class MMRewardSkill : MonoBehaviour, IPointerClickHandler
         MMUnit unit = node.unit;
         unit.skills.Add(skill.id);
 
+
         if(skill.time == MMTriggerTime.Gain)
         {
-            skill.skill.ExecuteEffect(unit);
-            //skill.Create(node, null);
-            
+            MMEffect effect = skill.CreateEffect();
+            effect.target = effect.source;
+            MMBattleManager.Instance.ExecuteEffectOnGain(effect);
         }
-
-        //MMBattleManager.Instance.BroadCast(MMTriggerTime.Gain);
-
+        
 
         MMRewardPanel.instance.CloseUI();
         MMGameOverManager.Instance.UpdateUI();

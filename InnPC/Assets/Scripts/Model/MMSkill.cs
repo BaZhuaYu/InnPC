@@ -20,6 +20,7 @@ public partial class MMSkill
     public string icon;
     public int prob;
 
+    public string target;
     public MMEffectType effect;
     public int value;
     public MMTriggerTime time;
@@ -82,105 +83,13 @@ public partial class MMSkill
         int.TryParse(values[allKeys["TempATK"]], out skill.tempATK);
         int.TryParse(values[allKeys["TempDEF"]], out skill.tempDEF);
 
-        skill.effect = DeserializeEffectType(values[allKeys["Effect"]]);
-        skill.area = DeserializeArea(values[allKeys["Area"]]);
-        skill.time = DeserializeTriggerTime(values[allKeys["Time"]]);
+        skill.effect = MMUtility.DeserializeEffectType(values[allKeys["Effect"]]);
+        skill.area = MMUtility.DeserializeArea(values[allKeys["Area"]]);
+        skill.time = MMUtility.DeserializeTriggerTime(values[allKeys["Time"]]);
 
         return skill;
     }
 
 
-    public static MMArea DeserializeArea(string s)
-    {
-        switch (s)
-        {
-            case "None":
-                return MMArea.None;
-            case "Single":
-                return MMArea.Single;
-            case "Row":
-                return MMArea.Row;
-            case "Col":
-                return MMArea.Col;
-            case "Beside":
-                return MMArea.Beside;
-            case "Behind":
-                return MMArea.Behind;
-        }
-        return MMArea.Single;
-    }
-
-
-    public static MMTriggerTime DeserializeTriggerTime(string s)
-    {
-        switch (s)
-        {
-            case "Gain":
-                return MMTriggerTime.Gain;
-            case "OnRoundBegin":
-                return MMTriggerTime.OnRoundBegin;
-            case "OnRoundEnd":
-                return MMTriggerTime.OnRoundEnd;
-            case "OnNormalAttack":
-                return MMTriggerTime.OnNormalAttack;
-            case "BeforeNormalAttack":
-                return MMTriggerTime.BeforeNormalAttack;
-            case "AfterNormalAttack":
-                return MMTriggerTime.AfterNormalAttack;
-            case "OnTargetDead":
-                return MMTriggerTime.OnKillTarget;
-            case "OnDead":
-                return MMTriggerTime.OnDead;
-            case "OnSummon":
-                return MMTriggerTime.OnSummon;
-        }
-
-        return MMTriggerTime.None;
-    }
-
-
-
-    public static MMEffectType DeserializeEffectType(string s)
-    {
-
-        //Attack,
-        //InHP,
-        //DeHP,
-        //InAP,
-        //DeAP,
-        //InATK,
-        //DeATK,
-        //Summon,
-
-
-        //AddUnit,
-        //AddHand,
-        //AddBuff,
-
-        switch (s)
-        {
-            case "1":
-                return MMEffectType.Attack;
-            case "2":
-                return MMEffectType.InHP;
-            case "3":
-                return MMEffectType.DeHP;
-            case "4":
-                return MMEffectType.InAP;
-            case "5":
-                return MMEffectType.DeAP;
-            case "6":
-                return MMEffectType.InATK;
-            case "7":
-                return MMEffectType.DeATK;
-            case "8":
-                return MMEffectType.Damage;
-            case "9":
-                return MMEffectType.Summon;
-
-        }
-
-        return MMEffectType.None;
-    }
-
+    
 }

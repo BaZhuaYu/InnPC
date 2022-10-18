@@ -7,14 +7,16 @@ public partial class MMBattleManager
 
     public void OnPhaseBegin()
     {
-        BroadCast(MMTriggerTime.OnRoundBegin, null);
+        BroadCast(MMTriggerTime.OnRoundBegin);
         foreach (var unit in units1)
         {
+            unit.numAction = 1;
             unit.ConfigState();
             unit.ConfigSkill();
         }
         foreach (var unit in units2)
         {
+            unit.numAction = 1;
             unit.ConfigState();
             unit.ConfigSkill();
         }
@@ -23,7 +25,6 @@ public partial class MMBattleManager
     
     public void OnPhasePlayerRound()
     {
-        
         foreach (var unit in units1)
         {
             unit.tempCell = unit.cell;
@@ -79,7 +80,7 @@ public partial class MMBattleManager
             }
         }
 
-        BroadCast(MMTriggerTime.OnRoundEnd, null);
+        BroadCast(MMTriggerTime.OnRoundEnd);
     }
 
 

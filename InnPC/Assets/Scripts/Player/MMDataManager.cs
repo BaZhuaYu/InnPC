@@ -52,10 +52,10 @@ public class MMDataManager : MonoBehaviour
         {
             string[] values = s.Split(',');
 
-            //if(values[0] == null || values[0] == "")
-            //{
-            //    continue;
-            //}
+            if (values[0] == null || values[0] == "")
+            {
+                continue;
+            }
 
             if (index == 0)
             {

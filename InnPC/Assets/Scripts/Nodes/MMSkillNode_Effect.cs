@@ -5,13 +5,20 @@ using UnityEngine;
 public partial class MMSkillNode : MMNode
 {
 
-    public MMEffect Create(MMUnitNode source, MMUnitNode target)
+    public MMEffect CreateEffect()
     {
         MMEffect effect = new MMEffect();
         effect.type = this.effectType;
         effect.value = this.value;
-        effect.source = source;
-        effect.target = target;
+        effect.source = this.unit;
+        switch (this.target)
+        {
+            case "Source":
+                effect.target = this.unit;
+                break;
+            default:
+                break;
+        }
 
         switch (effect.type)
         {
@@ -25,11 +32,11 @@ public partial class MMSkillNode : MMNode
             //case MMEffectType.InHP:
             //case MMEffectType.InATK:
             //    effect.target = effect.source;
-                //break;
-            case MMEffectType.Summon:
-                effect.destCell = effect.source.cell;
-                effect.userinfo.Add("CellID", 1);
-                break;
+            //break;
+            //case MMEffectType.Summon:
+            //    effect.destCell = effect.source.cell;
+            //    effect.userinfo.Add("CellID", 1);
+            //    break;
             default:
                 break;
         }
@@ -44,7 +51,6 @@ public partial class MMSkillNode : MMNode
     }
 
 
-    
 
 
 

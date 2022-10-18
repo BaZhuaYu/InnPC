@@ -71,4 +71,17 @@ public class MMItemNode : MMNode
     }
 
 
+
+
+    public MMEffect CreateEffect()
+    {
+        MMEffect ret = new MMEffect();
+        ret.type = MMUtility.DeserializeEffectType(item.effect + "");
+        ret.value = this.value;             
+
+        return ret;
+    }
+
+
+
 }

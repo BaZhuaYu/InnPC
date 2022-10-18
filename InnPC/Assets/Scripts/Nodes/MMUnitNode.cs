@@ -42,6 +42,9 @@ public partial class MMUnitNode : MMNode
     public int clss;
 
     public int attackRange;
+    public int hengsao;
+    public int guanchuan;
+    public int numAction;
 
     public List<MMSkillNode> skills;
 
@@ -83,7 +86,7 @@ public partial class MMUnitNode : MMNode
         hp = unit.hp;
         maxAP = unit.maxAP;
         ap = unit.ap;
-        ap = maxAP;
+//        ap = maxAP;
 
         atk = unit.atk;
         def = unit.def;
@@ -94,6 +97,8 @@ public partial class MMUnitNode : MMNode
         clss = unit.clss;
 
         attackRange = unit.attackRange;
+        hengsao = 0;
+        guanchuan = 0;
 
         skills = new List<MMSkillNode>();
         foreach (var id in unit.skills)
@@ -102,6 +107,7 @@ public partial class MMUnitNode : MMNode
             MMSkillNode node = MMSkillNode.Create();
             node.Accept(card);
             skills.Add(node);
+            node.unit = this;
         }
 
         buffs = new List<MMBuff>();
@@ -121,7 +127,7 @@ public partial class MMUnitNode : MMNode
 
     public void Clear()
     {
-        Debug.Log("Unit Clear: " + displayName + " Cell: " + this.cell.index);
+        MMDebugManager.Log("Unit Clear: " + displayName + " Cell: " + this.cell.index);
         this.cell.Clear();
         
         GameObject aa = GameObject.Find("DeadUnit");
@@ -337,7 +343,7 @@ public partial class MMUnitNode : MMNode
         {
             if((aa.Count % 2) == 0)
             {
-                MMEffect effect = skill.Create(null, null);
+                MMEffect effect = skill.CreateEffect();
 
             }
         }
@@ -352,7 +358,7 @@ public partial class MMUnitNode : MMNode
         {
             if(skill.time == time)
             {
-                MMEffect effect = skill.Create(this, null);
+                MMEffect effect = skill.CreateEffect();
                 ret.Add(effect);
             }
         }

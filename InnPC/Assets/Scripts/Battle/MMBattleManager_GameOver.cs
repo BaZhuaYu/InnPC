@@ -4,9 +4,7 @@ using UnityEngine;
 
 public partial class MMBattleManager : MonoBehaviour
 {
-
-
-
+    
     public bool CheckGameOver()
     {
         if (CheckGameLost())

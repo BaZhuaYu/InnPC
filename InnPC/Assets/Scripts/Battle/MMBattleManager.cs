@@ -42,6 +42,10 @@ public partial class MMBattleManager : MonoBehaviour
     {
         main.onClick.AddListener(OnClickMainButton);
 
+        MMCardPanel.Instance.CloseUI();
+        MMSkillPanel.Instance.CloseUI();
+        MMUnitPanel.Instance.CloseUI();
+
         EnterPhase(MMBattlePhase.Begin);
     }
 
@@ -58,56 +62,15 @@ public partial class MMBattleManager : MonoBehaviour
     {
 
     }
+    
 
 
-
-
-
-
-    public void PlaySkill()
+    public void PlayCard()
     {
-        if (this.selectingSkill == null)
-        {
-            MMTipManager.instance.CreateTip("没有选择技能");
-            return;
-        }
 
-        if (this.sourceUnit == null)
-        {
-            MMTipManager.instance.CreateTip("没有己方英雄");
-            return;
-        }
-
-        //if (selectingSkill.area == MMArea.None)
-        //{
-        //    selectingSkill.ExecuteEffect(sourceUnit.cell, null);
-        //}
-        //else
-        //{
-        //    selectingSkill.ExecuteEffect(sourceUnit.cell, targetUnit.cell);
-        //}
-
-        if (selectingSkill.area == MMArea.None)
-        {
-            targetUnit = sourceUnit;
-            //MMEffect effect = selectingSkill.Create(sourceUnit.cell, null);
-            //ExecuteEffect(effect);
-        }
-        else
-        {
-            //MMEffect effect = selectingSkill.Create(sourceUnit.cell, targetUnit.cell);
-            //ExecuteEffect(effect);
-        }
-        MMEffect effect = selectingSkill.Create(sourceUnit, targetUnit);
-        ExecuteEffect(effect);
-
-        //MMCardPanel.Instance.PlayCard(selectedSkill);
-        MMSkillPanel.Instance.PlaySkill(selectingSkill);
-        MMBattleManager.Instance.EnterState(MMBattleState.SourDone);
     }
 
 
-    
 
     public void EnterState(MMBattleState state)
     {
@@ -122,13 +85,16 @@ public partial class MMBattleManager : MonoBehaviour
                 ClearSelectSkill();
                 ClearTarget();
                 MMSkillPanel.Instance.Clear();
-                //MMSkillPanel.Instance.CloseUI();
-                //MMCardPanel.Instance.OpenUI();
+                MMSkillPanel.Instance.CloseUI();
+                MMCardPanel.Instance.OpenUI();
+                AutoSelectSour();
                 break;
             case MMBattleState.SelectSour:
                 sourceUnit.tempCell.Accept(sourceUnit);
                 DrawSkill();
                 sourceUnit.ShowMoveCells();
+                MMSkillPanel.Instance.OpenUI();
+                MMCardPanel.Instance.CloseUI();
                 break;
             case MMBattleState.SourMoved:
                 sourceUnit.HideMoveCells();
@@ -140,7 +106,19 @@ public partial class MMBattleManager : MonoBehaviour
             case MMBattleState.SourDone:
                 sourceUnit.tempCell = sourceUnit.cell;
                 HandleSourceActionDone();
-                EnterState(MMBattleState.Normal);
+
+                ClearUnitsInList();
+                
+                if (CheckGameOver())
+                {
+
+                }
+                else
+                {
+                    EnterState(MMBattleState.Normal);
+                    
+                }
+
                 return;
         }
 
@@ -211,26 +189,13 @@ public partial class MMBattleManager : MonoBehaviour
     }
 
 
-    public void DrawSkill()
-    {
-        //MMCardPanel.Instance.Draw(count);
-
-        MMSkillPanel.Instance.Accept(sourceUnit.skills);
-    }
-
-
-    public void ClearSelectSkill()
-    {
-        this.selectingSkill = null;
-        MMSkillPanel.Instance.selectingSkill = null;
-    }
 
 
     public void Clear()
     {
 
         this.EnterPhase(MMBattlePhase.End);
-        this.EnterState(MMBattleState.Normal);
+        //this.EnterState(MMBattleState.Normal);
 
         foreach(var unit in units1)
         {
@@ -281,15 +246,18 @@ public partial class MMBattleManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                SetSelectingSkill(sourceUnit.skills[0]);
+                //SetSelectingSkill(sourceUnit.skills[0]);
+                SelectSkill(sourceUnit.skills[0]);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                SetSelectingSkill(sourceUnit.skills[1]);
+                //SetSelectingSkill(sourceUnit.skills[1]);
+                SelectSkill(sourceUnit.skills[1]);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha3))
             {
-                SetSelectingSkill(sourceUnit.skills[2]);
+                //SetSelectingSkill(sourceUnit.skills[2]);
+                SelectSkill(sourceUnit.skills[2]);
             }
             //else if (Input.GetKeyDown(KeyCode.Alpha4))
             //{

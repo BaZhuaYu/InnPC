@@ -61,7 +61,6 @@ public partial class MMLevel
             int unitID = int.Parse(unitIDString);
             if (unitID != 0)
             {
-                Debug.Log("Add Emeny At: " + (cellIndex + 20));
                 level.enemies.Add(cellIndex + 20, MMUnit.Create(unitID));
             }
 
@@ -75,7 +74,6 @@ public partial class MMLevel
             int unitID = int.Parse(unitIDString);
             if (unitID != 0)
             {
-                Debug.Log("Add Emeny At: " + (cellIndex + 24));
                 level.enemies.Add(cellIndex + 24, MMUnit.Create(unitID));
             }
 

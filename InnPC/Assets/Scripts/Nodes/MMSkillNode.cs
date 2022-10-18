@@ -21,12 +21,15 @@ public partial class MMSkillNode : MMNode
     public string displayName;
     public string displayNote;
 
+    public int cost;
+
     public MMArea area;
 
     public MMTriggerTime time;
 
     public List<MMSkillKeyWord> keywords;
 
+    public string target;
     public MMEffectType effectType;
     public int value;
 
@@ -47,7 +50,6 @@ public partial class MMSkillNode : MMNode
 
     public void Accept(MMSkill skill)
     {
-
         if(this.skill != null)
         {
             Clear();
@@ -71,6 +73,8 @@ public partial class MMSkillNode : MMNode
         this.key = skill.key;
         this.displayName = skill.displayName;
         this.displayNote = skill.displayNote;
+
+        this.cost = skill.cost;
         this.area = skill.area;
 
         this.effectType = skill.effect;

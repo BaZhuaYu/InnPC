@@ -37,8 +37,8 @@ public partial class MMUnit
 
     public int attackRange;
 
-    public List<int> skills;
     public int card;
+    public List<int> skills;
 
 
     public int prob;
@@ -85,23 +85,23 @@ public partial class MMUnit
         unit.attackRange = int.Parse(values[allKeys["AttackRange"]]);
 
         unit.skills = new List<int>();
-        string[] ssss = values[allKeys["Skill"]].Split(';');
-
-        foreach (var temp in ssss)
-        {
-            int a = int.Parse(temp);
-            unit.skills.Add(a);
-        }
-
-        
         unit.skills.Add(10000);
+        unit.skills.Add(int.Parse(values[allKeys["Skill"]]));
+        
+        //if (unit.id < 10500)
+        //{
+        //    unit.skills.Add(unit.id);
+        //}
+
         unit.skills.Add(1000);
-        if (unit.id < 10500)
-        {
-            unit.skills.Add(unit.id);
-        }
+
 
         return unit;
+
+
+        
+
+
     }
 
     

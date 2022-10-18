@@ -32,9 +32,8 @@ public partial class MMSkillNode : MMNode, IBeginDragHandler, IDragHandler, IEnd
             }
         }
 
-
-        MMBattleManager.Instance.SetSelectingSkill(this);
         
+        MMBattleManager.Instance.SelectSkill(this);
     }
 
 

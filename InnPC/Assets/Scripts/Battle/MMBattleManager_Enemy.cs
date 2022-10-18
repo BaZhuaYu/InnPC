@@ -14,43 +14,33 @@ public partial class MMBattleManager : MonoBehaviour
 
     public IEnumerator ConfigEnemyAI()
     {
-        foreach (var unit in units2)
-        {
-            SetSource(unit);
-            yield return new WaitForSeconds(1f);
+        //foreach (var unit in units2)
+        //{
+        //    SetSource(unit);
+        //    yield return new WaitForSeconds(0.5f);
             
-            unit.ConfigSkill();
+        //    unit.ConfigSkill();
 
-            if(unit.skill == 1)
-            {
-                SetSelectingSkill(unit.skills[0]);
-                yield return new WaitForSeconds(1f);
+        //    if(unit.ap == unit.maxAP)
+        //    {
+        //        SelectSkill(unit.skills[0]);
+        //        yield return new WaitForSeconds(0.5f);
 
-                SetTarget(FindRandomUnit1());
-                yield return new WaitForSeconds(1f);
+        //        SetTarget(FindRandomUnit1());
+        //        yield return new WaitForSeconds(0.5f);
+        //    }
+        //    else
+        //    {
+        //        SelectSkill(unit.skills[2]);
+        //        yield return new WaitForSeconds(0.5f);
+        //    }
 
-                PlaySkill();
-            }
-            else if (unit.skill == 2)
-            {
-                SetSelectingSkill(unit.skills[1]);
-                yield return new WaitForSeconds(1f);
-
-                SetTarget(FindRandomUnit1());
-                yield return new WaitForSeconds(1f);
-
-                PlaySkill();
-            }
-            else
-            {
-                EnterState(MMBattleState.SourDone);
-            }
-        }
+        //    PlaySkill();
+            
+        //}
 
         yield return new WaitForSeconds(1.0f);
         OnClickMainButton();
-        //yield return new WaitForSeconds(1.0f);
-        //OnClickMainButton();
     }
 
     
