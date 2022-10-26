@@ -29,7 +29,7 @@ public partial class MMSkillNode : MMNode
 
     public List<MMSkillKeyWord> keywords;
 
-    public string target;
+    public string targetKey;
     public MMEffectType effectType;
     public int value;
 
@@ -78,6 +78,7 @@ public partial class MMSkillNode : MMNode
         this.area = skill.area;
 
         this.effectType = skill.effect;
+        this.targetKey = skill.target;
         this.value = skill.value;
 
         this.tempATK = skill.tempATK;

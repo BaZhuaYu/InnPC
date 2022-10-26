@@ -95,6 +95,11 @@ public partial class MMUnit
 
         unit.skills.Add(1000);
 
+        if(unit.id == 10300)
+        {
+            unit.skills.Add(1021);
+        }
+
 
         return unit;
 

@@ -28,12 +28,14 @@ public partial class MMBattleManager : MonoBehaviour
         {
 
         }
+
         MMEffect effect = selectingSkill.CreateEffect();
         effect.target = targetUnit;
         ExecuteEffect(effect);
 
         //MMCardPanel.Instance.PlayCard(selectedSkill);
         MMSkillPanel.Instance.PlaySkill(selectingSkill);
+        this.historySkill.Add(selectingSkill);
         MMBattleManager.Instance.EnterState(MMBattleState.SourDone);
     }
 

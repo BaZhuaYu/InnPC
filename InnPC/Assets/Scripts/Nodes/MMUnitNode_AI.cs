@@ -64,15 +64,46 @@ public partial class MMUnitNode : MMNode
     public MMUnitNode FindTarget()
     {
         List<MMCell> cells = MMMap.Instance.FindCellsInCol(this.cell.col) ;
-        foreach(var cell in cells)
+        MMUnitNode ret = null;
+
+        if(group == 1)
         {
-            if (cell.unitNode != null)
+            int index = MMMap.Instance.cells.Count;
+            foreach (var cell in cells)
             {
-                return cell.unitNode;
+                if (cell.unitNode != null)
+                {
+                    if (cell.unitNode.group == 2)
+                    {
+                        if (cell.index <= index)
+                        {
+                            ret = cell.unitNode;
+                            index = cell.index;
+                        }
+                    }
+                }
             }
         }
-
-        return null;
+        else
+        {
+            int index = 0;
+            foreach (var cell in cells)
+            {
+                if (cell.unitNode != null)
+                {
+                    if (cell.unitNode.group == 1)
+                    {
+                        if (cell.index >= index)
+                        {
+                            ret = cell.unitNode;
+                            index = cell.index;
+                        }
+                    }
+                }
+            }
+        }
+        
+        return ret;
     }
 
 

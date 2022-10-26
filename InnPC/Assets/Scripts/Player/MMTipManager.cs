@@ -20,7 +20,20 @@ public class MMTipManager : MMNode
         GameObject obj = Resources.Load("Prefabs/MMTipNode") as GameObject;
         MMTipNode tip = Instantiate(obj).GetComponent<MMTipNode>();
         tip.Show(s);
+        Debug.LogWarning(s);
     }
 
     
+    public void CreateSkillTip(MMSkillNode skill)
+    {
+        GameObject obj = Resources.Load("Prefabs/MMSkillTip") as GameObject;
+        
+
+        GameObject tip = Instantiate(obj);
+        tip.transform.SetParent(MMBattleManager.Instance.background.transform);
+        tip.transform.localPosition = new Vector3(-800, 0, 0);
+        Text text = tip.GetComponentInChildren<Text>();
+        text.text = skill.displayName;
+    }
+
 }

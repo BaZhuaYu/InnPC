@@ -279,4 +279,36 @@ public partial class MMMap : MMNode
     }
 
 
+
+    public int FindFrontRowOfGroup(int group)
+    {
+        int ret = 0;
+        if(group == 2)
+        {
+            ret = 7;
+        }
+        foreach(var cell in cells)
+        {
+            if (cell.unitNode != null && cell.unitNode.group == group)
+            {
+                if(group == 1)
+                {
+                    if (cell.row > ret)
+                    {
+                        ret = cell.row;
+                    }
+                }
+                else
+                {
+                    if (cell.row < ret)
+                    {
+                        ret = cell.row;
+                    }
+                }
+            }
+        }
+
+        return ret;
+    }
+
 }

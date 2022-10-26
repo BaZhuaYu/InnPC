@@ -88,7 +88,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 186771d003c973b4c8e6b04790937335, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  state: 0
+  nodeState: 0
+  nodeHighlight: 0
+  userinfo: 
 --- !u!1 &1059795267034928513
 GameObject:
   m_ObjectHideFlags: 0
@@ -253,7 +255,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 186771d003c973b4c8e6b04790937335, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  state: 0
+  nodeState: 0
+  nodeHighlight: 0
+  userinfo: 
 --- !u!1 &2109675343806712956
 GameObject:
   m_ObjectHideFlags: 0
@@ -342,7 +346,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 186771d003c973b4c8e6b04790937335, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  state: 0
+  nodeState: 0
+  nodeHighlight: 0
+  userinfo: 
 --- !u!1 &2331039138377401075
 GameObject:
   m_ObjectHideFlags: 0
@@ -591,7 +597,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 186771d003c973b4c8e6b04790937335, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  state: 0
+  nodeState: 0
+  nodeHighlight: 0
+  userinfo: 
 --- !u!1 &3840417954222313950
 GameObject:
   m_ObjectHideFlags: 0
@@ -680,7 +688,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 186771d003c973b4c8e6b04790937335, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  state: 0
+  nodeState: 0
+  nodeHighlight: 0
+  userinfo: 
 --- !u!1 &3883177920474437154
 GameObject:
   m_ObjectHideFlags: 0
@@ -694,7 +704,7 @@ GameObject:
   - component: {fileID: 8353765087410019971}
   - component: {fileID: -6315415965384158656}
   m_Layer: 5
-  m_Name: MMNodeUnit
+  m_Name: MMUnitNode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -709,7 +719,7 @@ RectTransform:
   m_GameObject: {fileID: 3883177920474437154}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.4, y: 1.4, z: 1.4}
   m_Children:
   - {fileID: 1110358534258139568}
   - {fileID: 879776059974516446}
@@ -775,7 +785,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a870c248070ee4d4d8472050bfabaf9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  state: 0
+  nodeState: 0
+  nodeHighlight: 0
+  userinfo: 
+  unit:
+    key: 
+    id: 0
+    displayName: 
+    displayNote: 
+    maxHP: 0
+    hp: 0
+    maxAP: 0
+    ap: 0
+    atk: 0
+    def: 0
+    mag: 0
+    spd: 0
+    race: 0
+    clss: 0
+    tempATK: 0
+    tempDEF: 0
+    attackRange: 0
+    card: 0
+    skills: 
+    prob: 0
   cell: {fileID: 0}
   tempCell: {fileID: 0}
   textHP: {fileID: 8131138435661368837}
@@ -795,9 +828,18 @@ MonoBehaviour:
   def: 0
   mag: 0
   spd: 0
+  race: 0
+  clss: 0
   attackRange: 0
-  cards: []
+  hengsao: 0
+  guanchuan: 0
+  numAction: 0
+  skills: []
   unitState: 0
+  unitPhase: 0
+  buffs: 
+  tempATK: 0
+  tempDEF: 0
   iconRage: {fileID: 3170405528080006011}
   iconWeak: {fileID: 3506953769693161240}
   backgroundATK: {fileID: 1059795267034928513}
@@ -809,6 +851,7 @@ MonoBehaviour:
   - {fileID: 8965228603605998642}
   - {fileID: 7475907231216443762}
   - {fileID: 7353137310241066691}
+  skillHistory: []
   skill: 0
 --- !u!1 &3901522628349441817
 GameObject:
@@ -898,7 +941,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 186771d003c973b4c8e6b04790937335, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  state: 0
+  nodeState: 0
+  nodeHighlight: 0
+  userinfo: 
 --- !u!1 &4482764152975358096
 GameObject:
   m_ObjectHideFlags: 0
@@ -1142,7 +1187,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 186771d003c973b4c8e6b04790937335, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  state: 0
+  nodeState: 0
+  nodeHighlight: 0
+  userinfo: 
 --- !u!1 &6855793110925671473
 GameObject:
   m_ObjectHideFlags: 0
@@ -1310,4 +1357,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 186771d003c973b4c8e6b04790937335, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  state: 0
+  nodeState: 0
+  nodeHighlight: 0
+  userinfo: 

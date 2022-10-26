@@ -11,15 +11,19 @@ public partial class MMSkillNode : MMNode
         effect.type = this.effectType;
         effect.value = this.value;
         effect.source = this.unit;
-        switch (this.target)
+        
+        switch (this.targetKey)
         {
             case "Source":
                 effect.target = this.unit;
                 break;
+            case "Target":
+                effect.target = this.unit.FindTarget();
+                break;
             default:
                 break;
         }
-
+        
         switch (effect.type)
         {
             case MMEffectType.Attack:
@@ -253,7 +257,5 @@ public partial class MMSkillNode : MMNode
         //    source.unitNode.DecreaseHP(value2);
         //}
     }
-
-
-
+    
 }

@@ -83,6 +83,7 @@ public partial class MMSkill
         int.TryParse(values[allKeys["TempATK"]], out skill.tempATK);
         int.TryParse(values[allKeys["TempDEF"]], out skill.tempDEF);
 
+        skill.target = values[allKeys["Target"]];
         skill.effect = MMUtility.DeserializeEffectType(values[allKeys["Effect"]]);
         skill.area = MMUtility.DeserializeArea(values[allKeys["Area"]]);
         skill.time = MMUtility.DeserializeTriggerTime(values[allKeys["Time"]]);

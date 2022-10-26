@@ -13,7 +13,7 @@ public partial class MMBattleManager : MonoBehaviour
     public Text buttonMain;
     public Text title;
 
-    
+
     public MMBattlePhase phase;
     public MMBattleState state;
 
@@ -27,7 +27,7 @@ public partial class MMBattleManager : MonoBehaviour
     public MMUnitNode targetUnit;
 
     //public MMLevel level;
-    
+    public List<MMSkillNode> historySkill;
 
     public int level;
 
@@ -46,10 +46,12 @@ public partial class MMBattleManager : MonoBehaviour
         MMSkillPanel.Instance.CloseUI();
         MMUnitPanel.Instance.CloseUI();
 
+        historySkill = new List<MMSkillNode>();
+
         EnterPhase(MMBattlePhase.Begin);
     }
 
-    
+
     public void LoadLevel()
     {
         level = MMPlayerManager.Instance.level;
@@ -62,7 +64,7 @@ public partial class MMBattleManager : MonoBehaviour
     {
 
     }
-    
+
 
 
     public void PlayCard()
@@ -77,7 +79,7 @@ public partial class MMBattleManager : MonoBehaviour
 
         this.state = state;
 
-        MMDebugManager.Log(this.state + "");
+
         switch (state)
         {
             case MMBattleState.Normal:
@@ -108,7 +110,7 @@ public partial class MMBattleManager : MonoBehaviour
                 HandleSourceActionDone();
 
                 ClearUnitsInList();
-                
+
                 if (CheckGameOver())
                 {
 
@@ -116,7 +118,7 @@ public partial class MMBattleManager : MonoBehaviour
                 else
                 {
                     EnterState(MMBattleState.Normal);
-                    
+
                 }
 
                 return;
@@ -129,30 +131,33 @@ public partial class MMBattleManager : MonoBehaviour
 
     public void OnClickMainButton()
     {
-        if (phase == MMBattlePhase.Begin)
+        switch (phase)
         {
-            EnterPhase(MMBattlePhase.PlayerRound);
+            case MMBattlePhase.Begin:
+                BroadCast(MMTriggerTime.OnBattleBegin);
+                EnterPhase(MMBattlePhase.PlayerRound);
+                break;
+            case MMBattlePhase.PlayerRound:
+                if (sourceUnit == null)
+                {
+                    BroadCast(MMTriggerTime.OnRoundEnd);
+                    EnterPhase(MMBattlePhase.EnemyRound);
+                }
+                else
+                {
+                    UnselectSourceCell();
+                }
+                break;
+            case MMBattlePhase.EnemyRound:
+                BroadCast(MMTriggerTime.OnRoundEnd);
+                OnPhaseEnd();
+                EnterPhase(MMBattlePhase.PlayerRound);
+                break;
+            case MMBattlePhase.End:
+                EnterPhase(MMBattlePhase.Begin);
+                break;
         }
-        else if (phase == MMBattlePhase.PlayerRound)
-        {
-            if (sourceUnit == null)
-            {
-                EnterPhase(MMBattlePhase.EnemyRound);
-            }
-            else
-            {
-                UnselectSourceCell();
-            }
-        }
-        else if (phase == MMBattlePhase.EnemyRound)
-        {
-            OnPhaseEnd();
-            EnterPhase(MMBattlePhase.PlayerRound);
-        }
-        else if (phase == MMBattlePhase.End)
-        {
-            EnterPhase(MMBattlePhase.Begin);
-        }
+
     }
 
 
@@ -172,12 +177,21 @@ public partial class MMBattleManager : MonoBehaviour
                 ShowTitle("PlayerRound");
                 main.enabled = true;
                 OnPhaseBegin();
-                OnPhasePlayerRound();
+                if (CheckGameOver())
+                {
+
+                }
+                else
+                {
+                    OnPhasePlayerRound();
+                }
+                BroadCast(MMTriggerTime.OnRoundBegin);
                 break;
             case MMBattlePhase.EnemyRound:
                 ShowButton("Wait");
                 ShowTitle("EnemyRound");
                 main.enabled = false;
+                BroadCast(MMTriggerTime.OnRoundBegin);
                 OnPhaseEnemyRound();
                 break;
             case MMBattlePhase.End:
@@ -197,7 +211,7 @@ public partial class MMBattleManager : MonoBehaviour
         this.EnterPhase(MMBattlePhase.End);
         //this.EnterState(MMBattleState.Normal);
 
-        foreach(var unit in units1)
+        foreach (var unit in units1)
         {
             unit.Clear();
         }
@@ -206,14 +220,14 @@ public partial class MMBattleManager : MonoBehaviour
         {
             unit.Clear();
         }
-        
+
         units1.Clear();
         units2.Clear();
         MMMap.Instance.Clear();
-        
+
     }
 
-    
+
 
     public void OnClickButtonBack()
     {
@@ -242,7 +256,7 @@ public partial class MMBattleManager : MonoBehaviour
         }
 
 
-        if(this.state == MMBattleState.SelectSour || this.state == MMBattleState.SourMoved)
+        if (this.state == MMBattleState.SelectSour || this.state == MMBattleState.SourMoved)
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
@@ -264,7 +278,7 @@ public partial class MMBattleManager : MonoBehaviour
             //    SetSelectSkill(MMCardManager.instance.hand.cards[3]);
             //}
         }
-        
+
     }
 
 
@@ -298,7 +312,7 @@ public partial class MMBattleManager : MonoBehaviour
 
     }
 
-    
+
 
     public void ShowButton(string s)
     {
@@ -310,7 +324,7 @@ public partial class MMBattleManager : MonoBehaviour
         title.text = s;
     }
 
-    
+
 
 
 

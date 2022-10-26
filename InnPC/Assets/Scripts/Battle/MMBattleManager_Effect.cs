@@ -5,7 +5,7 @@ using UnityEngine;
 
 public partial class MMBattleManager : MonoBehaviour
 {
-    
+
     public List<MMUnitNode> FindAllUnits()
     {
         List<MMUnitNode> ret = new List<MMUnitNode>();
@@ -26,61 +26,63 @@ public partial class MMBattleManager : MonoBehaviour
 
     public void BroadCast(MMTriggerTime time)
     {
-        MMDebugManager.Log("" + time);
+        MMDebugManager.Warning("BroadCast: " + time);
 
-        foreach (var unit in FindAllUnits())
+        List<MMUnitNode> units = null;
+
+        if (this.phase == MMBattlePhase.PlayerRound)
+        {
+            units = units1;
+        }
+        else
+        {
+            units = units2;
+        }
+
+        foreach (var unit in units)
         {
             foreach (var skill in unit.skills)
             {
                 if (skill.time == time)
                 {
-                    MMDebugManager.Warning("Unit:" + unit.displayName + " skill: " + skill.displayName);
-                    //skill.ExecuteEffect(sourceUnit.cell, targetUnit.cell);
+                    MMTipManager.instance.CreateSkillTip(skill);
                     MMEffect effect = skill.CreateEffect();
-
-                    //switch (time)
-                    //{
-                    //    case MMTriggerTime.OnSummon:
-                    //        if (unit == eff.source)
-                    //        {
-                    //            effect = skill.Create(unit, eff.target);
-                    //        }
-                    //        break;
-                    //    case MMTriggerTime.OnDead:
-                    //        Debug.Log("" + unit.displayName + "  " + skill.displayName + "  " + time);
-                    //        break;
-                    //    default:
-                    //        //effect = skill.Create(unit, null);
-                    //        break;
-                    //}
-
                     ExecuteEffect(effect);
                 }
             }
         }
+
     }
 
 
     public void BroadCastOnDead(MMUnitNode unit)
     {
         List<MMEffect> effects = unit.CreateEffect(MMTriggerTime.OnDead);
-        
+
         foreach (var effect in effects)
         {
+            switch (effect.type)
+            {
+                case MMEffectType.Summon:
+                    effect.target = MMUnitNode.CreateFromID(effect.value);
+                    break;
+                default:
+                    break;
+            }
             ExecuteEffect(effect);
         }
     }
-    
+
 
     public void BroadCastUnitSkill(MMTriggerTime time, MMUnitNode unit)
     {
-        foreach(var skill in unit.skills)
+        foreach (var skill in unit.skills)
         {
-            if(skill.time == time)
+            if (skill.time == time)
             {
                 MMEffect effect = skill.CreateEffect();
-                
-                switch(effect.type)
+
+                switch (effect.type)
                 {
                     case MMEffectType.Summon:
                         effect.destCell = unit.cell;
@@ -92,9 +94,8 @@ public partial class MMBattleManager : MonoBehaviour
                 ExecuteEffect(effect);
             }
         }
-        
-    }
 
+    }
 
 
     public void ExecuteEffectOnGain(MMEffect effect)
@@ -110,7 +111,7 @@ public partial class MMBattleManager : MonoBehaviour
                 break;
             case MMEffectType.InAP:
                 effect.target.unit.ap += 1;
-                break;    
+                break;
             default:
                 break;
         }
@@ -129,28 +130,22 @@ public partial class MMBattleManager : MonoBehaviour
 
 
 
-    //public IEnumerator Execute()
-    //{
-    //    while(true)
-    //    {
-    //        if (effects.Count > 0)
-    //        {
-    //            ExecuteEffect(effects[0]);
-    //            effects.RemoveAt(0);
-    //        }
-    //        yield return new WaitForSeconds(0.5f);
-    //    }
-    //}
-
-
-    //public void Trigger
-
-
-
-
     public void ExecuteEffect(MMEffect effect)
     {
-        Debug.Log(effect.type + " " + effect.value);
+
+        if (effect.target == null)
+        {
+            MMDebugManager.Warning("Source:" + effect.source.displayName +
+                                    " Target: null" +
+                                 " Effect: " + effect.type);
+            MMTipManager.instance.CreateTip("没有有效目标");
+            return;
+        }
+
+        MMDebugManager.Warning("Source:" + effect.source.displayName +
+                               " Target: " + effect.target.displayName +
+                               " Effect: " + effect.type);
+
 
         switch (effect.type)
         {
@@ -177,13 +172,13 @@ public partial class MMBattleManager : MonoBehaviour
             case MMEffectType.DeATK:
                 this.DeATK(effect);
                 break;
-                
+
             case MMEffectType.Damage:
                 Damage(effect);
                 break;
 
             case MMEffectType.Summon:
-                Summon(effect, null, null);
+                Summon(effect);
                 break;
 
             case MMEffectType.TempATKDEF:
@@ -206,12 +201,12 @@ public partial class MMBattleManager : MonoBehaviour
         MMUnitNode target = effect.target;
 
         target.DecreaseHP(source.atk + tempATK);
-        if(source.hengsao > 0)
+        if (source.hengsao > 0)
         {
             List<MMCell> cells = MMMap.Instance.FindCellsBeside(target.cell);
-            foreach(var cell in cells)
+            foreach (var cell in cells)
             {
-                if(cell.unitNode != null)
+                if (cell.unitNode != null)
                 {
                     cell.unitNode.DecreaseHP(source.hengsao);
                 }
@@ -346,39 +341,34 @@ public partial class MMBattleManager : MonoBehaviour
         }
     }
 
-    private void Summon(MMEffect effect, MMUnit unit, MMCell cell)
+    private void Summon(MMEffect effect)
     {
-        MMUnitNode node1 = MMUnitNode.CreateFromID(effect.value);
-        node1.group = effect.source.group;
-
+        effect.target.group = effect.source.group;
+        MMUnitNode node = effect.target;
         MMCell c;
         int row;
 
-        
-        
-
-        //if(effect.destCell.Accept(node1) == false)
-        //{
-        //    MMTipManager.instance.CreateTip("存在单位");
-        //    return;
-        //}
-
-
-        if (node1.group == 1)
+        if (node.group == 1)
         {
-            row = 3 - node1.clss;
+            row = 3 - node.clss;
+            int index = MMMap.Instance.FindFrontRowOfGroup(1);
+            row = Mathf.Min(row, index);
+            
             c = MMMap.Instance.FindRandomEmptyCellInRow(row);
-            units1.Add(node1);
+            units1.Add(node);
         }
         else
         {
-            row = node1.clss + 3;
+            row = node.clss + 3;
+            int index = MMMap.Instance.FindFrontRowOfGroup(2);
+            row = Mathf.Max(row, index);
+
             c = MMMap.Instance.FindRandomEmptyCellInRow(row);
-            units2.Add(node1);
+            units2.Add(node);
         }
 
-        c.Accept(node1);
-        effect.target = node1;
+        c.Accept(node);
+        effect.target = node;
         //BroadCast(MMTriggerTime.OnSummon, effect);
         ExecuteEffectOnSummon(effect);
 

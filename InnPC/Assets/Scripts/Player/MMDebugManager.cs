@@ -23,7 +23,8 @@ public class MMDebugManager : MonoBehaviour
 
     public void GMWin()
     {
-        MMBattleManager.Instance.CheckGameWin();
+        PrintSkillHistory();
+        //MMBattleManager.Instance.CheckGameWin();
     }
 
 
@@ -33,6 +34,14 @@ public class MMDebugManager : MonoBehaviour
         {
             Debug.Log("Unit: " + unit.displayName);
             Debug.Log("Cell: " + unit.cell.index);
+        }
+    }
+
+    public void PrintSkillHistory()
+    {
+        foreach(var skill in MMBattleManager.Instance.historySkill)
+        {
+            Debug.Log(skill.displayName);
         }
     }
 

@@ -127,12 +127,11 @@ public partial class MMUnitNode : MMNode
 
     public void Clear()
     {
-        MMDebugManager.Log("Unit Clear: " + displayName + " Cell: " + this.cell.index);
         this.cell.Clear();
-        
-        GameObject aa = GameObject.Find("DeadUnit");
-        this.gameObject.transform.SetParent(aa.transform);
-        this.SetParent(aa.GetComponent<MMNode>());
+        Destroy(gameObject);
+        //GameObject aa = GameObject.Find("DeadUnit");
+        //this.gameObject.transform.SetParent(aa.transform);
+        //this.SetParent(aa.GetComponent<MMNode>());
     }
 
 
@@ -344,7 +343,6 @@ public partial class MMUnitNode : MMNode
             if((aa.Count % 2) == 0)
             {
                 MMEffect effect = skill.CreateEffect();
-
             }
         }
     }
@@ -368,16 +366,7 @@ public partial class MMUnitNode : MMNode
 
 
 
-
-
-
-
-
-
-
-
-
-
+    
 
     public bool HasSkill(int id)
     {
