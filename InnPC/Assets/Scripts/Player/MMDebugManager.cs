@@ -39,9 +39,12 @@ public class MMDebugManager : MonoBehaviour
 
     public void PrintSkillHistory()
     {
-        foreach(var skill in MMBattleManager.Instance.historySkill)
+        foreach(var (round, skills) in MMBattleManager.Instance.historySkills)
         {
-            Debug.Log(skill.displayName);
+            foreach (var skill in skills)
+            {
+                Debug.Log(round + ": " + skill.displayName);
+            }
         }
     }
 

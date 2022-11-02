@@ -44,7 +44,6 @@ public partial class MMUnitNode : MMNode
     public int attackRange;
     public int hengsao;
     public int guanchuan;
-    public int numAction;
 
     public List<MMSkillNode> skills;
 
@@ -65,9 +64,7 @@ public partial class MMUnitNode : MMNode
     public MMNode groupSP;
     public List<MMNode> iconsSP;
 
-
-    public List<MMSkillNode> skillHistory;
-
+    
 
     public void Accept(MMUnit unit)
     {
@@ -86,7 +83,7 @@ public partial class MMUnitNode : MMNode
         hp = unit.hp;
         maxAP = unit.maxAP;
         ap = unit.ap;
-//        ap = maxAP;
+        ap = maxAP;
 
         atk = unit.atk;
         def = unit.def;
@@ -103,18 +100,16 @@ public partial class MMUnitNode : MMNode
         skills = new List<MMSkillNode>();
         foreach (var id in unit.skills)
         {
-            MMSkill card = MMSkill.Create(id);
+            MMSkill skill = MMSkill.Create(id);
             MMSkillNode node = MMSkillNode.Create();
-            node.Accept(card);
+            node.Accept(skill);
             skills.Add(node);
             node.unit = this;
         }
 
         buffs = new List<MMBuff>();
-        skillHistory = new List<MMSkillNode>();
-
         EnterState(MMUnitState.Normal);
-
+        
         Reload();
     }
 
@@ -127,11 +122,7 @@ public partial class MMUnitNode : MMNode
 
     public void Clear()
     {
-        this.cell.Clear();
         Destroy(gameObject);
-        //GameObject aa = GameObject.Find("DeadUnit");
-        //this.gameObject.transform.SetParent(aa.transform);
-        //this.SetParent(aa.GetComponent<MMNode>());
     }
 
 
@@ -331,22 +322,22 @@ public partial class MMUnitNode : MMNode
         }
     }
 
+    
 
-    public void PlaySkill(MMSkillNode skill)
+    public List<MMSkillNode> FindAllHistorySkills()
     {
-        this.skillHistory.Add(skill);
-
-        List<MMSkillNode> aa = skillHistory.FindAll( a => a.effectType == MMEffectType.Attack);
-
-        if(skill.time == MMTriggerTime.NormalAttackNum2)
+        List<MMSkillNode> ret = new List<MMSkillNode>();
+        foreach(var (round, skills) in MMBattleManager.Instance.historySkills)
         {
-            if((aa.Count % 2) == 0)
+            foreach(var skill in skills)
             {
-                MMEffect effect = skill.CreateEffect();
+                ret.Add(skill);
             }
         }
+        return ret;
     }
 
+    
 
     public List<MMEffect> CreateEffect(MMTriggerTime time)
     {
@@ -364,10 +355,7 @@ public partial class MMUnitNode : MMNode
         return ret;
     }
 
-
-
     
-
     public bool HasSkill(int id)
     {
         return true;

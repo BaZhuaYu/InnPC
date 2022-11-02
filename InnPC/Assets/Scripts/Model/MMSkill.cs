@@ -16,11 +16,13 @@ public partial class MMSkill
     public int id;
     public string displayName;
     public string displayNote;
+
+    public int type;
     public int cost;
     public string icon;
     public int prob;
 
-    public string target;
+    public MMEffectTarget target;
     public MMEffectType effect;
     public int value;
     public MMTriggerTime time;
@@ -51,17 +53,14 @@ public partial class MMSkill
                 break;
         }
     }
-
-
-
-
+    
+    
     public static MMSkill Create(int id)
     {
         if (allValues.ContainsKey(id) == false)
         {
             MMDebugManager.FatalError("MMSkill Create: " + id);
         }
-
         return CreateFromString(allValues[id]);
     }
 
@@ -76,6 +75,8 @@ public partial class MMSkill
         skill.displayName = values[allKeys["Name"]];
         skill.displayNote = values[allKeys["Note"]];
 
+        
+        int.TryParse(values[allKeys["Type"]], out skill.type);
         int.TryParse(values[allKeys["Prob"]], out skill.prob);
 
         int.TryParse(values[allKeys["Cost"]], out skill.cost);
@@ -83,14 +84,21 @@ public partial class MMSkill
         int.TryParse(values[allKeys["TempATK"]], out skill.tempATK);
         int.TryParse(values[allKeys["TempDEF"]], out skill.tempDEF);
 
-        skill.target = values[allKeys["Target"]];
+        skill.target = MMUtility.DeserializeEffectTarget(values[allKeys["Target"]]);
         skill.effect = MMUtility.DeserializeEffectType(values[allKeys["Effect"]]);
         skill.area = MMUtility.DeserializeArea(values[allKeys["Area"]]);
         skill.time = MMUtility.DeserializeTriggerTime(values[allKeys["Time"]]);
 
+        
+        skill.keywords = new List<MMSkillKeyWord>();
+        if(skill.id == 10000 || skill.id == 1000 || skill.id == 1035)
+        {
+            skill.keywords.Add(MMSkillKeyWord.Final);
+        }
+
+
         return skill;
     }
-
 
     
 }

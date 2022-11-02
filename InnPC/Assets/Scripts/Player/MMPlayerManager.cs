@@ -27,7 +27,7 @@ public class MMPlayerManager : MonoBehaviour
 
     void Start()
     {
-        gold = 100;
+        gold = 0;
 
         level = 0;
 
@@ -45,22 +45,10 @@ public class MMPlayerManager : MonoBehaviour
         {
             MMUnit unit1 = MMUnit.Create((i + 1) * 100 + 10000);
             units.Add(unit1);
-            //MMUnitNode node1 = MMUnitNode.Create();
-            //node1.group = 1;
-            //node1.Accept(unit1);
-            //units1.Add(node1);
-            //MMMap.instance.FindCellOfIndex(i).Accept(node1);
         }
     }
 
-
-
-
-
-
-
-
-
+    
     public List<MMUnitNode> CreateAllUnitNodes()
     {
         List<MMUnitNode> ret = new List<MMUnitNode>();

@@ -8,6 +8,11 @@ public partial class MMBattleManager : MonoBehaviour
 
     public static MMBattleManager Instance;
 
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     public MMNode background;
     public Button main;
     public Text buttonMain;
@@ -25,17 +30,12 @@ public partial class MMBattleManager : MonoBehaviour
     public MMSkillNode selectingSkill;
     public MMUnitNode sourceUnit;
     public MMUnitNode targetUnit;
-
-    //public MMLevel level;
-    public List<MMSkillNode> historySkill;
-
+    
+    public int round;
     public int level;
 
+    public Dictionary<int, List<MMSkillNode>> historySkills;
 
-    private void Awake()
-    {
-        Instance = this;
-    }
 
 
     private void Start()
@@ -46,7 +46,7 @@ public partial class MMBattleManager : MonoBehaviour
         MMSkillPanel.Instance.CloseUI();
         MMUnitPanel.Instance.CloseUI();
 
-        historySkill = new List<MMSkillNode>();
+        historySkills = new Dictionary<int, List<MMSkillNode>>();
 
         EnterPhase(MMBattlePhase.Begin);
     }
@@ -73,59 +73,6 @@ public partial class MMBattleManager : MonoBehaviour
     }
 
 
-
-    public void EnterState(MMBattleState state)
-    {
-
-        this.state = state;
-
-
-        switch (state)
-        {
-            case MMBattleState.Normal:
-                ClearSource();
-                ClearSelectSkill();
-                ClearTarget();
-                MMSkillPanel.Instance.Clear();
-                MMSkillPanel.Instance.CloseUI();
-                MMCardPanel.Instance.OpenUI();
-                AutoSelectSour();
-                break;
-            case MMBattleState.SelectSour:
-                sourceUnit.tempCell.Accept(sourceUnit);
-                DrawSkill();
-                sourceUnit.ShowMoveCells();
-                MMSkillPanel.Instance.OpenUI();
-                MMCardPanel.Instance.CloseUI();
-                break;
-            case MMBattleState.SourMoved:
-                sourceUnit.HideMoveCells();
-                break;
-            case MMBattleState.SelectSkill:
-                sourceUnit.HideMoveCells();
-                sourceUnit.ShowAttackCells();
-                break;
-            case MMBattleState.SourDone:
-                sourceUnit.tempCell = sourceUnit.cell;
-                HandleSourceActionDone();
-
-                ClearUnitsInList();
-
-                if (CheckGameOver())
-                {
-
-                }
-                else
-                {
-                    EnterState(MMBattleState.Normal);
-
-                }
-
-                return;
-        }
-
-        UpdateUI();
-    }
 
 
 
@@ -162,55 +109,13 @@ public partial class MMBattleManager : MonoBehaviour
 
 
 
-    public void EnterPhase(MMBattlePhase p)
-    {
-        this.phase = p;
-        switch (p)
-        {
-            case MMBattlePhase.Begin:
-                ShowButton("Start");
-                ShowTitle("Begin");
-                main.enabled = true;
-                break;
-            case MMBattlePhase.PlayerRound:
-                ShowButton("End Turn");
-                ShowTitle("PlayerRound");
-                main.enabled = true;
-                OnPhaseBegin();
-                if (CheckGameOver())
-                {
-
-                }
-                else
-                {
-                    OnPhasePlayerRound();
-                }
-                BroadCast(MMTriggerTime.OnRoundBegin);
-                break;
-            case MMBattlePhase.EnemyRound:
-                ShowButton("Wait");
-                ShowTitle("EnemyRound");
-                main.enabled = false;
-                BroadCast(MMTriggerTime.OnRoundBegin);
-                OnPhaseEnemyRound();
-                break;
-            case MMBattlePhase.End:
-                ShowButton("End");
-                ShowTitle("End");
-                main.enabled = false;
-                break;
-        }
-    }
-
+    
 
 
 
     public void Clear()
     {
-
-        this.EnterPhase(MMBattlePhase.End);
-        //this.EnterState(MMBattleState.Normal);
-
+        
         foreach (var unit in units1)
         {
             unit.Clear();

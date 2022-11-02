@@ -21,9 +21,11 @@ public partial class MMSkillNode : MMNode
     public string displayName;
     public string displayNote;
 
+    public MMSkillType type;
     public int cost;
 
     public MMArea area;
+    public MMEffectTarget target;
 
     public MMTriggerTime time;
 
@@ -40,11 +42,17 @@ public partial class MMSkillNode : MMNode
 
 
     public bool isReady;
+    public bool isEnabled;
 
 
     private void Start()
     {
-        keywords = new List<MMSkillKeyWord>();
+        
+    }
+
+    private void Update()
+    {
+        
     }
 
 
@@ -74,11 +82,20 @@ public partial class MMSkillNode : MMNode
         this.displayName = skill.displayName;
         this.displayNote = skill.displayNote;
 
+        this.type = MMUtility.DeserializeSkillType(skill.type);
+        if(type == MMSkillType.Power)
+        {
+            isEnabled = false;
+        }
+        else
+        {
+            isEnabled = true;
+        }
         this.cost = skill.cost;
         this.area = skill.area;
 
         this.effectType = skill.effect;
-        this.targetKey = skill.target;
+        this.target = skill.target;
         this.value = skill.value;
 
         this.tempATK = skill.tempATK;
@@ -89,6 +106,7 @@ public partial class MMSkillNode : MMNode
         this.name = "Card_" + id;
 
         this.time = skill.time;
+
 
         //ConfigReady();
         UpdateUI();

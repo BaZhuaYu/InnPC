@@ -4,7 +4,7 @@ using UnityEngine;
 
 public partial class MMBattleManager : MonoBehaviour
 {
-    
+
     public void PlaySkill()
     {
         if (this.selectingSkill == null)
@@ -19,10 +19,14 @@ public partial class MMBattleManager : MonoBehaviour
             return;
         }
 
+        sourceUnit.ap -= selectingSkill.cost;
 
-        if (selectingSkill.area == MMArea.None)
+
+
+        if(selectingSkill.type == MMSkillType.Power)
         {
-            targetUnit = sourceUnit;
+            sourceUnit.IncreaseATK(selectingSkill.tempATK);
+            sourceUnit.IncreaseHP(selectingSkill.tempDEF);
         }
         else
         {
@@ -30,13 +34,52 @@ public partial class MMBattleManager : MonoBehaviour
         }
 
         MMEffect effect = selectingSkill.CreateEffect();
-        effect.target = targetUnit;
+        effect.target = this.targetUnit;
+
+        if(selectingSkill.id == 1034)
+        {
+            effect.value = 0;
+            List<MMSkillNode> skills = sourceUnit.FindAllHistorySkills();
+            foreach(var skill in skills)
+            {
+                if(skill.type == MMSkillType.Attack)
+                {
+                    effect.value += 1;
+                }
+            }
+        }
+
         ExecuteEffect(effect);
 
-        //MMCardPanel.Instance.PlayCard(selectedSkill);
+        
+        this.historySkills[round].Add(selectingSkill);
+
         MMSkillPanel.Instance.PlaySkill(selectingSkill);
-        this.historySkill.Add(selectingSkill);
-        MMBattleManager.Instance.EnterState(MMBattleState.SourDone);
+
+        if(selectingSkill.type == MMSkillType.Power)
+        {
+            selectingSkill.EnterState(MMSkillState.Used);
+
+            foreach(var skill in selectingSkill.unit.skills)
+            {
+                if(skill.type == MMSkillType.Power)
+                {
+                    selectingSkill.isEnabled = false;
+                }
+            }
+            selectingSkill.isEnabled = true;
+        }
+        
+
+        if (selectingSkill.keywords.Contains(MMSkillKeyWord.Final))
+        {
+            EnterState(MMBattleState.SourDone);
+        }
+        else
+        {
+            EnterState(MMBattleState.PlayedSkill);
+        }
+
     }
 
 
@@ -60,13 +103,13 @@ public partial class MMBattleManager : MonoBehaviour
     public void SelectSkill(MMSkillNode skill)
     {
 
-        if(sourceUnit == null)
+        if (sourceUnit == null)
         {
             MMTipManager.instance.CreateTip("需要选中己方英雄");
             return;
         }
 
-        if(skill.cost > sourceUnit.ap)
+        if (skill.cost > sourceUnit.ap)
         {
             MMTipManager.instance.CreateTip("行动力不足");
             return;
@@ -74,35 +117,29 @@ public partial class MMBattleManager : MonoBehaviour
 
         MMSkillPanel.Instance.selectingSkill = skill;
         selectingSkill = skill;
-        
-        if (skill.area == MMArea.None)
-        {
-            MMBattleManager.Instance.PlaySkill();
-        }
-        else
+
+        if (skill.target == MMEffectTarget.None)
         {
             MMBattleManager.Instance.EnterState(MMBattleState.SelectSkill);
         }
-        
+        else
+        {
+            switch (skill.target)
+            {
+                case MMEffectTarget.Source:
+                    this.targetUnit = this.sourceUnit;
+                    break;
+                case MMEffectTarget.Target:
+                    this.targetUnit = this.sourceUnit.FindTarget();
+                    break;
+                default:
+                    MMDebugManager.Warning("SelectSkill: " + skill.target);
+                    break;
+            }
+            MMBattleManager.Instance.PlaySkill();
+        }
+
     }
-
-
-    //public void SetSelectingSkill(MMSkillNode skill)
-    //{
-    //    this.selectingSkill = skill;
-    //    skill.MoveUp(20);
-    //    sourceUnit.ShowAttackCells();
-
-    //    if (skill.area == MMArea.None)
-    //    {
-    //        MMBattleManager.Instance.PlaySkill();
-    //    }
-    //    else
-    //    {
-    //        MMBattleManager.Instance.EnterState(MMBattleState.SelectSkill);
-    //    }
-    //}
-
-
+    
 
 }

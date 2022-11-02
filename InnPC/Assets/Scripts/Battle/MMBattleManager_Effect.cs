@@ -43,7 +43,7 @@ public partial class MMBattleManager : MonoBehaviour
         {
             foreach (var skill in unit.skills)
             {
-                if (skill.time == time)
+                if (skill.time == time && skill.isEnabled)
                 {
                     MMTipManager.instance.CreateSkillTip(skill);
                     MMEffect effect = skill.CreateEffect();
@@ -142,10 +142,10 @@ public partial class MMBattleManager : MonoBehaviour
             return;
         }
 
-        MMDebugManager.Warning("Source:" + effect.source.displayName +
+        MMDebugManager.Warning("Source:" + effect.source.displayName + " Cell: " + effect.source.unit.id + 
                                " Target: " + effect.target.displayName +
                                " Effect: " + effect.type);
-
+        
 
         switch (effect.type)
         {
@@ -182,13 +182,15 @@ public partial class MMBattleManager : MonoBehaviour
                 break;
 
             case MMEffectType.TempATKDEF:
-
+                InATK(effect);
+                InHP(effect);
+                break;
 
             default:
                 MMDebugManager.Log("Not Find" + effect.type);
                 break;
         }
-
+        
     }
 
 
@@ -201,30 +203,54 @@ public partial class MMBattleManager : MonoBehaviour
         MMUnitNode target = effect.target;
 
         target.DecreaseHP(source.atk + tempATK);
-        if (source.hengsao > 0)
+        //if (source.hengsao > 0)
+        //{
+        //    List<MMCell> cells = MMMap.Instance.FindCellsBeside(target.cell);
+        //    foreach (var cell in cells)
+        //    {
+        //        if (cell.unitNode != null)
+        //        {
+        //            cell.unitNode.DecreaseHP(source.hengsao);
+        //        }
+        //    }
+        //}
+
+        if(effect.area == MMArea.Beside)
         {
             List<MMCell> cells = MMMap.Instance.FindCellsBeside(target.cell);
             foreach (var cell in cells)
             {
                 if (cell.unitNode != null)
                 {
-                    cell.unitNode.DecreaseHP(source.hengsao);
+                    cell.unitNode.DecreaseHP(source.atk);
                 }
             }
-            //List<MMUnitNode> units = source.find
         }
-        if (source.guanchuan > 0)
+
+        if (effect.area == MMArea.Behind)
         {
             List<MMCell> cells = MMMap.Instance.FindCellsBehind(target.cell);
             foreach (var cell in cells)
             {
                 if (cell.unitNode != null)
                 {
-                    cell.unitNode.DecreaseHP(source.guanchuan);
+                    cell.unitNode.DecreaseHP(source.atk);
                 }
             }
-            //List<MMUnitNode> units = source.find
         }
+
+
+        //if (source.guanchuan > 0)
+        //{
+        //    List<MMCell> cells = MMMap.Instance.FindCellsBehind(target.cell);
+        //    foreach (var cell in cells)
+        //    {
+        //        if (cell.unitNode != null)
+        //        {
+        //            cell.unitNode.DecreaseHP(source.guanchuan);
+        //        }
+        //    }
+        //}
 
 
 

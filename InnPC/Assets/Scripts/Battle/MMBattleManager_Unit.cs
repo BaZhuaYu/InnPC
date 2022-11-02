@@ -24,11 +24,7 @@ public partial class MMBattleManager : MonoBehaviour
         sourceUnit.cell.HandleHighlight(MMNodeHighlight.Green);
     }
 
-
     
-
-
-
     public void ClearSource()
     {
         if (sourceUnit == null)
@@ -75,69 +71,7 @@ public partial class MMBattleManager : MonoBehaviour
         this.ClearTarget();
     }
 
-
-
-
-    public void AutoSelectSour()
-    {
-        List<MMUnitNode> units = FindSortedUnits1();
-        foreach (var unit in units)
-        {
-            if (unit.unitPhase == MMUnitPhase.Combo)
-            {
-                SetSource(unit);
-                EnterState(MMBattleState.SelectSour);
-                return;
-            }
-        }
-
-        foreach (var unit in units)
-        {
-            if (unit.unitPhase == MMUnitPhase.Normal)
-            {
-                SetSource(unit);
-                EnterState(MMBattleState.SelectSour);
-                return;
-            }
-        }
-
-
-        if (this.sourceUnit == null)
-        {
-            MMTipManager.instance.CreateTip("己方回合行动结束");
-        }
-    }
-
-
-
-    public void HandleSourceActionDone()
-    {
-        sourceUnit.tempCell = sourceUnit.cell;
-
-        if (sourceUnit.unitPhase == MMUnitPhase.Combo)
-        {
-            sourceUnit.EnterPhase(MMUnitPhase.Normal);
-        }
-        else
-        {
-            sourceUnit.EnterPhase(MMUnitPhase.Actived);
-        }
-        
-        //ClearUnitsInMap();
-
-        foreach (var unit in FindAllUnits())
-        {
-            if (unit.unitState == MMUnitState.Dead)
-            {
-                BroadCastOnDead(unit);
-                unit.Clear();
-            }
-        }
-
-        
-    }
-
-
+    
 
     /// <summary>
     /// Find

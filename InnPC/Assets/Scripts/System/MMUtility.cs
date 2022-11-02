@@ -25,6 +25,23 @@ public class MMUtility : MonoBehaviour
         return MMArea.Single;
     }
 
+    public static MMEffectTarget DeserializeEffectTarget(string s)
+    {
+        switch (s)
+        {
+            case "Source":
+                return MMEffectTarget.Source;
+            case "Target":
+                return MMEffectTarget.Target;
+            default:
+                return MMEffectTarget.None;
+        }
+    }
+
+
+    //public static 
+
+
 
     public static MMTriggerTime DeserializeTriggerTime(string s)
     {
@@ -92,17 +109,34 @@ public class MMUtility : MonoBehaviour
                 return MMEffectType.Damage;
             case "9":
                 return MMEffectType.Summon;
+            case "10":
+            case "101":
+                return MMEffectType.TempATKDEF;
             case "15":
                 return MMEffectType.HengSao;
             case "16":
                 return MMEffectType.GuanChuan;
-
-
         }
 
         return MMEffectType.None;
     }
 
+
+    public static MMSkillType DeserializeSkillType(int t)
+    {
+        switch (t)
+        {
+            case 1:
+                return MMSkillType.Attack;
+            case 2:
+                return MMSkillType.Spell;
+            case 3:
+                return MMSkillType.Power;
+            case 4:
+                return MMSkillType.Passive;
+        }
+        return MMSkillType.None;
+    }
 
 
     public static Text CreateText(string name)
@@ -134,84 +168,4 @@ public class MMUtility : MonoBehaviour
     }
 
 
-}
-
-
-
-public enum MMSkillState
-{
-    Ready,
-    NotReady,
-    Used
-}
-
-
-
-
-public enum MMBattlePhase
-{
-    Begin,
-    PlayerRound,
-    EnemyRound,
-    End
-}
-
-
-public enum MMNodeHighlight
-{
-    Normal,
-    Yellow,
-    Red,
-    Blue,
-    Green
-}
-
-
-public enum MMNodeState
-{
-    Normal,
-    Yellow,
-    Red,
-    Blue,
-    Green
-}
-
-
-
-public enum MMBattleState
-{
-    Normal,
-    SelectSour,
-    SourMoved,
-    SelectSkill,
-    SourDone
-}
-
-
-public enum MMUnitState
-{
-    Rage,
-    Normal,
-    Weak,
-    Stunned,
-    Dead
-}
-
-
-public enum MMUnitPhase
-{
-    Normal,
-    Combo,
-    Actived,
-    Stunned
-}
-
-
-public enum MMRewardType : int
-{
-    Gold,
-    Unit,
-    Skill,
-    Card,
-    Item
 }

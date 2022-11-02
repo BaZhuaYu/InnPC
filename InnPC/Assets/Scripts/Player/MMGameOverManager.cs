@@ -147,7 +147,6 @@ public class MMGameOverManager : MMNode
         }
 
         this.SetActive(false);
-        MMBattleManager.Instance.Clear();
         MMBattleManager.Instance.LoadLevel();
         MMBattleManager.Instance.EnterPhase(MMBattlePhase.Begin);
     }

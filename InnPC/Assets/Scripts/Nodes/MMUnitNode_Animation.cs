@@ -4,35 +4,53 @@ using UnityEngine;
 
 public partial class MMUnitNode : MMNode
 {
-    
+
     public List<MMCell> FindMoveCells()
     {
-
+        List<MMCell> ret = new List<MMCell>();
         if (this.unitState == MMUnitState.Stunned)
         {
-            return new List<MMCell>();
+            return ret;
         }
 
 
-        List<int> rows = new List<int>();
-        
-        MMUnitNode unit;
-        if(this.group == 1)
+
+        if (this.group == 1)
         {
-            unit = MMBattleManager.Instance.FindFrontUnitOfGroup(2);
+            int min = this.cell.row;
+            int max = MMMap.Instance.row + 1;
+            
+            MMUnitNode unit = MMBattleManager.Instance.FindFrontUnitOfGroup(2);
+            if(unit != null)
+            {
+                max = unit.cell.row;
+            }
+
+            List<int> rows = new List<int>();
+            for (int i = min; i < max; i++)
+            {
+                rows.Add(i);
+            }
+            return MMMap.Instance.FindCellsInRows(rows);
         }
         else
         {
-            unit = MMBattleManager.Instance.FindFrontUnitOfGroup(1);
+            int max = this.cell.row;
+            int min = -1;
+            
+            MMUnitNode unit = MMBattleManager.Instance.FindFrontUnitOfGroup(1);
+            if (unit != null)
+            {
+                min = unit.cell.row;
+            }
+            List<int> rows = new List<int>();
+            for (int i = min + 1; i <= max; i++)
+            {
+                rows.Add(i);
+            }
+            return MMMap.Instance.FindCellsInRows(rows);
         }
         
-        for (int i = this.cell.row; i < unit.cell.row; i++)
-        {
-            rows.Add(i);
-        }
-        return MMMap.Instance.FindCellsInRows(rows);
-
-        //return MMMap.instance.FindCellsWithinDistance(this.cell, this.spd);
     }
 
 
@@ -109,20 +127,12 @@ public partial class MMUnitNode : MMNode
     }
 
 
-
     public void MoveToCell(MMCell cell)
     {
         int dis = this.cell.FindDistanceFromCell(cell);
         this.spd = 0;
         cell.Accept(this);
     }
-
-
-
-
-
-
-
 
 
 

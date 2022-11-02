@@ -33,7 +33,7 @@ public class MMTipManager : MMNode
         tip.transform.SetParent(MMBattleManager.Instance.background.transform);
         tip.transform.localPosition = new Vector3(-800, 0, 0);
         Text text = tip.GetComponentInChildren<Text>();
-        text.text = skill.displayName;
+        text.text = skill.unit.displayName + " " + skill.displayName + "\n" + skill.displayNote;
     }
 
 }

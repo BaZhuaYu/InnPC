@@ -33,11 +33,9 @@ public partial class MMCell : MMNode
     {
         if (this.unitNode != null)
         {
-            //this.Clear();
             return false;
         }
-
-
+        
         if (node.cell == null)
         {
             node.tempCell = node.cell;
@@ -47,11 +45,9 @@ public partial class MMCell : MMNode
         {
             node.cell.Clear();
         }
-
         
         this.unitNode = node;
         node.cell = this;
-
         node.SetParent(this);
 
         return true;
@@ -63,20 +59,21 @@ public partial class MMCell : MMNode
 
     }
 
+
     public void Clear()
     {
         if(this.unitNode != null)
         {
             Debug.Log("Cell Clear: " + index + " Unit: " + this.unitNode.displayName);
             this.unitNode.cell = null;
+            //this.unitNode.Clear();
             this.unitNode = null;
-        }   
+        }  
+        HandleState(MMNodeState.Normal);
+        HandleHighlight(MMNodeHighlight.Normal);
     }
 
-
-
-
-
+    
     public static MMCell Create()
     {
         GameObject prefabCell = Resources.Load("Prefabs/MMCell") as GameObject;
@@ -86,7 +83,6 @@ public partial class MMCell : MMNode
     }
 
     
-
     public int FindDistanceFromCell(MMCell cell)
     {
         int a = Mathf.Abs(cell.row - this.row);
@@ -94,9 +90,5 @@ public partial class MMCell : MMNode
         return a + b;
     }
 
-
-
-
-
-
+    
 }

@@ -50,6 +50,11 @@ public partial class MMBattleManager : MonoBehaviour
 
         if (group == 1)
         {
+            if(units1.Count == 0)
+            {
+                return null;
+            }
+
             ret = units1[0];
             foreach (var unit in units1)
             {
@@ -61,6 +66,11 @@ public partial class MMBattleManager : MonoBehaviour
         }
         else
         {
+            if (units2.Count == 0)
+            {
+                return null;
+            }
+
             ret = units2[0];
             foreach (var unit in units2)
             {

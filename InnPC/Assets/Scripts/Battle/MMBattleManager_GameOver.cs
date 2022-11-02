@@ -9,11 +9,13 @@ public partial class MMBattleManager : MonoBehaviour
     {
         if (CheckGameLost())
         {
+            EnterPhase(MMBattlePhase.End);
             MMGameOverManager.Instance.SetLost();
             return true;
         }
         else if (CheckGameWin())
         {
+            EnterPhase(MMBattlePhase.End);
             MMGameOverManager.Instance.SetWin();
             return true;
         }
@@ -46,8 +48,19 @@ public partial class MMBattleManager : MonoBehaviour
 
     public void ClearUnitsInList()
     {
+        foreach (var unit in FindAllUnits())
+        {
+            if (unit.unitState == MMUnitState.Dead)
+            {
+                BroadCastOnDead(unit);
+                unit.Clear();
+            }
+        }
+
+
         units1.RemoveAll(unit => unit.unitState == MMUnitState.Dead);
         units2.RemoveAll(unit => unit.unitState == MMUnitState.Dead);
+
     }
 
 

@@ -21,6 +21,14 @@ public enum MMTriggerTime
 }
 
 
+public enum MMEffectTarget
+{
+    None,
+    Source,
+    Target,
+}
+
+
 public enum MMArea
 {
     None,
@@ -36,7 +44,9 @@ public enum MMArea
 
 public enum MMSkillKeyWord
 {
-    Ultimate
+    None,
+    Ultimate,
+    Final,
 }
 
 

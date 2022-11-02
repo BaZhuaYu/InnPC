@@ -76,9 +76,7 @@ public partial class MMUnit
         int.TryParse(values[allKeys["DEF"]], out unit.def);
         int.TryParse(values[allKeys["MAG"]], out unit.mag);
         int.TryParse(values[allKeys["SPD"]], out unit.spd);
-
-
-
+        
         int.TryParse(values[allKeys["Prob"]], out unit.prob);
         int.TryParse(values[allKeys["Card"]], out unit.card);
 
@@ -87,26 +85,22 @@ public partial class MMUnit
         unit.skills = new List<int>();
         unit.skills.Add(10000);
         unit.skills.Add(int.Parse(values[allKeys["Skill"]]));
-        
-        //if (unit.id < 10500)
-        //{
-        //    unit.skills.Add(unit.id);
-        //}
-
         unit.skills.Add(1000);
 
-        if(unit.id == 10300)
-        {
-            unit.skills.Add(1021);
-        }
+        //if (unit.id == 10100)
+        //{
+        //    unit.skills.Add(1035);
+        //    unit.skills.Add(1036);
+        //    unit.skills.Add(1037);
+        //}
 
-
-        return unit;
-
-
+        //if (unit.id == 10300)
+        //{
+        //    unit.skills.Add(1021);
+        //}
         
-
-
+        return unit;
+        
     }
 
     

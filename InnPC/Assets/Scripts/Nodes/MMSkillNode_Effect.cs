@@ -9,6 +9,7 @@ public partial class MMSkillNode : MMNode
     {
         MMEffect effect = new MMEffect();
         effect.type = this.effectType;
+        effect.area = skill.area;
         effect.value = this.value;
         effect.source = this.unit;
         
@@ -198,17 +199,7 @@ public partial class MMSkillNode : MMNode
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
+    
 
     public void HandleAttackCard(MMCell source, MMCell target)
     {
