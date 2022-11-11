@@ -18,11 +18,10 @@ public partial class MMBattleManager : MonoBehaviour
             MMTipManager.instance.CreateTip("没有己方英雄");
             return;
         }
-
-        sourceUnit.ap -= selectingSkill.cost;
-
-
-
+        
+        sourceUnit.DecreaseAP(selectingSkill.cost);
+        sourceUnit.numSkillUsed += 1;
+        
         if(selectingSkill.type == MMSkillType.Power)
         {
             sourceUnit.IncreaseATK(selectingSkill.tempATK);
@@ -35,6 +34,8 @@ public partial class MMBattleManager : MonoBehaviour
 
         MMEffect effect = selectingSkill.CreateEffect();
         effect.target = this.targetUnit;
+
+        Debug.Log("aaaaaaaaaaa: " + effect.type);
 
         if(selectingSkill.id == 1034)
         {
@@ -56,6 +57,8 @@ public partial class MMBattleManager : MonoBehaviour
 
         MMSkillPanel.Instance.PlaySkill(selectingSkill);
 
+
+        //Power Card
         if(selectingSkill.type == MMSkillType.Power)
         {
             selectingSkill.EnterState(MMSkillState.Used);
@@ -69,8 +72,20 @@ public partial class MMBattleManager : MonoBehaviour
             }
             selectingSkill.isEnabled = true;
         }
+
+        //After
+        if(selectingSkill.id == 1074)
+        {
+            if(effect.target.unitState == MMUnitState.Dead)
+            {
+                effect.source.IncreaseAP(1);
+                Debug.Log("!!!!!!!!!!!!!!!selectingSkill: " + selectingSkill);
+            }
+        }
+
         
 
+        //Final Card
         if (selectingSkill.keywords.Contains(MMSkillKeyWord.Final))
         {
             EnterState(MMBattleState.SourDone);
@@ -81,6 +96,10 @@ public partial class MMBattleManager : MonoBehaviour
         }
 
     }
+
+
+
+
 
 
 

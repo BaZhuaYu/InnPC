@@ -13,6 +13,9 @@ public partial class MMSkillNode : MMNode
     public MMNode icon;
     public Text textName;
     public Text textNote;
+    public Text textCost;
+    public Text textATK;
+    public Text textDEF;
 
 
     public int id;
@@ -47,31 +50,31 @@ public partial class MMSkillNode : MMNode
 
     private void Start()
     {
-        
+
     }
 
     private void Update()
     {
-        
+
     }
 
 
     public void Accept(MMSkill skill)
     {
-        if(this.skill != null)
+        if (this.skill != null)
         {
             Clear();
         }
 
         this.skill = skill;
-        
+
         Reload();
-    } 
+    }
 
 
     public void Reload()
     {
-        if(this.skill == null)
+        if (this.skill == null)
         {
             Clear();
             return;
@@ -83,7 +86,7 @@ public partial class MMSkillNode : MMNode
         this.displayNote = skill.displayNote;
 
         this.type = MMUtility.DeserializeSkillType(skill.type);
-        if(type == MMSkillType.Power)
+        if (type == MMSkillType.Power)
         {
             isEnabled = false;
         }
@@ -128,15 +131,56 @@ public partial class MMSkillNode : MMNode
     {
         this.textName.text = skill.displayName;
         this.textNote.text = skill.displayNote;
+        if (this.type == MMSkillType.Passive)
+        {
+            this.textCost.transform.parent.gameObject.SetActive(false);
+        }
+        else
+        {
+            this.textCost.transform.parent.gameObject.SetActive(true);
+            this.textCost.text = skill.cost + "";
+        }
+        switch (this.type)
+        {
+            case MMSkillType.Attack:
+                this.GetComponent<Image>().color = Color.red;
+                textATK.gameObject.SetActive(true);
+                textDEF.gameObject.SetActive(true);
+                textATK.text = "" + tempATK;
+                textDEF.text = "" + tempDEF;
+                break;
+            case MMSkillType.Spell:
+                this.GetComponent<Image>().color = Color.blue;
+                textATK.gameObject.SetActive(false);
+                textDEF.gameObject.SetActive(false);
+                break;
+            case MMSkillType.Power:
+                this.GetComponent<Image>().color = Color.yellow;
+                textATK.gameObject.SetActive(true);
+                textDEF.gameObject.SetActive(true);
+                textATK.text = "" + tempATK;
+                textDEF.text = "" + tempDEF;
+                break;
+            case MMSkillType.Passive:
+                this.GetComponent<Image>().color = Color.gray;
+                textATK.gameObject.SetActive(false);
+                textDEF.gameObject.SetActive(false);
+                break;
+            default:
+                this.GetComponent<Image>().color = Color.black;
+                textATK.gameObject.SetActive(false);
+                textDEF.gameObject.SetActive(false);
+                break;
+        }
         icon.LoadImage("Cards/" + key);
     }
 
 
     private void ConfigReady()
     {
-        if(this.keywords.Contains(MMSkillKeyWord.Ultimate))
+        if (this.keywords.Contains(MMSkillKeyWord.Ultimate))
         {
-            if(this.unit.unitState == MMUnitState.Rage)
+            if (this.unit.unitState == MMUnitState.Rage)
             {
                 isReady = true;
             }

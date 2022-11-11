@@ -197,10 +197,15 @@ public partial class MMBattleManager : MonoBehaviour
 
     private void Attack(MMEffect effect)
     {
+
         int tempATK = effect.userinfo["TempATK"];
         int tempDEF = effect.userinfo["TempDEF"];
         MMUnitNode source = effect.source;
         MMUnitNode target = effect.target;
+
+        BroadCastUnitSkill(MMTriggerTime.BeforeAttack, source);
+        BroadCastUnitSkill(MMTriggerTime.BeforeBeAttack, target);
+
 
         target.DecreaseHP(source.atk + tempATK);
         //if (source.hengsao > 0)
@@ -268,6 +273,8 @@ public partial class MMBattleManager : MonoBehaviour
         int value2 = Mathf.Max(target.atk - tempDEF, 0);
         source.DecreaseHP(value2);
 
+        BroadCastUnitSkill(MMTriggerTime.AfterAttack, source);
+        BroadCastUnitSkill(MMTriggerTime.AfterBeAttack, target);
 
         //Target从Weak状态进入Stunned的状态时，Source可以连击
         //bool flag1 = (target.unitState == MMUnitState.Weak);
@@ -311,11 +318,11 @@ public partial class MMBattleManager : MonoBehaviour
     {
         if (effect.target != null)
         {
-            effect.target.IncreaseAP();
+            effect.target.IncreaseAP(1);
         }
         foreach (var tar in effect.sideTargets)
         {
-            tar.IncreaseAP();
+            tar.IncreaseAP(1);
         }
     }
 
@@ -323,11 +330,11 @@ public partial class MMBattleManager : MonoBehaviour
     {
         if (effect.target != null)
         {
-            effect.target.DecreaseAP();
+            effect.target.DecreaseAP(1);
         }
         foreach (var tar in effect.sideTargets)
         {
-            tar.DecreaseAP();
+            tar.DecreaseAP(1);
         }
     }
 
@@ -391,6 +398,12 @@ public partial class MMBattleManager : MonoBehaviour
 
             c = MMMap.Instance.FindRandomEmptyCellInRow(row);
             units2.Add(node);
+        }
+
+        if(c == null)
+        {
+            MMTipManager.instance.CreateTip("没有更多格子");
+            return;
         }
 
         c.Accept(node);

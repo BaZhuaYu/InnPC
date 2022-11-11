@@ -14,8 +14,10 @@ public partial class MMBattleManager : MonoBehaviour
     }
 
     public MMNode background;
-    public Button main;
-    public Text buttonMain;
+    public Button buttonMain;
+    public Button buttonAttack;
+    public Button buttonAwait;
+    public Text textButtonMain;
     public Text title;
 
 
@@ -40,7 +42,14 @@ public partial class MMBattleManager : MonoBehaviour
 
     private void Start()
     {
-        main.onClick.AddListener(OnClickMainButton);
+        buttonMain = GameObject.Find("MainButton/Button").GetComponent<Button>();
+        buttonAttack = GameObject.Find("AttackButton").GetComponent<Button>();
+        buttonAwait = GameObject.Find("AwaitButton").GetComponent<Button>();
+        textButtonMain = GameObject.Find("MainButton/Button").GetComponentInChildren<Text>();
+
+        buttonMain.onClick.AddListener(OnClickMainButton);
+        buttonAttack.onClick.AddListener(OnClickAttackButton);
+        buttonAwait.onClick.AddListener(OnClickAwaitButton);
 
         MMCardPanel.Instance.CloseUI();
         MMSkillPanel.Instance.CloseUI();
@@ -221,7 +230,7 @@ public partial class MMBattleManager : MonoBehaviour
 
     public void ShowButton(string s)
     {
-        buttonMain.text = s;
+        textButtonMain.text = s;
     }
 
     public void ShowTitle(string s)
@@ -230,7 +239,33 @@ public partial class MMBattleManager : MonoBehaviour
     }
 
 
+    public void OnClickAwaitButton()
+    {
+        if(this.sourceUnit == null)
+        {
+            return;
+        }
 
+        //if (this.sourceUnit.numSkillUsed == 0)
+        //{
+        //    sourceUnit.IncreaseAP(1);
+        //}
+        sourceUnit.IncreaseAP(1);
 
+        EnterState(MMBattleState.SourDone);
+    }
 
+    public void OnClickAttackButton()
+    {
+        MMEffect effect = new MMEffect();
+        effect.type = MMEffectType.Attack;
+        effect.source= sourceUnit;
+        effect.target = sourceUnit.FindTarget();
+        effect.userinfo.Add("TempATK", 0);
+        effect.userinfo.Add("TempDEF", 0);
+        ExecuteEffect(effect);
+
+        sourceUnit.IncreaseAP(1);
+        EnterState(MMBattleState.SourDone);
+    }
 }

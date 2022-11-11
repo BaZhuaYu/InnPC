@@ -14,29 +14,36 @@ public partial class MMBattleManager
                 historySkills = new Dictionary<int, List<MMSkillNode>>();
                 ShowButton("Start");
                 ShowTitle("Begin");
-                main.enabled = true;
+                buttonMain.enabled = true;
+                ClosePanels();
+                MMUnitPanel.Instance.OpenUI();
                 break;
             case MMBattlePhase.PlayerRound:
                 round += 1;
                 historySkills.Add(round, new List<MMSkillNode>());
                 ShowButton("End Turn");
                 ShowTitle("PlayerRound");
-                main.enabled = true;
+                buttonMain.enabled = true;
                 OnPhaseBegin();
                 OnPhasePlayerRound();
+                MMCardPanel.Instance.OpenUI();
                 BroadCast(MMTriggerTime.OnRoundBegin);
                 break;
             case MMBattlePhase.EnemyRound:
                 ShowButton("Wait");
                 ShowTitle("EnemyRound");
-                main.enabled = false;
+                buttonMain.enabled = false;
+                MMCardPanel.Instance.CloseUI();
                 BroadCast(MMTriggerTime.OnRoundBegin);
                 OnPhaseEnemyRound();
                 break;
             case MMBattlePhase.End:
                 ShowButton("End");
                 ShowTitle("End");
-                main.enabled = false;
+                buttonMain.enabled = false;
+                MMCardPanel.Instance.CloseUI();
+                MMSkillPanel.Instance.CloseUI();
+                MMUnitPanel.Instance.CloseUI();
                 MMBattleManager.Instance.Clear();
                 break;
         }
@@ -85,37 +92,37 @@ public partial class MMBattleManager
     {
         foreach (var unit in units1)
         {
-            if (unit.unitState == MMUnitState.Stunned)
-            {
-                unit.IncreaspAPToMax();
-            }
-            else
-            {
-                //unit.IncreaseAP();
-            }
+            //if (unit.unitState == MMUnitState.Stunned)
+            //{
+            //    unit.IncreaspAPToMax();
+            //}
+            //else
+            //{
+            //    //unit.IncreaseAP();
+            //}
 
-            if(unit.unitState != MMUnitState.Rage)
-            {
-                unit.EnterState(MMUnitState.Normal);
-            }
+            //if(unit.unitState != MMUnitState.Rage)
+            //{
+            //    unit.EnterState(MMUnitState.Normal);
+            //}
 
         }
 
         foreach (var unit in units2)
         {
-            if (unit.unitState == MMUnitState.Stunned)
-            {
-                unit.IncreaspAPToMax();
-            }
-            else
-            {
-                unit.IncreaseAP();
-            }
+            //if (unit.unitState == MMUnitState.Stunned)
+            //{
+            //    unit.IncreaspAPToMax();
+            //}
+            //else
+            //{
+            //    unit.IncreaseAP();
+            //}
 
-            if (unit.unitState != MMUnitState.Rage)
-            {
-                unit.EnterState(MMUnitState.Normal);
-            }
+            //if (unit.unitState != MMUnitState.Rage)
+            //{
+            //    unit.EnterState(MMUnitState.Normal);
+            //}
         }
         
     }

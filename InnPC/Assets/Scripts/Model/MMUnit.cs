@@ -83,9 +83,20 @@ public partial class MMUnit
         unit.attackRange = int.Parse(values[allKeys["AttackRange"]]);
 
         unit.skills = new List<int>();
-        unit.skills.Add(10000);
         unit.skills.Add(int.Parse(values[allKeys["Skill"]]));
-        unit.skills.Add(1000);
+
+
+        //if (unit.id < 10400)
+        //{
+        //    unit.skills.Add(unit.id);
+        //}
+        unit.skills.Add(unit.id/100 * 100);
+
+        if(unit.id == 10100)
+        {
+            unit.skills.Add(1074);
+        }
+
 
         //if (unit.id == 10100)
         //{
@@ -98,7 +109,7 @@ public partial class MMUnit
         //{
         //    unit.skills.Add(1021);
         //}
-        
+
         return unit;
         
     }

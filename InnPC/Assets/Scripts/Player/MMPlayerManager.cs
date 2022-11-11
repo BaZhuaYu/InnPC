@@ -27,7 +27,7 @@ public class MMPlayerManager : MonoBehaviour
 
     void Start()
     {
-        gold = 0;
+        gold = 110;
 
         level = 0;
 

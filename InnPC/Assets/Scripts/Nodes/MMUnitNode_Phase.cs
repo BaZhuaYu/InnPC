@@ -9,7 +9,10 @@ public partial class MMUnitNode : MMNode
     {
         this.unitPhase = p;
 
-
+        if(unitPhase == MMUnitPhase.Acting)
+        {
+            numSkillUsed = 0;
+        }
 
     }
 

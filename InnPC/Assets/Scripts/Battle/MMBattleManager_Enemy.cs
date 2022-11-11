@@ -18,7 +18,7 @@ public partial class MMBattleManager : MonoBehaviour
         //{
         //    SetSource(unit);
         //    yield return new WaitForSeconds(0.5f);
-            
+
         //    unit.ConfigSkill();
 
         //    if(unit.ap == unit.maxAP)
@@ -36,21 +36,53 @@ public partial class MMBattleManager : MonoBehaviour
         //    }
 
         //    PlaySkill();
-            
+
         //}
+        foreach (var unit in units2)
+        {
+            SetSource(unit);
+            if (unit.ap == unit.maxAP)
+            {
+                MMUnitNode dest = unit.FindTarget();
+                if (dest != null)
+                {
+
+                    SelectSkill(unit.skills[0]);
+                    SetTarget(dest);
+
+                    Debug.Log("---------------------------");
+                    Debug.Log(sourceUnit.displayName);
+                    Debug.Log(selectingSkill.displayName);
+                    Debug.Log(targetUnit.displayName);
+                    Debug.Log("---------------------------");
+
+                    PlaySkill();
+                }
+                else
+                {
+                    Debug.Log("xxxxxxxxxxxxxxxxxxxxx");
+                }
+            }
+            else
+            {
+                OnClickAwaitButton();
+                //unit.IncreaseAP(1);
+            }
+            yield return new WaitForSeconds(1.0f);
+        }
 
         yield return new WaitForSeconds(1.0f);
         OnClickMainButton();
     }
 
-    
+
     public MMUnitNode FindFrontUnitOfGroup(int group)
     {
         MMUnitNode ret;
 
         if (group == 1)
         {
-            if(units1.Count == 0)
+            if (units1.Count == 0)
             {
                 return null;
             }
@@ -80,7 +112,7 @@ public partial class MMBattleManager : MonoBehaviour
                 }
             }
         }
-        
+
         return ret;
     }
 

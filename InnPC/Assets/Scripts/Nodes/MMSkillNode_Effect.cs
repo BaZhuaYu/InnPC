@@ -163,7 +163,7 @@ public partial class MMSkillNode : MMNode
         }
         else if (id == 1000)
         {
-            source.unitNode.IncreaseAP();
+            source.unitNode.IncreaseAP(1);
         }
         else if (id == 10000)
         {
@@ -214,16 +214,16 @@ public partial class MMSkillNode : MMNode
 
 
         //Target从Weak状态进入Stunned的状态时，Source可以连击
-        bool flag1 = (target.unitNode.unitState == MMUnitState.Weak);
-        if (target.unitNode.group == 2)
-        {
-            target.unitNode.DecreaseAP();
-        }
-        bool flag2 = (target.unitNode.unitState == MMUnitState.Stunned);
-        if (flag1 && flag2)
-        {
-            source.unitNode.EnterPhase(MMUnitPhase.Combo);
-        }
+        //bool flag1 = (target.unitNode.unitState == MMUnitState.Weak);
+        //if (target.unitNode.group == 2)
+        //{
+        //    target.unitNode.DecreaseAP(1);
+        //}
+        //bool flag2 = (target.unitNode.unitState == MMUnitState.Stunned);
+        //if (flag1 && flag2)
+        //{
+        //    source.unitNode.EnterPhase(MMUnitPhase.Combo);
+        //}
 
 
         //bool flag1 = (target.unitNode.unitState != MMUnitState.Stunned);

@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public partial class MMUnitNode : MMNode
 {
+
 
     public List<MMCell> FindMoveCells()
     {
@@ -133,6 +135,26 @@ public partial class MMUnitNode : MMNode
         this.spd = 0;
         cell.Accept(this);
     }
+
+
+
+
+
+    public void PlayAnimationHurt(int value)
+    {
+        m_DamageAnimator.gameObject.SetActive(true);
+        m_DamageAnimator.SetTrigger("Show");
+        m_DamageText.text = "-" + value;
+        Invoke("aaa", 1f);
+    }
+
+    public void aaa()
+    {
+        m_DamageAnimator.gameObject.SetActive(false);
+    }
+
+
+
 
 
 

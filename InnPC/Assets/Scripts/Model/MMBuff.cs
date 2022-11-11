@@ -10,9 +10,11 @@ public enum MMTriggerTime
     OnBattleBegin,      //2
     OnRoundBegin,       //3
     OnRoundEnd,
-    OnNormalAttack,
-    BeforeNormalAttack,
-    AfterNormalAttack,
+    OnAttack,
+    BeforeAttack,
+    AfterAttack,
+    BeforeBeAttack,
+    AfterBeAttack,
     OnDead,
     OnKillTarget,
     OnSummon,
@@ -26,6 +28,8 @@ public enum MMEffectTarget
     None,
     Source,
     Target,
+    MinHPTarget,
+    MaxHPTarget,
 }
 
 

@@ -64,6 +64,18 @@ public partial class MMUnitNode : MMNode
     public MMNode groupSP;
     public List<MMNode> iconsSP;
 
+
+    public Animator m_DamageAnimator;
+    public Text m_DamageText;
+
+    public int numSkillUsed;
+
+    void Start()
+    {
+        //m_DamageAnimator = transform.Find("Damage").GetComponent<Animator>();
+        //m_DamageText = transform.Find("Damage/Text").GetComponent<Text>();
+        //m_DamageAnimator.gameObject.SetActive(false);
+    }
     
 
     public void Accept(MMUnit unit)
@@ -83,7 +95,7 @@ public partial class MMUnitNode : MMNode
         hp = unit.hp;
         maxAP = unit.maxAP;
         ap = unit.ap;
-        ap = maxAP;
+        //ap = maxAP;
 
         atk = unit.atk;
         def = unit.def;
@@ -109,7 +121,9 @@ public partial class MMUnitNode : MMNode
 
         buffs = new List<MMBuff>();
         EnterState(MMUnitState.Normal);
-        
+
+        m_DamageAnimator.gameObject.SetActive(false);
+
         Reload();
     }
 
@@ -138,6 +152,7 @@ public partial class MMUnitNode : MMNode
     public void DecreaseHP(int value)
     {
         this.hp -= value;
+        PlayAnimationHurt(value);
 
         if(hp <= 0)
         {
@@ -147,7 +162,7 @@ public partial class MMUnitNode : MMNode
         UpdateUI();
     }
 
-    public void IncreaseAP()
+    public void IncreaseAP(int value)
     {
         if (ap == maxAP)
         {
@@ -158,7 +173,7 @@ public partial class MMUnitNode : MMNode
             EnterState(MMUnitState.Rage);
         }
         
-        this.ap += 1;
+        this.ap += value;
 
         if (this.ap >= maxAP)
         {
@@ -169,7 +184,7 @@ public partial class MMUnitNode : MMNode
         UpdateUI();
     }
 
-    public void DecreaseAP()
+    public void DecreaseAP(int value)
     {
         if (ap == 0)
         {
@@ -180,7 +195,7 @@ public partial class MMUnitNode : MMNode
             EnterState(MMUnitState.Weak);
         }
 
-        this.ap -= 1;
+        this.ap -= value;
 
         if (this.ap <= 0)
         {
@@ -190,6 +205,15 @@ public partial class MMUnitNode : MMNode
 
         UpdateUI();
     }
+
+    public void DecreaseAPAll()
+    {
+        this.ap = 0;
+        EnterState(MMUnitState.Weak);
+        UpdateUI();
+    }
+
+
 
     public void IncreaseATK(int value)
     {
@@ -256,14 +280,14 @@ public partial class MMUnitNode : MMNode
         }
 
 
-        if(this.unitState == MMUnitState.Stunned)
-        {
-            backgroundATK.SetActive(false);
-        }
-        else
-        {
-            backgroundATK.SetActive(true);
-        }
+        //if(this.unitState == MMUnitState.Stunned)
+        //{
+        //    backgroundATK.SetActive(false);
+        //}
+        //else
+        //{
+        //    backgroundATK.SetActive(true);
+        //}
 
 
         for(int i = 0; i < 5;i++)
@@ -318,7 +342,7 @@ public partial class MMUnitNode : MMNode
     {
         for (int i = 0; i < maxAP; i++)
         {
-            IncreaseAP();
+            IncreaseAP(1);
         }
     }
 

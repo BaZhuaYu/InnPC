@@ -75,9 +75,8 @@ public enum MMUnitState
 public enum MMUnitPhase
 {
     Normal,
-    Combo,
+    Acting,
     Actived,
-    Stunned
 }
 
 

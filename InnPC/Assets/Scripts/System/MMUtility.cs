@@ -53,12 +53,16 @@ public class MMUtility : MonoBehaviour
                 return MMTriggerTime.OnRoundBegin;
             case "OnRoundEnd":
                 return MMTriggerTime.OnRoundEnd;
-            case "OnNormalAttack":
-                return MMTriggerTime.OnNormalAttack;
-            case "BeforeNormalAttack":
-                return MMTriggerTime.BeforeNormalAttack;
-            case "AfterNormalAttack":
-                return MMTriggerTime.AfterNormalAttack;
+            case "OnAttack":
+                return MMTriggerTime.OnAttack;
+            case "BeforeAttack":
+                return MMTriggerTime.BeforeAttack;
+            case "AfterAttack":
+                return MMTriggerTime.AfterAttack;
+            case "BeforeBeAttack":
+                return MMTriggerTime.BeforeBeAttack;
+            case "AfterBeAttack":
+                return MMTriggerTime.AfterBeAttack;
             case "OnTargetDead":
                 return MMTriggerTime.OnKillTarget;
             case "OnDead":

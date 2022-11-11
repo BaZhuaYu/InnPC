@@ -20,7 +20,7 @@ public partial class MMBattleManager : MonoBehaviour
                 ClearSelectSkill();
                 ClearTarget();
                 MMSkillPanel.Instance.Clear();
-                MMSkillPanel.Instance.CloseUI();
+                ClosePanels();
                 MMCardPanel.Instance.OpenUI();
                 AutoSelectSour();
                 break;
@@ -29,8 +29,9 @@ public partial class MMBattleManager : MonoBehaviour
                 sourceUnit.tempCell.Accept(sourceUnit);
                 DrawSkill();
                 sourceUnit.ShowMoveCells();
+                
+                ClosePanels();
                 MMSkillPanel.Instance.OpenUI();
-                MMCardPanel.Instance.CloseUI();
                 break;
 
             case MMBattleState.SourMoved:
@@ -49,7 +50,7 @@ public partial class MMBattleManager : MonoBehaviour
 
             case MMBattleState.SourDone:
                 sourceUnit.tempCell = sourceUnit.cell;
-                
+                sourceUnit.EnterPhase(MMUnitPhase.Actived);
                 HandleSourceActionDone();
                 ClearUnitsInList();
 
@@ -73,15 +74,15 @@ public partial class MMBattleManager : MonoBehaviour
     public void AutoSelectSour()
     {
         List<MMUnitNode> units = FindSortedUnits1();
-        foreach (var unit in units)
-        {
-            if (unit.unitPhase == MMUnitPhase.Combo)
-            {
-                SetSource(unit);
-                EnterState(MMBattleState.SelectSour);
-                return;
-            }
-        }
+        //foreach (var unit in units)
+        //{
+        //    if (unit.unitPhase == MMUnitPhase.Combo)
+        //    {
+        //        SetSource(unit);
+        //        EnterState(MMBattleState.SelectSour);
+        //        return;
+        //    }
+        //}
 
         foreach (var unit in units)
         {
@@ -105,18 +106,14 @@ public partial class MMBattleManager : MonoBehaviour
     public void HandleSourceActionDone()
     {
         sourceUnit.tempCell = sourceUnit.cell;
-
-        if (sourceUnit.unitPhase == MMUnitPhase.Combo)
-        {
-            sourceUnit.EnterPhase(MMUnitPhase.Normal);
-        }
-        else
-        {
-            sourceUnit.EnterPhase(MMUnitPhase.Actived);
-        }
-
+        sourceUnit.numSkillUsed = 0;
     }
 
-
+    public void ClosePanels()
+    {
+        MMCardPanel.Instance.CloseUI();
+        MMSkillPanel.Instance.CloseUI();
+        MMUnitPanel.Instance.CloseUI();
+    }
 
 }

@@ -86,6 +86,7 @@ public partial class MMSkill
 
         skill.target = MMUtility.DeserializeEffectTarget(values[allKeys["Target"]]);
         skill.effect = MMUtility.DeserializeEffectType(values[allKeys["Effect"]]);
+        //int.TryParse(values[allKeys["Effect"]], out skill.effect);
         skill.area = MMUtility.DeserializeArea(values[allKeys["Area"]]);
         skill.time = MMUtility.DeserializeTriggerTime(values[allKeys["Time"]]);
 
