@@ -58,6 +58,10 @@ public partial class MMBattleManager : MonoBehaviour
         historySkills = new Dictionary<int, List<MMSkillNode>>();
 
         EnterPhase(MMBattlePhase.Begin);
+
+
+        Debug.Log((MMEffectType)1);
+
     }
 
 
@@ -96,6 +100,10 @@ public partial class MMBattleManager : MonoBehaviour
             case MMBattlePhase.PlayerRound:
                 if (sourceUnit == null)
                 {
+                    //if(sourceUnit.HasSkillEnabled(1076))
+                    //{
+                    //    BroadCast(MMTriggerTime.OnRoundBegin);
+                    //}
                     BroadCast(MMTriggerTime.OnRoundEnd);
                     EnterPhase(MMBattlePhase.EnemyRound);
                 }
@@ -105,6 +113,10 @@ public partial class MMBattleManager : MonoBehaviour
                 }
                 break;
             case MMBattlePhase.EnemyRound:
+                if (sourceUnit.HasSkillEnabled(1076))
+                {
+                    BroadCast(MMTriggerTime.OnRoundBegin);
+                }
                 BroadCast(MMTriggerTime.OnRoundEnd);
                 OnPhaseEnd();
                 EnterPhase(MMBattlePhase.PlayerRound);

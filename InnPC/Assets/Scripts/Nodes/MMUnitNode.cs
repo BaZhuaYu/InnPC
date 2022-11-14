@@ -380,9 +380,16 @@ public partial class MMUnitNode : MMNode
     }
 
     
-    public bool HasSkill(int id)
+    public bool HasSkillEnabled(int id)
     {
-        return true;
+        foreach(var skill in skills)
+        {
+            if(skill.id == id && skill.enabled)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
 

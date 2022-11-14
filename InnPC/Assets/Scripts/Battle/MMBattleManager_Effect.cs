@@ -146,7 +146,6 @@ public partial class MMBattleManager : MonoBehaviour
                                " Target: " + effect.target.displayName +
                                " Effect: " + effect.type);
         
-
         switch (effect.type)
         {
             case MMEffectType.Attack:
@@ -186,18 +185,69 @@ public partial class MMBattleManager : MonoBehaviour
                 InHP(effect);
                 break;
 
+            case (MMEffectType)1067:
+                effect.value = effect.source.maxHP - effect.source.hp;
+                Damage(effect);
+                break;
+
+            case (MMEffectType)1068:
+                effect.source.IncreaseATK(1);
+                effect.source.DecreaseHP(1);
+                break;
+
+            case (MMEffectType)1071:
+
+                break;
+
+            case (MMEffectType)1074:
+                Debug.Log("1074");
+                Debug.Log(effect.target.hp);
+                Attack(effect);
+                break;
+
+            case (MMEffectType)1078:
+                foreach(var unit in units1)
+                {
+                    if(unit == effect.source)
+                    {
+
+                    }
+                    else
+                    {
+                        unit.IncreaseAP(1);
+                    }
+                }
+                break;
+                
             default:
                 MMDebugManager.Log("Not Find" + effect.type);
                 break;
         }
-        
+
+
+        switch (effect.type)
+        {
+            case (MMEffectType)1074:
+                Debug.Log(effect.target.hp);
+                if (effect.target.unitState == MMUnitState.Dead)
+                {
+                    effect.source.IncreaseAP(1);
+                    Debug.Log("!!!!!!!!!!!!!!!selectingSkill: " + selectingSkill);
+                }
+                else
+                {
+                    Debug.Log("&&&&&&&&&&&&&&&selectingSkill: " + selectingSkill);
+                }
+                break;
+        }
+
+
     }
 
 
 
     private void Attack(MMEffect effect)
     {
-
         int tempATK = effect.userinfo["TempATK"];
         int tempDEF = effect.userinfo["TempDEF"];
         MMUnitNode source = effect.source;

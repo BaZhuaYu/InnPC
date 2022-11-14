@@ -34,8 +34,7 @@ public partial class MMBattleManager : MonoBehaviour
 
         MMEffect effect = selectingSkill.CreateEffect();
         effect.target = this.targetUnit;
-
-        Debug.Log("aaaaaaaaaaa: " + effect.type);
+        
 
         if(selectingSkill.id == 1034)
         {
@@ -71,16 +70,6 @@ public partial class MMBattleManager : MonoBehaviour
                 }
             }
             selectingSkill.isEnabled = true;
-        }
-
-        //After
-        if(selectingSkill.id == 1074)
-        {
-            if(effect.target.unitState == MMUnitState.Dead)
-            {
-                effect.source.IncreaseAP(1);
-                Debug.Log("!!!!!!!!!!!!!!!selectingSkill: " + selectingSkill);
-            }
         }
 
         

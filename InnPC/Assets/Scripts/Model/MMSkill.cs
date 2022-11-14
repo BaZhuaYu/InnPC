@@ -85,6 +85,11 @@ public partial class MMSkill
         int.TryParse(values[allKeys["TempDEF"]], out skill.tempDEF);
 
         skill.target = MMUtility.DeserializeEffectTarget(values[allKeys["Target"]]);
+        if(skill.id == 1078)
+        {
+            Debug.Log(values[allKeys["Effect"]]);
+            Debug.Log("-----------------" + skill.id);
+        }
         skill.effect = MMUtility.DeserializeEffectType(values[allKeys["Effect"]]);
         //int.TryParse(values[allKeys["Effect"]], out skill.effect);
         skill.area = MMUtility.DeserializeArea(values[allKeys["Area"]]);

@@ -95,6 +95,7 @@ public partial class MMUnit
         if(unit.id == 10100)
         {
             unit.skills.Add(1074);
+            unit.ap = 1;
         }
 
 

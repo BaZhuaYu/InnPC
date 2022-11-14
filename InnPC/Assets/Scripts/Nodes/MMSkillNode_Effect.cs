@@ -25,23 +25,13 @@ public partial class MMSkillNode : MMNode
                 break;
         }
         
-        switch (effect.type)
+        switch (this.type)
         {
-            case MMEffectType.Attack:
+            case MMSkillType.Attack:
+            case MMSkillType.Power:
                 effect.userinfo.Add("TempATK", tempATK);
                 effect.userinfo.Add("TempDEF", tempDEF);
                 break;
-            //case MMEffectType.InAP
-
-            //case MMEffectType.InAP:
-            //case MMEffectType.InHP:
-            //case MMEffectType.InATK:
-            //    effect.target = effect.source;
-            //break;
-            //case MMEffectType.Summon:
-            //    effect.destCell = effect.source.cell;
-            //    effect.userinfo.Add("CellID", 1);
-            //    break;
             default:
                 break;
         }

@@ -52,7 +52,5 @@ public class MMEffect
         sideTargets = new List<MMUnitNode>();
         userinfo = new Dictionary<string, int>();
     }
-
-
     
 }

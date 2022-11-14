@@ -120,6 +120,14 @@ public class MMUtility : MonoBehaviour
                 return MMEffectType.HengSao;
             case "16":
                 return MMEffectType.GuanChuan;
+            default:
+                if(s == "")
+                {
+                    s = "0";
+                }
+                int a = int.Parse(s);
+                
+                return (MMEffectType)(a);
         }
 
         return MMEffectType.None;
