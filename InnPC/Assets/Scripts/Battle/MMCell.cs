@@ -24,8 +24,8 @@ public partial class MMCell : MMNode
 
     private void Start()
     {
-        HandleState(MMNodeState.Normal);
-        HandleHighlight(MMNodeHighlight.Normal);
+        HandleFill(MMNodeState.Normal);
+        HandleBorder(MMNodeHighlight.Normal);
     }
 
 
@@ -35,24 +35,24 @@ public partial class MMCell : MMNode
         {
             return false;
         }
-        
+
         if (node.cell == null)
         {
             node.tempCell = node.cell;
         }
 
-        if(node.cell != null)
+        if (node.cell != null)
         {
             node.cell.Clear();
         }
-        
+
         this.unitNode = node;
         node.cell = this;
         node.SetParent(this);
 
         return true;
     }
-    
+
 
     public void Reload()
     {
@@ -62,18 +62,81 @@ public partial class MMCell : MMNode
 
     public void Clear()
     {
-        if(this.unitNode != null)
+        if (this.unitNode != null)
         {
-            Debug.Log("Cell Clear: " + index + " Unit: " + this.unitNode.displayName);
             this.unitNode.cell = null;
-            //this.unitNode.Clear();
             this.unitNode = null;
-        }  
-        HandleState(MMNodeState.Normal);
-        HandleHighlight(MMNodeHighlight.Normal);
+        }
+        HandleFill(MMNodeState.Normal);
+        HandleBorder(MMNodeHighlight.Normal);
     }
 
-    
+
+    public void HandleFill(MMNodeState s)
+    {
+        this.nodeState = s;
+        switch (s)
+        {
+            case MMNodeState.Normal:
+                GetComponent<Image>().color = MMUtility.FindColorWhite();
+                break;
+            case MMNodeState.Red:
+                GetComponent<Image>().color = MMUtility.FindColorRed();
+                break;
+            case MMNodeState.Yellow:
+                GetComponent<Image>().color = MMUtility.FindColorYellow();
+                break;
+            case MMNodeState.Blue:
+                GetComponent<Image>().color = MMUtility.FindColorBlue();
+                break;
+            case MMNodeState.Green:
+                GetComponent<Image>().color = MMUtility.FindColorGreen();
+                break;
+        }
+    }
+
+
+    public void HandleBorder(MMNodeHighlight s)
+    {
+        this.nodeHighlight = s;
+        switch (s)
+        {
+            case MMNodeHighlight.Normal:
+                GetComponent<Outline>().effectColor = new Color(0f, 0f, 0f, 0f);
+                this.transform.SetSiblingIndex(0);
+                break;
+            case MMNodeHighlight.Red:
+                GetComponent<Outline>().effectColor = new Color(1f, 0f, 0f, 1f);
+                this.transform.SetSiblingIndex(100);
+                break;
+            case MMNodeHighlight.Yellow:
+                GetComponent<Outline>().effectColor = new Color(1f, 0.5f, 0f, 1f);
+                this.transform.SetSiblingIndex(100);
+                break;
+            case MMNodeHighlight.Blue:
+                GetComponent<Outline>().effectColor = new Color(0f, 0f, 1f, 1f);
+                this.transform.SetSiblingIndex(100);
+                break;
+            case MMNodeHighlight.Green:
+                GetComponent<Outline>().effectColor = new Color(0f, 1f, 0f, 1f);
+                this.transform.SetSiblingIndex(100);
+                break;
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
     public static MMCell Create()
     {
         GameObject prefabCell = Resources.Load("Prefabs/MMCell") as GameObject;
@@ -82,7 +145,7 @@ public partial class MMCell : MMNode
         return cell;
     }
 
-    
+
     public int FindDistanceFromCell(MMCell cell)
     {
         int a = Mathf.Abs(cell.row - this.row);
@@ -90,5 +153,5 @@ public partial class MMCell : MMNode
         return a + b;
     }
 
-    
+
 }

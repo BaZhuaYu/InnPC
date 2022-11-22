@@ -21,13 +21,7 @@ public enum MMSkillType
 }
 
 
-public enum MMBattlePhase
-{
-    Begin,
-    PlayerRound,
-    EnemyRound,
-    End
-}
+
 
 
 public enum MMNodeHighlight
@@ -50,18 +44,6 @@ public enum MMNodeState
 }
 
 
-
-public enum MMBattleState
-{
-    Normal,
-    SelectSour,
-    SourMoved,
-    SelectSkill,
-    PlayedSkill,
-    SourDone
-}
-
-
 public enum MMUnitState
 {
     Rage,
@@ -69,14 +51,6 @@ public enum MMUnitState
     Weak,
     Stunned,
     Dead
-}
-
-
-public enum MMUnitPhase
-{
-    Normal,
-    Acting,
-    Actived,
 }
 
 

@@ -2,129 +2,340 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public enum MMBattlePhase
+{
+    Begin,
+    PlayerRound,
+    EnemyRound,
+    Routing,
+    UnitBegin,
+    UnitActing,
+    UnitEnd,
+    End,
+}
+
+
 public partial class MMBattleManager
 {
+
+    List<MMUnitNode> tempEnemyUnits;
+
     public void EnterPhase(MMBattlePhase p)
     {
+
+        if (phase == MMBattlePhase.End)
+        {
+            if (p != MMBattlePhase.Begin)
+            {
+                Debug.Log(phase.ToString() + "XXXXXXXXXXXXXXXXXXX" + p.ToString());
+                return;
+            }
+        }
+
+        if(phase == MMBattlePhase.PlayerRound)
+        {
+            if (p != MMBattlePhase.Routing)
+            {
+                Debug.Log(phase.ToString() + "XXXXXXXXXXXXXXXXXXX" + p.ToString());
+                return;
+            }
+        }
+
+
+        if(p == MMBattlePhase.UnitBegin || p == MMBattlePhase.UnitActing || p == MMBattlePhase.UnitEnd)
+        {
+            if(sourceUnit == null)
+            {
+                Debug.Log(phase.ToString() + "XXXXXXXXXXXXXXXXXXX" + p.ToString());
+                return;
+            }
+        }
+
+
+
+
+        OnExitPhase(phase);
+
         this.phase = p;
+        
+
         switch (p)
         {
             case MMBattlePhase.Begin:
+                Debug.Log("--------Begin--------");
                 round = 0;
                 historySkills = new Dictionary<int, List<MMSkillNode>>();
-                ShowButton("Start");
-                ShowTitle("Begin");
-                buttonMain.enabled = true;
-                ClosePanels();
-                MMUnitPanel.Instance.OpenUI();
+
+                MMCardPanel.Instance.LoadDeck(MMPlayerManager.Instance.cards);
+                MMCardPanel.Instance.ShuffleDeck();
+
+                DebugConfig();
+
+                DrawCards(4, true);
+
+                EnterPhase(MMBattlePhase.PlayerRound);
                 break;
+
             case MMBattlePhase.PlayerRound:
+                Debug.Log("--------PlayerRound--------");
                 round += 1;
                 historySkills.Add(round, new List<MMSkillNode>());
-                ShowButton("End Turn");
-                ShowTitle("PlayerRound");
-                buttonMain.enabled = true;
-                OnPhaseBegin();
-                OnPhasePlayerRound();
-                MMCardPanel.Instance.OpenUI();
+                DrawCards(2);
+                isPlayerRound = true;
+                foreach(var unit in units1)
+                {
+                    unit.isActived = false;
+                }
+                MMMap.Instance.SetColor(MMUtility.FindColorWhite());
                 BroadCast(MMTriggerTime.OnRoundBegin);
+                EnterState(MMBattleState.Normal);
+                EnterPhase(MMBattlePhase.Routing);
                 break;
+
             case MMBattlePhase.EnemyRound:
-                ShowButton("Wait");
-                ShowTitle("EnemyRound");
-                buttonMain.enabled = false;
-                MMCardPanel.Instance.CloseUI();
+                Debug.Log("--------EnemyRound--------");
+                MMMap.Instance.SetColor(MMUtility.FindColorLightRed());
+                isPlayerRound = false;
+                EnterState(MMBattleState.Normal);
                 BroadCast(MMTriggerTime.OnRoundBegin);
-                OnPhaseEnemyRound();
+
+                foreach (var unit in units2)
+                {
+                    unit.isActived = false;
+                }
+
+                tempEnemyUnits = new List<MMUnitNode>();
+                foreach(var unit in units2)
+                {
+                    if(unit.ap == unit.maxAP && unit.isActived == false)
+                    {
+                        tempEnemyUnits.Add(unit);
+                    }
+                }
+
+                EnterPhase(MMBattlePhase.Routing);
                 break;
+
+
+            case MMBattlePhase.UnitBegin:
+                Debug.Log("UnitBegin: " + " " + sourceUnit.displayName);
+                sourceUnit.OnRoundBegin();
+                MMSkillPanel.Instance.Accept(sourceUnit.skills);
+                EnterPhase(MMBattlePhase.UnitActing);
+                break;
+
+
+            case MMBattlePhase.UnitActing:
+                Debug.Log("UnitActing: " + " " + sourceUnit.displayName);
+                if (isPlayerRound)
+                {
+
+                }
+                else
+                {
+                    AutoUnitActing();
+                }
+                break;
+
+
+            case MMBattlePhase.UnitEnd:
+                Debug.Log("UnitEnd: " + " " + sourceUnit.displayName);
+                
+                sourceUnit.OnRoundEnd();
+                UnselectSourceCell();
+                ClearDeadUnits();
+                EnterPhase(MMBattlePhase.Routing);
+
+                break;
+
+
             case MMBattlePhase.End:
-                ShowButton("End");
-                ShowTitle("End");
-                buttonMain.enabled = false;
-                MMCardPanel.Instance.CloseUI();
-                MMSkillPanel.Instance.CloseUI();
-                MMUnitPanel.Instance.CloseUI();
+                Debug.Log("--------End--------");
                 MMBattleManager.Instance.Clear();
+                break;
+
+
+            case MMBattlePhase.Routing:
+                //AutoRouting();
+                //StartRoutingNextPhase();
+                AutoRouting();
+                break;
+
+        }
+
+
+        OnEnterPhase(this.phase);
+
+    }
+
+
+    void OnExitPhase(MMBattlePhase phase)
+    {
+        switch (phase)
+        {
+            case MMBattlePhase.Begin:
+                BroadCast(MMTriggerTime.OnBattleBegin);
+                break;
+
+
+            case MMBattlePhase.PlayerRound:
+                BroadCast(MMTriggerTime.OnRoundEnd);
+                IncreaseAPUnits(units1);
+                break;
+
+
+            case MMBattlePhase.EnemyRound:
+                BroadCast(MMTriggerTime.OnRoundEnd);
+                IncreaseAPUnits(units2);
+                break;
+
+
+            case MMBattlePhase.UnitEnd:
+                EnterState(MMBattleState.Normal);
+                break;
+
+
+            default:
                 break;
         }
     }
 
 
 
-    public void OnPhaseBegin()
+    void OnEnterPhase(MMBattlePhase phase)
     {
-        foreach (var unit in units1)
+
+        ClosePanels();
+
+
+        switch (phase)
         {
-            unit.ConfigState();
-            unit.ConfigSkill();
-            unit.EnterPhase(MMUnitPhase.Normal);
+            case MMBattlePhase.End:
+                ShowTitle("Begin");
+                ShowButton("End");
+                MMUnitPanel.Instance.OpenUI();
+                break;
+
+            case MMBattlePhase.Begin:
+                ShowTitle("Round 1");
+                ShowButton("Begin");
+                MMCardPanel.Instance.OpenUI();
+                break;
+
+            case MMBattlePhase.PlayerRound:
+                ShowButton("PlayerRound");
+                MMCardPanel.Instance.OpenUI();
+                break;
+
+            case MMBattlePhase.EnemyRound:
+                ShowButton("EnemyRound");
+                MMCardPanel.Instance.OpenUI();
+                break;
+
+            case MMBattlePhase.Routing:
+                MMCardPanel.Instance.OpenUI();
+                ShowButton("Routing");
+                break;
+
+            case MMBattlePhase.UnitBegin:
+                ShowButton("UnitBegin");
+                MMCardPanel.Instance.OpenUI();
+                MMSkillPanel.Instance.OpenUI();
+                break;
+
+            case MMBattlePhase.UnitActing:
+                ShowButton("UnitActing");
+                MMCardPanel.Instance.OpenUI();
+                MMSkillPanel.Instance.OpenUI();
+                break;
+
+            case MMBattlePhase.UnitEnd:
+                ShowButton("UnitEnd");
+                MMCardPanel.Instance.OpenUI();
+                MMSkillPanel.Instance.OpenUI();
+                break;
+
         }
-        foreach (var unit in units2)
+
+        textPhase.text = phase.ToString();
+    }
+
+
+
+    public void AutoRouting()
+    {
+
+        if (CheckGameOver())
         {
-            unit.ConfigState();
-            unit.ConfigSkill();
-            unit.EnterPhase(MMUnitPhase.Normal);
+            ShowButton("Game Over");
+            return;
         }
+
+
+        if(this.phase != MMBattlePhase.Routing)
+        {
+            Debug.LogError(this.phase + "");
+        }
+
+
+        if (isPlayerRound)
+        {
+            foreach(var unit in units1)
+            {
+                if(unit.isActived)
+                {
+                    EnterPhase(MMBattlePhase.EnemyRound);
+                    return;
+                }
+            }
+        }
+        else
+        {
+            foreach(var unit in tempEnemyUnits)
+            {
+                if(unit.ap == unit.maxAP && unit.isActived == false)
+                {
+                    TryEnterPhase_UnitBegin(unit);
+                    return;
+                }
+            }
+            EnterPhase(MMBattlePhase.PlayerRound);
+        }
+        
     }
 
     
-    public void OnPhasePlayerRound()
+
+
+    public void TryEnterPhase_UnitBegin(MMUnitNode unit)
     {
-        foreach (var unit in units1)
+        sourceUnit = unit;
+        EnterPhase(MMBattlePhase.UnitBegin);
+    }
+
+    
+
+
+    /// <summary>
+    /// Private
+    /// </summary>
+    /// <param name="units"></param>
+
+
+    private void IncreaseAPUnits(List<MMUnitNode> units)
+    {
+        foreach (var unit in units)
         {
-            unit.tempCell = unit.cell;
+            unit.IncreaseAP(1);
         }
-        foreach (var unit in units2)
-        {
-            unit.tempCell = unit.cell;
-        }
-        AutoSelectSour();
     }
 
 
-    public void OnPhaseEnemyRound()
+    public void ClearUnitEnd()
     {
-        StartCoroutine(ConfigEnemyAI());
-    }
-
-
-    public void OnPhaseEnd()
-    {
-        foreach (var unit in units1)
-        {
-            //if (unit.unitState == MMUnitState.Stunned)
-            //{
-            //    unit.IncreaspAPToMax();
-            //}
-            //else
-            //{
-            //    //unit.IncreaseAP();
-            //}
-
-            //if(unit.unitState != MMUnitState.Rage)
-            //{
-            //    unit.EnterState(MMUnitState.Normal);
-            //}
-
-        }
-
-        foreach (var unit in units2)
-        {
-            //if (unit.unitState == MMUnitState.Stunned)
-            //{
-            //    unit.IncreaspAPToMax();
-            //}
-            //else
-            //{
-            //    unit.IncreaseAP();
-            //}
-
-            //if (unit.unitState != MMUnitState.Rage)
-            //{
-            //    unit.EnterState(MMUnitState.Normal);
-            //}
-        }
-        
+        this.sourceUnit = null;
+        this.targetUnit = null;
     }
 
 

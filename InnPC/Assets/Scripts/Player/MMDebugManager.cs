@@ -25,6 +25,7 @@ public class MMDebugManager : MonoBehaviour
     {
         PrintSkillHistory();
         //MMBattleManager.Instance.CheckGameWin();
+        MMBattleManager.Instance.EnterPhase(MMBattlePhase.End);
     }
 
 

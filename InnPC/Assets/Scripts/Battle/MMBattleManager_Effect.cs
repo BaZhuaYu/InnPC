@@ -185,6 +185,11 @@ public partial class MMBattleManager : MonoBehaviour
                 InHP(effect);
                 break;
 
+            case (MMEffectType)10101:
+                Damage(effect);
+                effect.source.IncreaseHP(effect.value);
+                break;
+
             case (MMEffectType)1067:
                 effect.value = effect.source.maxHP - effect.source.hp;
                 Damage(effect);
@@ -229,7 +234,7 @@ public partial class MMBattleManager : MonoBehaviour
         {
             case (MMEffectType)1074:
                 Debug.Log(effect.target.hp);
-                if (effect.target.unitState == MMUnitState.Dead)
+                if (effect.target.state == MMUnitState.Dead)
                 {
                     effect.source.IncreaseAP(1);
                     Debug.Log("!!!!!!!!!!!!!!!selectingSkill: " + selectingSkill);
@@ -428,6 +433,7 @@ public partial class MMBattleManager : MonoBehaviour
     {
         effect.target.group = effect.source.group;
         MMUnitNode node = effect.target;
+        node.gameObject.AddComponent<MMUnitNode_Battle>();
         MMCell c;
         int row;
 

@@ -6,24 +6,24 @@ using UnityEngine.UI;
 public partial class MMUnitNode : MMNode
 {
 
+    List<MMCell> tempMoveCells;
+    List<MMCell> tempAttackCells;
 
-    public List<MMCell> FindMoveCells()
+    public List<MMCell> FindMovableCells()
     {
         List<MMCell> ret = new List<MMCell>();
-        if (this.unitState == MMUnitState.Stunned)
+        if (this.state == MMUnitState.Stunned)
         {
             return ret;
         }
 
-
-
         if (this.group == 1)
         {
-            int min = this.cell.row;
+            int min = this.tempCell.row;
             int max = MMMap.Instance.row + 1;
-            
+
             MMUnitNode unit = MMBattleManager.Instance.FindFrontUnitOfGroup(2);
-            if(unit != null)
+            if (unit != null)
             {
                 max = unit.cell.row;
             }
@@ -37,9 +37,9 @@ public partial class MMUnitNode : MMNode
         }
         else
         {
-            int max = this.cell.row;
+            int max = this.tempCell.row;
             int min = -1;
-            
+
             MMUnitNode unit = MMBattleManager.Instance.FindFrontUnitOfGroup(1);
             if (unit != null)
             {
@@ -52,80 +52,123 @@ public partial class MMUnitNode : MMNode
             }
             return MMMap.Instance.FindCellsInRows(rows);
         }
-        
+
     }
 
 
 
     public void ShowMoveCells()
     {
-        List<MMCell> cells = FindMoveCells();
+        if (isMoved)
+        {
+            return;
+        }
+
+        List<MMCell> cells = FindMovableCells();
+        tempMoveCells = cells;
         foreach (var cell in cells)
         {
-            cell.HandleState(MMNodeState.Blue);
+            cell.HandleFill(MMNodeState.Blue);
         }
     }
 
 
     public void HideMoveCells()
     {
-        List<MMCell> cells = FindMoveCells();
-        foreach (var cell in cells)
+        if (tempMoveCells == null)
         {
-            cell.HandleState(MMNodeState.Normal);
+            return;
         }
+
+        foreach (var cell in tempMoveCells)
+        {
+            cell.HandleFill(MMNodeState.Normal);
+        }
+
+        //List<MMCell> cells = FindMovableCells();
+        //foreach (var cell in cells)
+        //{
+        //    cell.HandleState(MMNodeState.Normal);
+        //}
     }
 
 
     public List<MMCell> FindAttackCells()
     {
-        if (this.unitState == MMUnitState.Stunned)
+        List<MMCell> ret = new List<MMCell>();
+        if (this.state == MMUnitState.Stunned)
         {
-            return new List<MMCell>();
+            return ret;
         }
 
         if (this.group == 1)
         {
-            return MMMap.Instance.FindCellsInColGreaterThanCell(this.cell, this.attackRange);
+            ret = MMMap.Instance.FindCellsInColGreaterThanCell(this.cell, this.attackRange);
         }
         else
         {
-            return MMMap.Instance.FindCellsInColLessThanCell(this.cell, this.attackRange);
+            ret = MMMap.Instance.FindCellsInColLessThanCell(this.cell, this.attackRange);
         }
+        
+        return ret;
     }
+
 
     public void ShowAttackCells()
     {
-        List<MMCell> cells = FindAttackCells();
-        foreach (var cell in cells)
+        tempAttackCells = FindAttackCells();
+        foreach (var cell in tempAttackCells)
         {
-            cell.HandleState(MMNodeState.Blue);
+            cell.HandleFill(MMNodeState.Blue);
             if (cell.unitNode != null)
             {
                 if (cell.unitNode.group != this.group)
                 {
-                    cell.HandleHighlight(MMNodeHighlight.Red);
+                    cell.HandleBorder(MMNodeHighlight.Red);
                 }
-                //else
-                //{
-                //    cell.EnterHighlight(MMNodeHighlight.Green);
-                //}
             }
         }
+
+        //List<MMCell> cells = FindAttackCells();
+        //foreach (var cell in cells)
+        //{
+        //    cell.HandleState(MMNodeState.Blue);
+        //    if (cell.unitNode != null)
+        //    {
+        //        if (cell.unitNode.group != this.group)
+        //        {
+        //            cell.HandleHighlight(MMNodeHighlight.Red);
+        //        }
+        //    }
+        //}
     }
 
 
     public void HideAttackCells()
     {
-        List<MMCell> cells = FindAttackCells();
+        if(tempAttackCells == null)
+        {
+            return;
+        }
+        List<MMCell> cells = tempAttackCells;
         foreach (var cell in cells)
         {
-            cell.HandleState(MMNodeState.Normal);
+            cell.HandleFill(MMNodeState.Normal);
             if (cell.unitNode != null)
             {
-                cell.HandleHighlight(MMNodeHighlight.Normal);
+                cell.HandleBorder(MMNodeHighlight.Normal);
             }
         }
+
+        //List<MMCell> cells = FindAttackCells();
+        //foreach (var cell in cells)
+        //{
+        //    cell.HandleState(MMNodeState.Normal);
+        //    if (cell.unitNode != null)
+        //    {
+        //        cell.HandleHighlight(MMNodeHighlight.Normal);
+        //    }
+        //}
     }
 
 
@@ -137,6 +180,21 @@ public partial class MMUnitNode : MMNode
     }
 
 
+    public void ShowSelected()
+    {
+        if(this.cell !=null)
+        {
+            this.cell.HandleBorder(MMNodeHighlight.Green);
+        }
+    }
+
+    public void HideSelected()
+    {
+        if (this.cell != null)
+        {
+            this.cell.HandleBorder(MMNodeHighlight.Normal);
+        }
+    }
 
 
 

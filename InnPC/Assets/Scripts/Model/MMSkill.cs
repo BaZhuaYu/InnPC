@@ -19,7 +19,6 @@ public partial class MMSkill
 
     public int type;
     public int cost;
-    public string icon;
     public int prob;
 
     public MMEffectTarget target;
@@ -85,23 +84,11 @@ public partial class MMSkill
         int.TryParse(values[allKeys["TempDEF"]], out skill.tempDEF);
 
         skill.target = MMUtility.DeserializeEffectTarget(values[allKeys["Target"]]);
-        if(skill.id == 1078)
-        {
-            Debug.Log(values[allKeys["Effect"]]);
-            Debug.Log("-----------------" + skill.id);
-        }
         skill.effect = MMUtility.DeserializeEffectType(values[allKeys["Effect"]]);
-        //int.TryParse(values[allKeys["Effect"]], out skill.effect);
         skill.area = MMUtility.DeserializeArea(values[allKeys["Area"]]);
         skill.time = MMUtility.DeserializeTriggerTime(values[allKeys["Time"]]);
-
         
         skill.keywords = new List<MMSkillKeyWord>();
-        if(skill.id == 10000 || skill.id == 1000 || skill.id == 1035)
-        {
-            skill.keywords.Add(MMSkillKeyWord.Final);
-        }
-
 
         return skill;
     }

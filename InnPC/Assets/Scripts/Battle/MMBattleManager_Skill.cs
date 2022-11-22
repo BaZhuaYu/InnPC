@@ -5,22 +5,10 @@ using UnityEngine;
 public partial class MMBattleManager : MonoBehaviour
 {
 
-    public void PlaySkill()
+    public void HandlePlaySkill()
     {
-        if (this.selectingSkill == null)
-        {
-            MMTipManager.instance.CreateTip("没有选择技能");
-            return;
-        }
-
-        if (this.sourceUnit == null)
-        {
-            MMTipManager.instance.CreateTip("没有己方英雄");
-            return;
-        }
         
         sourceUnit.DecreaseAP(selectingSkill.cost);
-        sourceUnit.numSkillUsed += 1;
         
         if(selectingSkill.type == MMSkillType.Power)
         {
@@ -77,11 +65,11 @@ public partial class MMBattleManager : MonoBehaviour
         //Final Card
         if (selectingSkill.keywords.Contains(MMSkillKeyWord.Final))
         {
-            EnterState(MMBattleState.SourDone);
+            EnterPhase(MMBattlePhase.UnitEnd);
         }
         else
         {
-            EnterState(MMBattleState.PlayedSkill);
+            EnterPhase(MMBattlePhase.UnitActing);
         }
 
     }
@@ -90,6 +78,14 @@ public partial class MMBattleManager : MonoBehaviour
 
 
 
+
+
+
+
+    public void DrawCards(int count, bool instance = false)
+    {
+        MMCardPanel.Instance.DrawCard(count, instance);
+    }
 
 
     public void DrawSkill()
@@ -108,46 +104,7 @@ public partial class MMBattleManager : MonoBehaviour
 
 
 
-    public void SelectSkill(MMSkillNode skill)
-    {
-
-        if (sourceUnit == null)
-        {
-            MMTipManager.instance.CreateTip("需要选中己方英雄");
-            return;
-        }
-
-        if (skill.cost > sourceUnit.ap)
-        {
-            MMTipManager.instance.CreateTip("行动力不足");
-            return;
-        }
-
-        MMSkillPanel.Instance.selectingSkill = skill;
-        selectingSkill = skill;
-
-        if (skill.target == MMEffectTarget.None)
-        {
-            MMBattleManager.Instance.EnterState(MMBattleState.SelectSkill);
-        }
-        else
-        {
-            switch (skill.target)
-            {
-                case MMEffectTarget.Source:
-                    this.targetUnit = this.sourceUnit;
-                    break;
-                case MMEffectTarget.Target:
-                    this.targetUnit = this.sourceUnit.FindTarget();
-                    break;
-                default:
-                    MMDebugManager.Warning("SelectSkill: " + skill.target);
-                    break;
-            }
-            MMBattleManager.Instance.PlaySkill();
-        }
-
-    }
+    
     
 
 }

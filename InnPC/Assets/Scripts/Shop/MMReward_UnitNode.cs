@@ -3,25 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class MMRewardItem : MonoBehaviour, IPointerClickHandler
+public class MMReward_UnitNode : MonoBehaviour, IPointerClickHandler
 {
-
-    public MMItemNode item;
-
-
+    
     public void OnPointerClick(PointerEventData eventData)
     {
+        Debug.Log("MMRewardUnit");
+        
         MMUnitNode node = GetComponent<MMUnitNode>();
         MMUnit unit = node.unit;
 
-        MMEffect effect = item.CreateEffect();
-        effect.source = node;
-        effect.target = node;
-        
-        MMBattleManager.Instance.ExecuteEffectOnGain(effect);
 
+        if(MMPlayerManager.Instance.HasUnit(unit))
+        {
+            MMTipManager.instance.CreateTip("已拥有该角色");
+            return;
+        }
+
+
+        MMPlayerManager.Instance.units.Add(unit);
+        node.SetActive(false);
 
         MMRewardPanel.instance.CloseUI();
         MMGameOverManager.Instance.UpdateUI();
     }
+
 }

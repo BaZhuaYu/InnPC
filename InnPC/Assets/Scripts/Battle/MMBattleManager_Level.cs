@@ -7,7 +7,6 @@ public partial class MMBattleManager : MonoBehaviour
 
     public void LoadLevel(int id)
     {
-        
         MMLevel level = MMLevel.Create(id);
         foreach (var unit in level.enemies)
         {
@@ -16,13 +15,13 @@ public partial class MMBattleManager : MonoBehaviour
     }
     
     
-
     public void LoadPlayerUnits()
     {
         int i = 0;
         foreach (var unit in MMPlayerManager.Instance.units)
         {
             MMUnitNode node = MMUnitNode.Create();
+            node.gameObject.AddComponent<MMUnitNode_Battle>();
             node.group = 1;
             node.Accept(unit);
             units1.Add(node);
@@ -30,13 +29,13 @@ public partial class MMBattleManager : MonoBehaviour
         }
     }
 
-
     
 
     public void AddEnemy(int id, int pos)
     {
         MMUnit unit2 = MMUnit.Create(id);
         MMUnitNode node2 = MMUnitNode.Create();
+        node2.gameObject.AddComponent<MMUnitNode_Battle>();
         node2.group = 2;
         node2.Accept(unit2);
         units2.Add(node2);
@@ -53,4 +52,6 @@ public partial class MMBattleManager : MonoBehaviour
         units2.Add(node2);
         MMMap.Instance.FindCellInXY(row, col).Accept(node2);
     }
+
+
 }

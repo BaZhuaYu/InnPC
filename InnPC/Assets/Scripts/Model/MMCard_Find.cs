@@ -7,34 +7,74 @@ public partial class MMCard
     public static Dictionary<string, int> allKeys;
     public static Dictionary<int, string> allValues;
 
-    public void LoadData()
+    
+    public static List<MMCard> all;
+    public static List<MMCard> cards;
+
+
+    public static void Init()
     {
-        if (id == 1)
+        all = new List<MMCard>();
+        cards = new List<MMCard>();
+        foreach (var temp in allValues.Values)
         {
-            this.id = 1;
-            this.key = "Card_1";
-            this.displayName = "普通攻击";
-            this.displayNote = "造成1点伤害";
-            value = 1;
-            area = MMArea.Single;
+            MMCard card = MMCard.CreateFromString(temp);
+            all.Add(card);
+            if (card.prob > 0)
+            {
+                cards.Add(card);
+            }
         }
-        else if (id == 2)
+
+        if (all.Count == 0)
         {
-            this.id = 2;
-            this.key = "Card_2";
-            this.displayName = "普通防御";
-            this.displayNote = "获得1点防御";
-            area = MMArea.Beside;
-        }
-        else if (id == 3)
-        {
-            this.id = 3;
-            this.key = "Card_3";
-            this.displayName = "普通移动";
-            this.displayNote = "移动一格";
-            area = MMArea.Behind;
+            MMDebugManager.FatalError("public static List<MMCard> FindAll()");
         }
     }
 
-    
+
+    public static List<MMCard> FindAll()
+    {
+        List<MMCard> ret = new List<MMCard>(); ;
+        foreach (var one in all)
+        {
+            if (one.prob > 0)
+            {
+                ret.Add(one);
+            }
+        }
+        return ret;
+    }
+
+
+    public static MMCard FindRandomOne()
+    {
+        List<MMCard> all = FindAll();
+        return all[Random.Range(0, all.Count)];
+    }
+
+
+    public static List<MMCard> FindRandomCount(int count)
+    {
+        List<MMCard> all = FindAll();
+        if (count > all.Count)
+        {
+            MMDebugManager.FatalError("FindRandom: " + count);
+        }
+
+        List<MMCard> ret = new List<MMCard>();
+
+        while (ret.Count < count)
+        {
+            MMCard skill = FindRandomOne();
+            if (MMUtility.CheckListNotHasOne<MMCard>(ret, skill))
+            {
+                ret.Add(skill);
+            }
+        }
+
+        return ret;
+    }
+
+
 }

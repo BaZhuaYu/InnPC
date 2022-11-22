@@ -9,6 +9,8 @@ public partial class MMUnitNode : MMNode
 
     public MMUnit unit;
 
+    public MMNode avatar;
+
     public MMCell cell;
     public MMCell tempCell;
 
@@ -46,11 +48,10 @@ public partial class MMUnitNode : MMNode
     public int guanchuan;
 
     public List<MMSkillNode> skills;
+    public List<MMCardNode> cards;
 
-    public MMUnitState unitState;
-
-    public MMUnitPhase unitPhase;
-
+    public MMUnitState state;
+    
     public  List<MMBuff> buffs;
 
     public int tempATK;
@@ -68,7 +69,13 @@ public partial class MMUnitNode : MMNode
     public Animator m_DamageAnimator;
     public Text m_DamageText;
 
-    public int numSkillUsed;
+
+    /// <summary>
+    /// Battle Props
+    /// </summary>
+    public bool isActived;
+    public bool isMoved = false;
+
 
     void Start()
     {
@@ -83,7 +90,7 @@ public partial class MMUnitNode : MMNode
         this.unit = unit;
         this.name = "MMUnitNode_" + unit.id;
 
-        LoadImage("Units/" + unit.key + "QS");
+        avatar.LoadImage("Units/" + unit.key + "QS");
 
         this.id = unit.id;
         this.key = unit.key;
@@ -95,8 +102,7 @@ public partial class MMUnitNode : MMNode
         hp = unit.hp;
         maxAP = unit.maxAP;
         ap = unit.ap;
-        //ap = maxAP;
-
+        
         atk = unit.atk;
         def = unit.def;
         mag = unit.mag;
@@ -110,16 +116,32 @@ public partial class MMUnitNode : MMNode
         guanchuan = 0;
 
         skills = new List<MMSkillNode>();
-        foreach (var id in unit.skills)
+        foreach(var s in unit.skills)
         {
-            MMSkill skill = MMSkill.Create(id);
+            MMSkill skill = MMSkill.Create(s);
             MMSkillNode node = MMSkillNode.Create();
             node.Accept(skill);
+            node.name = this.displayName + "_" + "skill_" + skill.id;
             skills.Add(node);
             node.unit = this;
         }
-
+        
+        
+        cards = new List<MMCardNode>();
+        foreach (var c in unit.cards)
+        {
+            MMCard card = MMCard.Create(c);
+            MMCardNode nodeCard = MMCardNode.Create();
+            nodeCard.Accept(card);
+            nodeCard.name = this.displayName + "_" + "card_" + card.id;
+            cards.Add(nodeCard);
+            nodeCard.unit = this;
+        }
+            
+        
         buffs = new List<MMBuff>();
+
+
         EnterState(MMUnitState.Normal);
 
         m_DamageAnimator.gameObject.SetActive(false);
@@ -139,9 +161,7 @@ public partial class MMUnitNode : MMNode
         Destroy(gameObject);
     }
 
-
-
-
+    
 
     public void IncreaseHP(int value)
     {
@@ -164,15 +184,6 @@ public partial class MMUnitNode : MMNode
 
     public void IncreaseAP(int value)
     {
-        if (ap == maxAP)
-        {
-            EnterState(MMUnitState.Rage);
-        }
-        else if (ap == maxAP - 1)
-        {
-            EnterState(MMUnitState.Rage);
-        }
-        
         this.ap += value;
 
         if (this.ap >= maxAP)
@@ -186,21 +197,11 @@ public partial class MMUnitNode : MMNode
 
     public void DecreaseAP(int value)
     {
-        if (ap == 0)
-        {
-            EnterState(MMUnitState.Stunned);
-        }
-        else if (ap == 1)
-        {
-            EnterState(MMUnitState.Weak);
-        }
-
         this.ap -= value;
 
         if (this.ap <= 0)
         {
             this.ap = 0;
-            EnterState(MMUnitState.Stunned);
         }
 
         UpdateUI();
@@ -259,8 +260,7 @@ public partial class MMUnitNode : MMNode
     {
         textHP.text = hp + "";
         textATK.text = atk + "";
-
-        //textAP.text = ap + "";
+        
 
         if(maxAP == 0)
         {
@@ -278,29 +278,49 @@ public partial class MMUnitNode : MMNode
                 groupSP.LoadImage("UI/IconWeak");
             }
         }
-
-
-        //if(this.unitState == MMUnitState.Stunned)
-        //{
-        //    backgroundATK.SetActive(false);
-        //}
-        //else
-        //{
-        //    backgroundATK.SetActive(true);
-        //}
-
+        
 
         for(int i = 0; i < 5;i++)
         {
             if(i < ap)
             {
                 iconsSP[i].SetActive(true);
+                Color c = Color.black;
+                if (clss == 1)
+                {
+                    c = MMUtility.FindColorRed();
+                }
+                else if (clss == 2)
+                {
+                    c = MMUtility.FindColorYellow();
+                }
+                else if (clss == 3)
+                {
+                    c = MMUtility.FindColorBlue();
+                }
+                else if (clss == 4)
+                {
+                    c = MMUtility.FindColorGreen();
+                }
+                else
+                {
+                    c = MMUtility.FindColorBlack();
+                }
+
+                iconsSP[i].SetColor(c);
+            }
+            else if (i < maxAP)
+            {
+                iconsSP[i].SetActive(true);
+                iconsSP[i].SetColor(MMUtility.FindColorWhite());
             }
             else
             {
                 iconsSP[i].SetActive(false);
             }
+            
         }
+        
     }
 
 
@@ -325,8 +345,7 @@ public partial class MMUnitNode : MMNode
         return MMUnitNode.CreateFromUnit(unit);
     }
 
-
-
+    
 
     public bool CheckHasAP()
     {
@@ -347,7 +366,6 @@ public partial class MMUnitNode : MMNode
     }
 
     
-
     public List<MMSkillNode> FindAllHistorySkills()
     {
         List<MMSkillNode> ret = new List<MMSkillNode>();
@@ -360,7 +378,6 @@ public partial class MMUnitNode : MMNode
         }
         return ret;
     }
-
     
 
     public List<MMEffect> CreateEffect(MMTriggerTime time)

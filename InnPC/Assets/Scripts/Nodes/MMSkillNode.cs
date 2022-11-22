@@ -5,7 +5,9 @@ using UnityEngine.UI;
 
 public partial class MMSkillNode : MMNode
 {
-
+    /// <summary>
+    /// Panel
+    /// </summary>
     public MMUnitNode unit;
 
     public MMSkill skill;
@@ -18,6 +20,9 @@ public partial class MMSkillNode : MMNode
     public Text textDEF;
 
 
+    /// <summary>
+    /// Data
+    /// </summary>
     public int id;
     public string key;
 
@@ -33,8 +38,7 @@ public partial class MMSkillNode : MMNode
     public MMTriggerTime time;
 
     public List<MMSkillKeyWord> keywords;
-
-    public string targetKey;
+    
     public MMEffectType effectType;
     public int value;
 
@@ -44,18 +48,16 @@ public partial class MMSkillNode : MMNode
     public MMSkillState state;
 
 
+    /// <summary>
+    /// Battle
+    /// </summary>
     public bool isReady;
     public bool isEnabled;
 
 
     private void Start()
     {
-
-    }
-
-    private void Update()
-    {
-
+        textNote.gameObject.SetActive(false);
     }
 
 
@@ -96,7 +98,7 @@ public partial class MMSkillNode : MMNode
         }
         this.cost = skill.cost;
         this.area = skill.area;
-
+        
         this.effectType = skill.effect;
         this.target = skill.target;
         this.value = skill.value;
@@ -124,6 +126,12 @@ public partial class MMSkillNode : MMNode
         this.textNote.text = "";
         this.name = "Card_0";
         this.gameObject.transform.SetParent(null);
+    }
+
+
+    public void Destroy()
+    {
+        Destroy(gameObject);
     }
 
 
@@ -180,7 +188,7 @@ public partial class MMSkillNode : MMNode
     {
         if (this.keywords.Contains(MMSkillKeyWord.Ultimate))
         {
-            if (this.unit.unitState == MMUnitState.Rage)
+            if (this.unit.state == MMUnitState.Rage)
             {
                 isReady = true;
             }
@@ -222,6 +230,7 @@ public partial class MMSkillNode : MMNode
     {
         MMSkillNode node = MMSkillNode.Create();
         node.Accept(skill);
+        node.name = "MMSkillNode_" + skill.id;
         return node;
     }
 

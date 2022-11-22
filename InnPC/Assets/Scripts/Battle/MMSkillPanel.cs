@@ -29,12 +29,6 @@ public class MMSkillPanel : MMNode
     {
         Clear();
         this.skills = skills;
-        
-        foreach(var s in skills)
-        {
-            Debug.Log("Accept: " + s);
-        }
-
         Reload();
     }
 
@@ -49,7 +43,7 @@ public class MMSkillPanel : MMNode
     {
         foreach(var skill in skills)
         {
-            skill.RemoveFromParent();
+            skill.Clear();
         }
         skills = new List<MMSkillNode>();
         selectingSkill = null;

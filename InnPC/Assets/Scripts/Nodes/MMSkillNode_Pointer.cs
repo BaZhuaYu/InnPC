@@ -3,52 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public partial class MMSkillNode : MMNode, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
+public partial class MMSkillNode : MMNode, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
     
     public void OnPointerClick(PointerEventData eventData)
     {
-
-        Debug.Log(this.type);
-
         if(eventData.button != PointerEventData.InputButton.Left)
         {
             return;
         }
 
-        MMBattleState state = MMBattleManager.Instance.state;
-
-        //if ((state == MMBattleState.SelectSour || state == MMBattleState.SourMoved) == false)
-        //{
-        //    MMTipManager.instance.CreateTip("不能使用这张卡牌：状态不对");
-        //    return;
-        //}
-        
-        if (this.type == MMSkillType.Passive)
+        if (MMBattleManager.Instance.phase == MMBattlePhase.End)
         {
-            MMTipManager.instance.CreateTip("被动技能，无法使用");
             return;
         }
 
-        if (this.state == MMSkillState.Used)
-        {
-            MMTipManager.instance.CreateTip("已使用，不能再次使用");
-            return;
-        }
 
-        if (this.state == MMSkillState.NotReady)
-        {
-            MMTipManager.instance.CreateTip("这个技能还没有准备好");
-            return;
-        }
-
-        if(this.cost > this.unit.ap)
-        {
-            MMTipManager.instance.CreateTip("行动力不足");
-            return;
-        }
-
-        MMBattleManager.Instance.SelectSkill(this);
+        MMBattleManager.Instance.TryEnterStateSelectingSkill(this);
     }
 
 
@@ -80,6 +51,16 @@ public partial class MMSkillNode : MMNode, IBeginDragHandler, IDragHandler, IEnd
     public void OnEndDrag(PointerEventData eventData)
     {
 
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        this.textNote.gameObject.SetActive(true);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        this.textNote.gameObject.SetActive(false);
     }
 
 }

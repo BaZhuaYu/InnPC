@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class MMUtility : MonoBehaviour
 {
+
     public static MMArea DeserializeArea(string s)
     {
         switch (s)
@@ -121,12 +122,12 @@ public class MMUtility : MonoBehaviour
             case "16":
                 return MMEffectType.GuanChuan;
             default:
-                if(s == "")
+                if (s == "")
                 {
                     s = "0";
                 }
                 int a = int.Parse(s);
-                
+
                 return (MMEffectType)(a);
         }
 
@@ -148,6 +149,47 @@ public class MMUtility : MonoBehaviour
                 return MMSkillType.Passive;
         }
         return MMSkillType.None;
+    }
+
+
+    public static Color FindColorRed()
+    {
+        return new Color(235f / 255f, 75f / 255f, 23f / 255f);
+    }
+
+    public static Color FindColorYellow()
+    {
+        return new Color(254f / 255f, 186f / 255f, 7f / 255f);
+    }
+
+    public static Color FindColorBlue()
+    {
+        return new Color(11f / 255f, 50f / 255f, 140f / 255f);
+    }
+
+    public static Color FindColorGreen()
+    {
+        return new Color(63f / 255f, 110f / 255f, 83f / 255f);
+    }
+
+    public static Color FindColorBlack()
+    {
+        return new Color(16f / 255f, 42f / 255f, 58f / 255f);
+    }
+
+    public static Color FindColorWhite()
+    {
+        return new Color(238f / 255f, 222f / 255f, 176f / 255f);
+    }
+
+    public static Color FindColorLightGreen()
+    {
+        return new Color(46f / 255f, 223f / 255f, 163f / 255f);
+    }
+
+    public static Color FindColorLightRed()
+    {
+        return new Color(240f / 255f, 207f / 255f, 227f / 255f);
     }
 
 

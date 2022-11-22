@@ -5,16 +5,14 @@ using UnityEngine;
 public partial class MMUnitNode : MMNode
 {
     
-    public void EnterPhase(MMUnitPhase p)
+    public void OnRoundBegin()
     {
-        this.unitPhase = p;
-
-        if(unitPhase == MMUnitPhase.Acting)
-        {
-            numSkillUsed = 0;
-        }
-
+        tempCell = this.cell;
     }
 
+    public void OnRoundEnd()
+    {
+        this.isActived = true;
+    }
 
 }

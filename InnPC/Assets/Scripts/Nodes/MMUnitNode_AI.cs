@@ -22,7 +22,7 @@ public partial class MMUnitNode : MMNode
             }
             else if(this.ap > 0)
             {
-                if(this.unitState != MMUnitState.Rage)
+                if(this.state != MMUnitState.Rage)
                 {
                     EnterState(MMUnitState.Normal);
                 }
@@ -37,23 +37,23 @@ public partial class MMUnitNode : MMNode
 
     public void ConfigSkill()
     {
-        if (this.unitState == MMUnitState.Rage)
+        if (this.state == MMUnitState.Rage)
         {
             skill = 1;
         }
-        else if (this.unitState == MMUnitState.Normal)
+        else if (this.state == MMUnitState.Normal)
         {
             skill = 2;
         }
-        else if (this.unitState == MMUnitState.Weak)
+        else if (this.state == MMUnitState.Weak)
         {
             skill = 2;
         }
-        else if (this.unitState == MMUnitState.Stunned)
+        else if (this.state == MMUnitState.Stunned)
         {
             skill = 0;
         }
-        else if (this.unitState == MMUnitState.Dead)
+        else if (this.state == MMUnitState.Dead)
         {
             skill = 0;
         }
@@ -68,42 +68,57 @@ public partial class MMUnitNode : MMNode
 
         if(group == 1)
         {
-            int index = MMMap.Instance.cells.Count;
-            foreach (var cell in cells)
-            {
-                if (cell.unitNode != null)
-                {
-                    if (cell.unitNode.group == 2)
-                    {
-                        if (cell.index <= index)
-                        {
-                            ret = cell.unitNode;
-                            index = cell.index;
-                        }
-                    }
-                }
-            }
+            cells.Sort((c1,c2) => c1.row < c2.row ? -1:1);
+            cells.RemoveAll(c => (c.row <= this.cell.row || c.row > cell.row + attackRange));
+
+            //int index = MMMap.Instance.cells.Count;
+            //foreach (var cell in cells)
+            //{
+            //    if (cell.unitNode != null)
+            //    {
+            //        if (cell.unitNode.group == 2)
+            //        {
+            //            if (cell.index <= index)
+            //            {
+            //                ret = cell.unitNode;
+            //                index = cell.index;
+            //            }
+            //        }
+            //    }
+            //}
         }
         else
         {
-            int index = 0;
-            foreach (var cell in cells)
+            cells.Sort((c1, c2) => c1.row > c2.row ? -1 : 1);
+            cells.RemoveAll(c => (c.row >= this.cell.row || c.row < cell.row - attackRange));
+            //int index = 0;
+            //foreach (var cell in cells)
+            //{
+            //    if (cell.unitNode != null)
+            //    {
+            //        if (cell.unitNode.group == 1)
+            //        {
+            //            if (cell.index >= index)
+            //            {
+            //                ret = cell.unitNode;
+            //                index = cell.index;
+            //            }
+            //        }
+            //    }
+            //}
+        }
+
+
+        foreach(var cell in cells)
+        {
+            if(cell.unitNode != null)
             {
-                if (cell.unitNode != null)
-                {
-                    if (cell.unitNode.group == 1)
-                    {
-                        if (cell.index >= index)
-                        {
-                            ret = cell.unitNode;
-                            index = cell.index;
-                        }
-                    }
-                }
+                return cell.unitNode;
             }
         }
+
         
-        return ret;
+        return null;
     }
 
 

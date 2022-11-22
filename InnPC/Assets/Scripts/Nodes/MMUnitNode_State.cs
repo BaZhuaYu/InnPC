@@ -7,22 +7,22 @@ public partial class MMUnitNode : MMNode
     
     public void EnterState(MMUnitState s)
     {
-        if(this.unitState == MMUnitState.Dead)
+        if(this.state == MMUnitState.Dead)
         {
             return;
         }
         
-        if(unitState == s)
+        if(state == s)
         {
             return;
         }
 
-        this.unitState = s;
+        this.state = s;
 
         this.iconRage.SetActive(false);
         this.iconWeak.SetActive(false);
 
-        switch (unitState)
+        switch (state)
         {
             case MMUnitState.Rage:
                 break;
@@ -33,7 +33,10 @@ public partial class MMUnitNode : MMNode
             case MMUnitState.Stunned:
                 break;
             case MMUnitState.Dead:
-
+                if(MMBattleManager.Instance.sourceUnit == this)
+                {
+                    //MMBattleManager.Instance.EnterPhase(MMBattlePhase.UnitEnd);
+                }
                 return;
         }
 

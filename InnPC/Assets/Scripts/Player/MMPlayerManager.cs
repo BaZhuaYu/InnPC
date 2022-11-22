@@ -17,35 +17,51 @@ public class MMPlayerManager : MonoBehaviour
 
     public int level;
 
+    public int hp;
+
     public List<MMUnit> units;
 
     public List<MMSkill> skills;
 
     public List<MMCard> cards;
 
-
+    
 
     void Start()
     {
-        gold = 110;
-
-        level = 0;
+        gold = 100;
+        level = 1;
+        hp = 100;
 
         units = new List<MMUnit>();
         skills = new List<MMSkill>();
         cards = new List<MMCard>();
+        
+
 
         LoadData();
     }
 
 
-    public void LoadData()
+    void LoadData()
     {
         for (int i = 0; i < 3; i++)
         {
-            MMUnit unit1 = MMUnit.Create((i + 1) * 100 + 10000);
-            units.Add(unit1);
+            MMUnit unit = MMUnit.Create((i + 1) * 100 + 10000);
+            units.Add(unit);
+
+            MMCard card = MMCard.Create(unit.id + 1);
+            cards.Add(card);
         }
+
+        for (int i = 0; i < 4; i++)
+        {
+            MMCard card1 = MMCard.Create(10000);
+            MMCard card2 = MMCard.Create(10000);
+            cards.Add(card1);
+            cards.Add(card2);
+        }
+        
     }
 
     
@@ -77,5 +93,17 @@ public class MMPlayerManager : MonoBehaviour
         return false;
     }
 
+
+    public MMUnit FindUnit(int id)
+    {
+        foreach(var unit in units)
+        {
+            if(unit.id == id)
+            {
+                return unit;
+            }
+        }
+        return null;
+    }
 
 }

@@ -43,7 +43,7 @@ public class MMGameOverManager : MMNode
 
         rewards.Add(MMRewardType.Item);
         rewards.Add(MMRewardType.Skill);
-        rewards.Add(MMRewardType.Unit);
+        rewards.Add(MMRewardType.Card);
         
         
         MMPlayerManager.Instance.gold += MMBattleManager.Instance.level + 2;
@@ -146,7 +146,7 @@ public class MMGameOverManager : MMNode
 
         this.SetActive(false);
         MMBattleManager.Instance.LoadLevel();
-        MMBattleManager.Instance.EnterPhase(MMBattlePhase.Begin);
+        //MMBattleManager.Instance.EnterPhase(MMBattlePhase.Begin);
     }
 
 
@@ -178,7 +178,19 @@ public class MMGameOverManager : MMNode
 
     public void OnClickRewardCardButton()
     {
-        //RemoveReward(MMRewardType.Card);
+        if (MMPlayerManager.Instance.gold < 3)
+        {
+            MMTipManager.instance.CreateTip("金币不足");
+            return;
+        }
+
+        MMPlayerManager.Instance.gold -= 3;
+
+        MMRewardPanel.instance.OpenUI();
+        MMRewardPanel.instance.LoadCardPanel();
+        //RemoveReward(MMRewardType.Unit);
+
+        UpdateUI();
     }
 
 

@@ -19,6 +19,10 @@ public partial class MMBattleManager : MonoBehaviour
     public Button buttonAwait;
     public Text textButtonMain;
     public Text title;
+    public Text textPhase;
+    public Text textHP;
+    public Button buttonDeck;
+    public Button buttonUsed;
 
 
     public MMBattlePhase phase;
@@ -28,24 +32,26 @@ public partial class MMBattleManager : MonoBehaviour
     public List<MMUnitNode> units1;
     public List<MMUnitNode> units2;
 
-
+    public MMCardNode selectingCard;
     public MMSkillNode selectingSkill;
     public MMUnitNode sourceUnit;
     public MMUnitNode targetUnit;
-    
+
     public int round;
     public int level;
+    public bool isPlayerRound = false;
 
     public Dictionary<int, List<MMSkillNode>> historySkills;
 
-
+    MMBattlePhase last;
 
     private void Start()
     {
-        buttonMain = GameObject.Find("MainButton/Button").GetComponent<Button>();
+        buttonMain = GameObject.Find("MainButton").GetComponent<Button>();
         buttonAttack = GameObject.Find("AttackButton").GetComponent<Button>();
         buttonAwait = GameObject.Find("AwaitButton").GetComponent<Button>();
-        textButtonMain = GameObject.Find("MainButton/Button").GetComponentInChildren<Text>();
+        textButtonMain = GameObject.Find("MainButton").GetComponentInChildren<Text>();
+        textHP = GameObject.Find("TextHP").GetComponent<Text>();
 
         buttonMain.onClick.AddListener(OnClickMainButton);
         buttonAttack.onClick.AddListener(OnClickAttackButton);
@@ -57,12 +63,77 @@ public partial class MMBattleManager : MonoBehaviour
 
         historySkills = new Dictionary<int, List<MMSkillNode>>();
 
-        EnterPhase(MMBattlePhase.Begin);
 
+        this.phase = MMBattlePhase.End;
 
-        Debug.Log((MMEffectType)1);
+        last = MMBattlePhase.End;
 
     }
+
+
+
+    private void Update()
+    {
+        textHP.text = MMPlayerManager.Instance.hp + "";
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            OnClickButtonBack();
+        }
+
+        if (this.phase == MMBattlePhase.UnitActing)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                TryEnterStateSelectingCard(MMCardPanel.Instance.hand[0]);
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                TryEnterStateSelectingCard(MMCardPanel.Instance.hand[1]);
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                TryEnterStateSelectingCard(MMCardPanel.Instance.hand[2]);
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha4))
+            {
+                TryEnterStateSelectingCard(MMCardPanel.Instance.hand[3]);
+            }
+        }
+
+        textPhase.text = phase.ToString() + " " + state.ToString();
+        //OnEnterPhase(this.phase);
+
+        if (last != phase)
+        {
+            last = phase;
+        }
+    }
+
+
+    public void DebugConfig()
+    {
+        MMUnitNode unit = FindUnit(10100);
+        //unit.ap = 1;
+        unit.UpdateUI();
+        //unit.skills.Add()
+
+    }
+
+
+    public MMUnitNode FindUnit(int id)
+    {
+        foreach (var unit in units1)
+        {
+            if (unit.id == id)
+            {
+                return unit;
+            }
+        }
+        return null;
+    }
+
+
 
 
     public void LoadLevel()
@@ -70,17 +141,19 @@ public partial class MMBattleManager : MonoBehaviour
         level = MMPlayerManager.Instance.level;
         LoadPlayerUnits();
         LoadLevel(this.level);
+        if (GameObject.Find("BattleStartButton") == null)
+        {
+
+        }
+        else
+        {
+            GameObject.Find("BattleStartButton").SetActive(false);
+        }
+
     }
 
 
     public void LoadCard()
-    {
-
-    }
-
-
-
-    public void PlayCard()
     {
 
     }
@@ -93,50 +166,58 @@ public partial class MMBattleManager : MonoBehaviour
     {
         switch (phase)
         {
-            case MMBattlePhase.Begin:
-                BroadCast(MMTriggerTime.OnBattleBegin);
-                EnterPhase(MMBattlePhase.PlayerRound);
-                break;
-            case MMBattlePhase.PlayerRound:
-                if (sourceUnit == null)
-                {
-                    //if(sourceUnit.HasSkillEnabled(1076))
-                    //{
-                    //    BroadCast(MMTriggerTime.OnRoundBegin);
-                    //}
-                    BroadCast(MMTriggerTime.OnRoundEnd);
-                    EnterPhase(MMBattlePhase.EnemyRound);
-                }
-                else
-                {
-                    UnselectSourceCell();
-                }
-                break;
-            case MMBattlePhase.EnemyRound:
-                if (sourceUnit.HasSkillEnabled(1076))
-                {
-                    BroadCast(MMTriggerTime.OnRoundBegin);
-                }
-                BroadCast(MMTriggerTime.OnRoundEnd);
-                OnPhaseEnd();
-                EnterPhase(MMBattlePhase.PlayerRound);
-                break;
             case MMBattlePhase.End:
                 EnterPhase(MMBattlePhase.Begin);
                 break;
+
+            default:
+                ShowTitle(phase.ToString());
+                Debug.LogError(phase.ToString());
+                break;
+
+                //case MMBattlePhase.Begin:
+                //    EnterPhase(MMBattlePhase.PlayerRound);
+                //    break;
+
+                //case MMBattlePhase.PlayerRound:
+                //    if (sourceUnit == null)
+                //    {
+                //        EnterPhase(MMBattlePhase.EnemyRound);
+                //    }
+                //    else
+                //    {
+                //        UnselectSourceCell();
+                //    }
+                //    break;
+                //case MMBattlePhase.EnemyRound:
+                //    MMDebugManager.FatalError("OnClickMainButton: EnemyRound");
+                //    break;
+
+
+                //case MMBattlePhase.UnitEnd:
+                //    if (sourceUnit.group == 1)
+                //    {
+                //        EnterPhase(MMBattlePhase.EnemyRound);
+                //    }
+                //    else
+                //    {
+                //        EnterPhase(MMBattlePhase.PlayerRound);
+                //    }
+                //    break;
+
         }
 
     }
 
 
 
-    
+
 
 
 
     public void Clear()
     {
-        
+
         foreach (var unit in units1)
         {
             unit.Clear();
@@ -150,6 +231,9 @@ public partial class MMBattleManager : MonoBehaviour
         units1.Clear();
         units2.Clear();
         MMMap.Instance.Clear();
+        MMCardPanel.Instance.Clear();
+        MMSkillPanel.Instance.Clear();
+        MMUnitPanel.Instance.Clear();
 
     }
 
@@ -157,93 +241,25 @@ public partial class MMBattleManager : MonoBehaviour
 
     public void OnClickButtonBack()
     {
-        if (this.state == MMBattleState.SelectSkill)
+        if (this.state == MMBattleState.SelectingSkill)
         {
-            this.ClearSelectSkill();
-            this.EnterState(MMBattleState.SourMoved);
+            this.EnterState(MMBattleState.SelectedSourceUnit);
         }
-        else if (this.state == MMBattleState.SourMoved)
+        else if (this.state == MMBattleState.SelectingCard)
         {
-            this.EnterState(MMBattleState.SelectSour);
-        }
-        else if (this.state == MMBattleState.SelectSour)
-        {
-            this.ClearSource();
-            this.EnterState(MMBattleState.Normal);
+            this.EnterState(MMBattleState.SelectedSourceUnit);
         }
     }
 
 
-    private void Update()
-    {
-        if (Input.GetMouseButtonDown(1))
-        {
-            OnClickButtonBack();
-        }
 
 
-        if (this.state == MMBattleState.SelectSour || this.state == MMBattleState.SourMoved)
-        {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                //SetSelectingSkill(sourceUnit.skills[0]);
-                SelectSkill(sourceUnit.skills[0]);
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                //SetSelectingSkill(sourceUnit.skills[1]);
-                SelectSkill(sourceUnit.skills[1]);
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha3))
-            {
-                //SetSelectingSkill(sourceUnit.skills[2]);
-                SelectSkill(sourceUnit.skills[2]);
-            }
-            //else if (Input.GetKeyDown(KeyCode.Alpha4))
-            //{
-            //    SetSelectSkill(MMCardManager.instance.hand.cards[3]);
-            //}
-        }
-
-    }
-
-
-    private void UpdateUI()
-    {
-        foreach (var cell in MMMap.Instance.cells)
-        {
-            cell.HandleState(MMNodeState.Normal);
-            cell.HandleHighlight(MMNodeHighlight.Normal);
-        }
-
-        MMSkillPanel.Instance.UpdateUI();
-
-        switch (this.state)
-        {
-            case MMBattleState.Normal:
-                break;
-            case MMBattleState.SelectSour:
-                sourceUnit.cell.HandleHighlight(MMNodeHighlight.Green);
-                sourceUnit.ShowMoveCells();
-                break;
-            case MMBattleState.SourMoved:
-                sourceUnit.cell.HandleHighlight(MMNodeHighlight.Green);
-                break;
-            case MMBattleState.SelectSkill:
-                sourceUnit.cell.HandleHighlight(MMNodeHighlight.Green);
-                sourceUnit.ShowAttackCells();
-                MMSkillPanel.Instance.SetSelectedSkill(selectingSkill);
-                break;
-        }
-
-    }
-
-
-
-    public void ShowButton(string s)
+    public void ShowButton(string s, bool isEnabled = true)
     {
         textButtonMain.text = s;
+        buttonMain.enabled = isEnabled;
     }
+
 
     public void ShowTitle(string s)
     {
@@ -253,31 +269,34 @@ public partial class MMBattleManager : MonoBehaviour
 
     public void OnClickAwaitButton()
     {
-        if(this.sourceUnit == null)
+        if (this.sourceUnit == null)
         {
             return;
         }
 
-        //if (this.sourceUnit.numSkillUsed == 0)
-        //{
-        //    sourceUnit.IncreaseAP(1);
-        //}
-        sourceUnit.IncreaseAP(1);
-
-        EnterState(MMBattleState.SourDone);
+        EnterPhase(MMBattlePhase.UnitEnd);
     }
+
+
 
     public void OnClickAttackButton()
     {
         MMEffect effect = new MMEffect();
         effect.type = MMEffectType.Attack;
-        effect.source= sourceUnit;
+        effect.source = sourceUnit;
         effect.target = sourceUnit.FindTarget();
         effect.userinfo.Add("TempATK", 0);
         effect.userinfo.Add("TempDEF", 0);
         ExecuteEffect(effect);
 
-        sourceUnit.IncreaseAP(1);
-        EnterState(MMBattleState.SourDone);
+        EnterPhase(MMBattlePhase.UnitEnd);
     }
+
+
+
+
+
+
+
+
 }

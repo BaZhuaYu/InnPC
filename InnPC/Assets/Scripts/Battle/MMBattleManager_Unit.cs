@@ -5,81 +5,32 @@ using UnityEngine;
 public partial class MMBattleManager : MonoBehaviour
 {
 
-    public void SetSource(MMUnitNode unit)
-    {
-        sourceUnit = unit;
-        sourceUnit.cell.HandleHighlight(MMNodeHighlight.Green);
-        sourceUnit.ShowMoveCells();
-        sourceUnit.ShowAttackCells();
-    }
-
-
-    public void SetTarget(MMUnitNode unit)
-    {
-        targetUnit = unit;
-        targetUnit.cell.HandleHighlight(MMNodeHighlight.Red);
-
-        sourceUnit.HideMoveCells();
-        sourceUnit.HideAttackCells();
-        sourceUnit.cell.HandleHighlight(MMNodeHighlight.Green);
-    }
-
-    
-    public void ClearSource()
-    {
-        if (sourceUnit == null)
-        {
-            return;
-        }
-
-        if (sourceUnit.cell == null)
-        {
-            sourceUnit = null;
-            return;
-        }
-
-        sourceUnit.cell.HandleState(MMNodeState.Normal);
-        sourceUnit.cell.HandleHighlight(MMNodeHighlight.Normal);
-        sourceUnit.HideMoveCells();
-        sourceUnit.HideAttackCells();
-        sourceUnit = null;
-    }
-
-
-    public void ClearTarget()
-    {
-        if (targetUnit == null)
-        {
-            return;
-        }
-
-        if (targetUnit.cell == null)
-        {
-            targetUnit = null;
-            return;
-        }
-
-        targetUnit.cell.HandleState(MMNodeState.Normal);
-        targetUnit.cell.HandleHighlight(MMNodeHighlight.Normal);
-        targetUnit = null;
-    }
-
-
-    public void UnselectSourceCell()
-    {
-        this.ClearSource();
-        this.ClearTarget();
-    }
-
-    
-
     /// <summary>
     /// Find
     /// </summary>
     /// <returns></returns>
 
 
+    public void AutoSelectSour()
+    {
+        List<MMUnitNode> units = FindSortedUnits1();
 
+        foreach (var unit in units)
+        {
+            if (unit.isActived == false)
+            {
+                TryEnterPhase_UnitBegin(unit);
+                return;
+            }
+        }
+
+        if (this.sourceUnit == null)
+        {
+            MMTipManager.instance.CreateTip("己方回合行动结束");
+        }
+    }
+
+    
     public List<MMUnitNode> FindSortedUnits1()
     {
         int row = MMMap.Instance.row;
@@ -137,7 +88,6 @@ public partial class MMBattleManager : MonoBehaviour
 
         return ret;
     }
-
-
-
+    
+    
 }

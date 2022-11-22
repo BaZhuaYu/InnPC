@@ -5,11 +5,13 @@ using UnityEngine.UI;
 
 public class MMNode : MonoBehaviour
 {
-
+    [HideInInspector]
     public MMNodeState nodeState;
 
+    [HideInInspector]
     public MMNodeHighlight nodeHighlight;
 
+    [HideInInspector]
     public string userinfo;
 
 
@@ -49,11 +51,13 @@ public class MMNode : MonoBehaviour
 
     public virtual void OpenUI()
     {
+        Debug.LogWarning(gameObject.name + " Open");
         this.gameObject.SetActive(true);
     }
 
     public virtual void CloseUI()
     {
+        Debug.LogWarning(gameObject.name + " Close");
         this.gameObject.SetActive(false);
     }
 
@@ -184,66 +188,15 @@ public class MMNode : MonoBehaviour
         this.transform.localPosition = Vector3.zero;
     }
 
+    public void SetColor(Color c)
+    {
+        GetComponent<Image>().color = c;
+    }
 
     public void SetActive(bool flag)
     {
         this.gameObject.SetActive(flag);
     }
 
-
-    public void HandleState(MMNodeState s)
-    {
-        this.nodeState = s;
-        switch (s)
-        {
-            case MMNodeState.Normal:
-                GetComponent<Image>().color = Color.white;
-                break;
-            case MMNodeState.Red:
-                GetComponent<Image>().color = new Color(1f, 0f, 0f, 0.5f);
-                break;
-            case MMNodeState.Yellow:
-                GetComponent<Image>().color = new Color(1f, 0.5f, 0f, 0.5f);
-                break;
-            case MMNodeState.Blue:
-                GetComponent<Image>().color = new Color(0f, 0f, 1f, 0.5f);
-                break;
-            case MMNodeState.Green:
-                GetComponent<Image>().color = new Color(0f, 1f, 0f, 0.5f);
-                break;
-        }
-
-    }
-
-
-    public void HandleHighlight(MMNodeHighlight s)
-    {
-        this.nodeHighlight = s;
-        switch (s)
-        {
-            case MMNodeHighlight.Normal:
-                GetComponent<Outline>().effectColor = new Color(0f, 0f, 0f, 0f);
-                this.transform.SetSiblingIndex(0);
-                break;
-            case MMNodeHighlight.Red:
-                GetComponent<Outline>().effectColor = new Color(1f, 0f, 0f, 1f);
-                this.transform.SetSiblingIndex(100);
-                break;
-            case MMNodeHighlight.Yellow:
-                GetComponent<Outline>().effectColor = new Color(1f, 0.5f, 0f, 1f);
-                this.transform.SetSiblingIndex(100);
-                break;
-            case MMNodeHighlight.Blue:
-                GetComponent<Outline>().effectColor = new Color(0f, 0f, 1f, 1f);
-                this.transform.SetSiblingIndex(100);
-                break;
-            case MMNodeHighlight.Green:
-                GetComponent<Outline>().effectColor = new Color(0f, 1f, 0f, 1f);
-                this.transform.SetSiblingIndex(100);
-                break;
-        }
-
-    }
-
-
+    
 }

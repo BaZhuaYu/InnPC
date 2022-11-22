@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class MMRewardPanel : MMNode
 {
-
     public static MMRewardPanel instance;
 
     private void Awake()
@@ -30,7 +29,11 @@ public class MMRewardPanel : MMNode
         base.OpenUI();
         transform.SetSiblingIndex(100);
     }
-    
+
+    public override void CloseUI()
+    {
+        base.CloseUI();
+    }
 
 
     public void LoadUnitPanel()
@@ -53,9 +56,9 @@ public class MMRewardPanel : MMNode
         unitNodes[1].SetParent(this);
         unitNodes[2].SetParent(this);
 
-        unitNodes[0].gameObject.AddComponent<MMRewardUnit>();
-        unitNodes[1].gameObject.AddComponent<MMRewardUnit>();
-        unitNodes[2].gameObject.AddComponent<MMRewardUnit>();
+        unitNodes[0].gameObject.AddComponent<MMReward_UnitNode>();
+        unitNodes[1].gameObject.AddComponent<MMReward_UnitNode>();
+        unitNodes[2].gameObject.AddComponent<MMReward_UnitNode>();
 
         unitNodes[0].MoveLeft(150);
         unitNodes[2].MoveRight(150);
@@ -78,7 +81,7 @@ public class MMRewardPanel : MMNode
         {
             unit.SetParent(this);
             unit.MoveDown(100);
-            MMRewardSkill rewardSkill = unit.gameObject.AddComponent<MMRewardSkill>();
+            MMReward_SkillNode rewardSkill = unit.gameObject.AddComponent<MMReward_SkillNode>();
             rewardSkill.skill = skillNode;
         }
 
@@ -90,6 +93,28 @@ public class MMRewardPanel : MMNode
     public void LoadCardPanel()
     {
         Clear();
+
+        cardNodes = new List<MMCardNode>();
+        
+        List<MMCard> cards = MMCard.FindRandomCount(3);
+
+        foreach (var card in cards)
+        {
+            MMCardNode node = MMCardNode.Create();
+            node.Accept(card);
+            cardNodes.Add(node);
+        }
+
+        cardNodes[0].SetParent(this);
+        cardNodes[1].SetParent(this);
+        cardNodes[2].SetParent(this);
+
+        cardNodes[0].gameObject.AddComponent<MMReward_CardNode>();
+        cardNodes[1].gameObject.AddComponent<MMReward_CardNode>();
+        cardNodes[2].gameObject.AddComponent<MMReward_CardNode>();
+
+        cardNodes[0].MoveLeft(400);
+        cardNodes[2].MoveRight(400);
     }
 
 
@@ -108,7 +133,7 @@ public class MMRewardPanel : MMNode
         {
             unit.SetParent(this);
             unit.MoveDown(100);
-            MMRewardItem rewardItem = unit.gameObject.AddComponent<MMRewardItem>();
+            MMReward_ItemNode rewardItem = unit.gameObject.AddComponent<MMReward_ItemNode>();
             rewardItem.item = itemNode;
         }
 
@@ -120,18 +145,24 @@ public class MMRewardPanel : MMNode
 
 
 
-
     public void Clear()
     {
         if(unitNodes != null)
         {
             foreach (var unit in unitNodes)
             {
-                Debug.Log("Clear: " + unit.displayName);
-                //unit.SetActive(false);
                 unit.RemoveFromParent();
             }
             unitNodes.Clear();
+        }
+
+        if(cardNodes != null)
+        {
+            foreach (var card in cardNodes)
+            {
+                card.RemoveFromParent();
+            }
+            cardNodes.Clear();
         }
         
         if(skillNode != null)

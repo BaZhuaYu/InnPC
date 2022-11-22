@@ -24,33 +24,13 @@ public partial class MMBattleManager : MonoBehaviour
             return false;
         }
     }
+    
 
-
-    public void ClearUnitsInMap()
-    {
-        for (int i = 0; i < units1.Count; i++)
-        {
-            if (units1[i].unitState == MMUnitState.Dead)
-            {
-                units1[i].Clear();
-            }
-        }
-
-        for (int i = 0; i < units2.Count; i++)
-        {
-            if (units2[i].unitState == MMUnitState.Dead)
-            {
-                units2[i].Clear();
-            }
-        }
-    }
-
-
-    public void ClearUnitsInList()
+    public void ClearDeadUnits()
     {
         foreach (var unit in FindAllUnits())
         {
-            if (unit.unitState == MMUnitState.Dead)
+            if (unit.state == MMUnitState.Dead)
             {
                 BroadCastOnDead(unit);
                 unit.Clear();
@@ -58,8 +38,8 @@ public partial class MMBattleManager : MonoBehaviour
         }
 
 
-        units1.RemoveAll(unit => unit.unitState == MMUnitState.Dead);
-        units2.RemoveAll(unit => unit.unitState == MMUnitState.Dead);
+        units1.RemoveAll(unit => unit.state == MMUnitState.Dead);
+        units2.RemoveAll(unit => unit.state == MMUnitState.Dead);
 
     }
 
@@ -75,7 +55,7 @@ public partial class MMBattleManager : MonoBehaviour
 
         foreach (var unit in units2)
         {
-            if (unit.unitState != MMUnitState.Dead)
+            if (unit.state != MMUnitState.Dead)
             {
                 return false;
             }
@@ -94,7 +74,7 @@ public partial class MMBattleManager : MonoBehaviour
 
         foreach (var unit in units1)
         {
-            if (unit.unitState != MMUnitState.Dead)
+            if (unit.state != MMUnitState.Dead)
             {
                 return false;
             }

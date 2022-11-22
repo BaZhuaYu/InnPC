@@ -11,69 +11,42 @@ public partial class MMBattleManager : MonoBehaviour
         return units1[index];
     }
 
+    
 
-    public IEnumerator ConfigEnemyAI()
+    MMUnitNode FindMaxAPUnit2()
     {
-        //foreach (var unit in units2)
-        //{
-        //    SetSource(unit);
-        //    yield return new WaitForSeconds(0.5f);
-
-        //    unit.ConfigSkill();
-
-        //    if(unit.ap == unit.maxAP)
-        //    {
-        //        SelectSkill(unit.skills[0]);
-        //        yield return new WaitForSeconds(0.5f);
-
-        //        SetTarget(FindRandomUnit1());
-        //        yield return new WaitForSeconds(0.5f);
-        //    }
-        //    else
-        //    {
-        //        SelectSkill(unit.skills[2]);
-        //        yield return new WaitForSeconds(0.5f);
-        //    }
-
-        //    PlaySkill();
-
-        //}
-        foreach (var unit in units2)
+        foreach(var unit in units2)
         {
-            SetSource(unit);
-            if (unit.ap == unit.maxAP)
+            if (unit.ap == unit.maxAP && unit.isActived == false)
             {
-                MMUnitNode dest = unit.FindTarget();
-                if (dest != null)
-                {
-
-                    SelectSkill(unit.skills[0]);
-                    SetTarget(dest);
-
-                    Debug.Log("---------------------------");
-                    Debug.Log(sourceUnit.displayName);
-                    Debug.Log(selectingSkill.displayName);
-                    Debug.Log(targetUnit.displayName);
-                    Debug.Log("---------------------------");
-
-                    PlaySkill();
-                }
-                else
-                {
-                    Debug.Log("xxxxxxxxxxxxxxxxxxxxx");
-                }
+                return unit;
             }
-            else
-            {
-                OnClickAwaitButton();
-                //unit.IncreaseAP(1);
-            }
-            yield return new WaitForSeconds(1.0f);
         }
 
-        yield return new WaitForSeconds(1.0f);
-        OnClickMainButton();
+        return null;
     }
+
+
+    public void AutoUnitActing()
+    {
+        Debug.Log("AutoUnitActing");
+        MMUnitNode dest = sourceUnit.FindTarget();
+        sourceUnit.isActived = true;
+        if (dest == null)
+        {
+
+            sourceUnit.DecreaseAP(sourceUnit.maxAP);
+            MMPlayerManager.Instance.hp -= 10;
+        }
+        else
+        {
+            TryEnterStateSelectingCard(sourceUnit.cards[0]);
+            TryEnterStateSelectedTargetUnit(dest);
+        }
+        
+        EnterPhase(MMBattlePhase.UnitEnd);
+    }
+    
 
 
     public MMUnitNode FindFrontUnitOfGroup(int group)
