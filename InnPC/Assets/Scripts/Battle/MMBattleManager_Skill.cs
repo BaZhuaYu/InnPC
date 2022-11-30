@@ -101,10 +101,6 @@ public partial class MMBattleManager : MonoBehaviour
         this.selectingSkill = null;
         MMSkillPanel.Instance.selectingSkill = null;
     }
-
-
-
-    
     
 
 }

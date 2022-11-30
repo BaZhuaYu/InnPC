@@ -8,11 +8,12 @@ public partial class MMUnitNode : MMNode
     public void OnRoundBegin()
     {
         tempCell = this.cell;
+        this.isActived = true;
     }
 
     public void OnRoundEnd()
     {
-        this.isActived = true;
+        
     }
 
 }

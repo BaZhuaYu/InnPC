@@ -41,6 +41,8 @@ public class MMCardPanel : MMNode
 
     public void LoadDeck(List<MMCard> cards)
     {
+        Debug.Log("LoadDeck");
+
         deck = new List<MMCardNode>();
         hand = new List<MMCardNode>();
         used = new List<MMCardNode>();
@@ -166,35 +168,36 @@ public class MMCardPanel : MMNode
 
     public void UpdateUI()
     {
+        Debug.Log("MMCardPanel UpdateUI");
+
+        foreach(var card in hand)
+        {
+            card.SetActive(true);
+            card.SetParent(this);
+        }
 
         SortHand();
 
         for (int i = 0; i < hand.Count; i++)
-        {
-            hand[i].SetActive(true);
-            hand[i].SetParent(this);
+        {   
             float x = this.FindWidth() / 2f - hand[i].FindWidth() / 2f - (float)i / (float)(hand.Count + 1) * this.FindWidth();
 
-            hand[i].transform.localPosition = new Vector2(x, 0);
+            hand[i].transform.localPosition = new Vector2(x, hand[i].transform.localPosition.y);
+
             if (selectingCard != null && this.selectingCard == hand[i])
             {
+                hand[i].MoveToCenterY();
                 hand[i].MoveUp(20);
             }
-
         }
 
-
-        Debug.Log("++++++++++++++++++++++++++++++");
+        
         int index = hand.Count;
         for (int i = 0; i < hand.Count; i++)
         {
             hand[i].gameObject.transform.SetSiblingIndex(index--);
-            Debug.Log(hand[i].displayName + " " + hand[i].gameObject.transform.GetSiblingIndex());
         }
-        Debug.Log("------------------------------");
-
-
-
+        
 
         foreach (var card in used)
         {
@@ -215,8 +218,40 @@ public class MMCardPanel : MMNode
 
     void SortHand()
     {
-        hand.Sort((x, y) => x.race < y.race ? -1 : 1);
+        if(MMBattleManager.Instance.sourceUnit == null)
+        {
+            foreach(var card in hand)
+            {
+                card.sortingOrder = card.clss;
+                card.MoveToCenterY();
+            }
+        }
+        else
+        {
+            foreach (var card in hand)
+            {
+                if(card.clss == MMBattleManager.Instance.sourceUnit.clss)
+                {
+                    card.sortingOrder = card.clss;
+                    card.MoveToCenterY();
+                }
+                else if (card.clss == 0)
+                {
+                    card.sortingOrder = card.clss + 100;
+                    card.MoveToCenterY();
+                }
+                else
+                {
+                    card.sortingOrder = card.clss + 1000;
+                    card.MoveToCenterY();
+                    card.MoveDown(80);
+                }
+            }
+        }
+
+        hand.Sort((x, y) => x.sortingOrder < y.sortingOrder ? -1 : 1);
     }
+    
 
 
     public void Clear()
@@ -236,11 +271,13 @@ public class MMCardPanel : MMNode
         {
             card.DestroySelf();
         }
+        hand = new List<MMCardNode>();
+        deck = new List<MMCardNode>();
+        used = new List<MMCardNode>();
         UpdateUI();
     }
 
-
-
+    
 
     /// <summary>
     /// Private

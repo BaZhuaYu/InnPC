@@ -68,7 +68,7 @@ public partial class MMUnitNode : MMNode
         tempMoveCells = cells;
         foreach (var cell in cells)
         {
-            cell.HandleFill(MMNodeState.Blue);
+            cell.HandleFill(MMNodeState.Green);
         }
     }
 
@@ -84,12 +84,7 @@ public partial class MMUnitNode : MMNode
         {
             cell.HandleFill(MMNodeState.Normal);
         }
-
-        //List<MMCell> cells = FindMovableCells();
-        //foreach (var cell in cells)
-        //{
-        //    cell.HandleState(MMNodeState.Normal);
-        //}
+        
     }
 
 
@@ -128,19 +123,7 @@ public partial class MMUnitNode : MMNode
                 }
             }
         }
-
-        //List<MMCell> cells = FindAttackCells();
-        //foreach (var cell in cells)
-        //{
-        //    cell.HandleState(MMNodeState.Blue);
-        //    if (cell.unitNode != null)
-        //    {
-        //        if (cell.unitNode.group != this.group)
-        //        {
-        //            cell.HandleHighlight(MMNodeHighlight.Red);
-        //        }
-        //    }
-        //}
+        
     }
 
 
@@ -159,16 +142,7 @@ public partial class MMUnitNode : MMNode
                 cell.HandleBorder(MMNodeHighlight.Normal);
             }
         }
-
-        //List<MMCell> cells = FindAttackCells();
-        //foreach (var cell in cells)
-        //{
-        //    cell.HandleState(MMNodeState.Normal);
-        //    if (cell.unitNode != null)
-        //    {
-        //        cell.HandleHighlight(MMNodeHighlight.Normal);
-        //    }
-        //}
+        
     }
 
 

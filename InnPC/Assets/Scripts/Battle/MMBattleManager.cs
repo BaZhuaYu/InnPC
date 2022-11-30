@@ -14,6 +14,7 @@ public partial class MMBattleManager : MonoBehaviour
     }
 
     public MMNode background;
+    public MMNode backgroundNote;
     public Button buttonMain;
     public Button buttonAttack;
     public Button buttonAwait;
@@ -23,6 +24,7 @@ public partial class MMBattleManager : MonoBehaviour
     public Text textHP;
     public Button buttonDeck;
     public Button buttonUsed;
+    public MMNode avatar;
 
 
     public MMBattlePhase phase;
@@ -39,7 +41,7 @@ public partial class MMBattleManager : MonoBehaviour
 
     public int round;
     public int level;
-    public bool isPlayerRound = false;
+    public int isPlayerRound;
 
     public Dictionary<int, List<MMSkillNode>> historySkills;
 
@@ -48,10 +50,12 @@ public partial class MMBattleManager : MonoBehaviour
     private void Start()
     {
         buttonMain = GameObject.Find("MainButton").GetComponent<Button>();
+        backgroundNote = GameObject.Find("Canvas/PanelBattle/Note").GetComponent<MMNode>();
         buttonAttack = GameObject.Find("AttackButton").GetComponent<Button>();
         buttonAwait = GameObject.Find("AwaitButton").GetComponent<Button>();
         textButtonMain = GameObject.Find("MainButton").GetComponentInChildren<Text>();
         textHP = GameObject.Find("TextHP").GetComponent<Text>();
+        avatar = GameObject.Find("Avatar").GetComponent<MMNode>();
 
         buttonMain.onClick.AddListener(OnClickMainButton);
         buttonAttack.onClick.AddListener(OnClickAttackButton);
@@ -63,10 +67,10 @@ public partial class MMBattleManager : MonoBehaviour
 
         historySkills = new Dictionary<int, List<MMSkillNode>>();
 
+        isPlayerRound = 0;
+        this.phase = MMBattlePhase.BattleEnd;
 
-        this.phase = MMBattlePhase.End;
-
-        last = MMBattlePhase.End;
+        last = MMBattlePhase.BattleEnd;
 
     }
 
@@ -158,16 +162,14 @@ public partial class MMBattleManager : MonoBehaviour
 
     }
 
-
-
-
+    
 
     public void OnClickMainButton()
     {
         switch (phase)
         {
-            case MMBattlePhase.End:
-                EnterPhase(MMBattlePhase.Begin);
+            case MMBattlePhase.BattleEnd:
+                EnterPhase(MMBattlePhase.BattleBegin);
                 break;
 
             default:

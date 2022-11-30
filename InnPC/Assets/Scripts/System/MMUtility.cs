@@ -54,6 +54,11 @@ public class MMUtility : MonoBehaviour
                 return MMTriggerTime.OnRoundBegin;
             case "OnRoundEnd":
                 return MMTriggerTime.OnRoundEnd;
+            case "OnBattleBegin":
+                return MMTriggerTime.OnBattleBegin;
+            case "OnActiveUnit":
+                return MMTriggerTime.OnActiveUnit;
+
             case "OnAttack":
                 return MMTriggerTime.OnAttack;
             case "BeforeAttack":

@@ -5,65 +5,167 @@ using UnityEngine;
 
 public enum MMBattlePhase
 {
-    Begin,
-    PlayerRound,
-    EnemyRound,
-    Routing,
+    BattleBegin,
+
+    RoundBegin,
+    PickUnit,
+
     UnitBegin,
     UnitActing,
     UnitEnd,
-    End,
+
+    RoundEnd,
+
+    BattleEnd,
 }
 
 
 public partial class MMBattleManager
 {
-
+    bool isSourceUnitDead = false;
     List<MMUnitNode> tempEnemyUnits;
 
     public void EnterPhase(MMBattlePhase p)
     {
 
-        if (phase == MMBattlePhase.End)
+        if (p == MMBattlePhase.BattleBegin)
         {
-            if (p != MMBattlePhase.Begin)
+            if (phase != MMBattlePhase.BattleEnd)
             {
-                Debug.Log(phase.ToString() + "XXXXXXXXXXXXXXXXXXX" + p.ToString());
+                Debug.Log("From: " + phase.ToString() + " To: " + p.ToString());
                 return;
             }
         }
 
-        if(phase == MMBattlePhase.PlayerRound)
+        if (p == MMBattlePhase.RoundBegin)
         {
-            if (p != MMBattlePhase.Routing)
+            if (phase != MMBattlePhase.BattleBegin && phase != MMBattlePhase.RoundEnd)
             {
-                Debug.Log(phase.ToString() + "XXXXXXXXXXXXXXXXXXX" + p.ToString());
+                Debug.Log("From: " + phase.ToString() + " To: " + p.ToString());
+                return;
+            }
+        }
+
+        if (p == MMBattlePhase.PickUnit)
+        {
+            if (phase != MMBattlePhase.RoundBegin && phase != MMBattlePhase.UnitEnd)
+            {
+                Debug.Log("From: " + phase.ToString() + " To: " + p.ToString());
+                return;
+            }
+        }
+
+        if (p == MMBattlePhase.UnitBegin)
+        {
+            if (phase != MMBattlePhase.PickUnit)
+            {
+                Debug.Log("From: " + phase.ToString() + " To: " + p.ToString());
+                return;
+            }
+        }
+
+        if (p == MMBattlePhase.UnitActing)
+        {
+            if (phase != MMBattlePhase.UnitBegin && phase != MMBattlePhase.UnitActing)
+            {
+                Debug.Log("From: " + phase.ToString() + " To: " + p.ToString());
+                return;
+            }
+        }
+
+        if (p == MMBattlePhase.UnitEnd)
+        {
+            if (phase != MMBattlePhase.UnitActing)
+            {
+                Debug.Log("From: " + phase.ToString() + " To: " + p.ToString());
                 return;
             }
         }
 
 
-        if(p == MMBattlePhase.UnitBegin || p == MMBattlePhase.UnitActing || p == MMBattlePhase.UnitEnd)
+        if (p == MMBattlePhase.RoundEnd)
         {
-            if(sourceUnit == null)
+            if (phase != MMBattlePhase.PickUnit)
             {
-                Debug.Log(phase.ToString() + "XXXXXXXXXXXXXXXXXXX" + p.ToString());
+                Debug.Log("From: " + phase.ToString() + " To: " + p.ToString());
+                return;
+            }
+        }
+
+        if (p == MMBattlePhase.BattleEnd)
+        {
+            if (phase == MMBattlePhase.BattleEnd)
+            {
+                Debug.Log("From: " + phase.ToString() + " To: " + p.ToString());
                 return;
             }
         }
 
 
-
-
-        OnExitPhase(phase);
-
+        OnExitPhase(this.phase);
         this.phase = p;
-        
+        OnEnterPhase(p);
+
+        UpdateUI();
+
+        AutoRoute_Phase();
+    }
+
+
+    void OnExitPhase(MMBattlePhase p)
+    {
+        Debug.Log("--------" + p.ToString() + "--------" + isPlayerRound);
+
+        switch (this.phase)
+        {
+            case MMBattlePhase.BattleBegin:
+                break;
+
+            case MMBattlePhase.RoundBegin:
+                break;
+
+            case MMBattlePhase.PickUnit:
+                break;
+
+            case MMBattlePhase.UnitBegin:
+
+                break;
+
+            case MMBattlePhase.UnitActing:
+
+
+                break;
+
+            case MMBattlePhase.UnitEnd:
+                break;
+
+            case MMBattlePhase.RoundEnd:
+                isSourceUnitDead = false;
+                if (isPlayerRound == 1)
+                {
+                    IncreaseAPUnits(units1);
+                }
+                else if (isPlayerRound == 2)
+                {
+                    IncreaseAPUnits(units2);
+                }
+                isPlayerRound = (isPlayerRound + 1) % 2 + 1;
+                break;
+
+            case MMBattlePhase.BattleEnd:
+                break;
+
+        }
+    }
+
+
+    void OnEnterPhase(MMBattlePhase p)
+    {
+        Debug.Log("++++++++" + phase.ToString() + "++++++++" + isPlayerRound);
 
         switch (p)
         {
-            case MMBattlePhase.Begin:
-                Debug.Log("--------Begin--------");
+            case MMBattlePhase.BattleBegin:
                 round = 0;
                 historySkills = new Dictionary<int, List<MMSkillNode>>();
 
@@ -73,64 +175,61 @@ public partial class MMBattleManager
                 DebugConfig();
 
                 DrawCards(4, true);
+                isPlayerRound += 1;
 
-                EnterPhase(MMBattlePhase.PlayerRound);
+                BroadCast(MMTriggerTime.OnBattleBegin);
                 break;
 
-            case MMBattlePhase.PlayerRound:
-                Debug.Log("--------PlayerRound--------");
+            case MMBattlePhase.RoundBegin:
                 round += 1;
                 historySkills.Add(round, new List<MMSkillNode>());
-                DrawCards(2);
-                isPlayerRound = true;
-                foreach(var unit in units1)
-                {
-                    unit.isActived = false;
-                }
-                MMMap.Instance.SetColor(MMUtility.FindColorWhite());
-                BroadCast(MMTriggerTime.OnRoundBegin);
-                EnterState(MMBattleState.Normal);
-                EnterPhase(MMBattlePhase.Routing);
-                break;
 
-            case MMBattlePhase.EnemyRound:
-                Debug.Log("--------EnemyRound--------");
-                MMMap.Instance.SetColor(MMUtility.FindColorLightRed());
-                isPlayerRound = false;
-                EnterState(MMBattleState.Normal);
-                BroadCast(MMTriggerTime.OnRoundBegin);
-
-                foreach (var unit in units2)
+                if (isPlayerRound == 1)
                 {
-                    unit.isActived = false;
-                }
-
-                tempEnemyUnits = new List<MMUnitNode>();
-                foreach(var unit in units2)
-                {
-                    if(unit.ap == unit.maxAP && unit.isActived == false)
+                    DrawCards(2);
+                    foreach (var unit in units1)
                     {
-                        tempEnemyUnits.Add(unit);
+                        unit.tempCell = unit.cell;
+                        unit.isActived = false;
+                    }
+                }
+                else
+                {
+                    foreach (var unit in units2)
+                    {
+                        unit.isActived = false;
+                    }
+
+                    tempEnemyUnits = new List<MMUnitNode>();
+                    foreach (var unit in units2)
+                    {
+                        if (unit.ap == unit.maxAP && unit.isActived == false)
+                        {
+                            tempEnemyUnits.Add(unit);
+                        }
                     }
                 }
 
-                EnterPhase(MMBattlePhase.Routing);
+                EnterState(MMBattleState.Normal);
+                BroadCast(MMTriggerTime.OnRoundBegin);
                 break;
 
+            case MMBattlePhase.PickUnit:
+                break;
 
             case MMBattlePhase.UnitBegin:
-                Debug.Log("UnitBegin: " + " " + sourceUnit.displayName);
+                Debug.Log("UnitBegin: " + " " + sourceUnit.displayName + " " + sourceUnit.cell.index);
                 sourceUnit.OnRoundBegin();
                 MMSkillPanel.Instance.Accept(sourceUnit.skills);
-                EnterPhase(MMBattlePhase.UnitActing);
+                BroadCast(MMTriggerTime.OnActiveUnit);
                 break;
 
 
             case MMBattlePhase.UnitActing:
-                Debug.Log("UnitActing: " + " " + sourceUnit.displayName);
-                if (isPlayerRound)
+                Debug.Log("UnitActing: " + " " + sourceUnit.displayName + " " + sourceUnit.cell.index);
+                if (isPlayerRound == 1)
                 {
-
+                    
                 }
                 else
                 {
@@ -140,102 +239,56 @@ public partial class MMBattleManager
 
 
             case MMBattlePhase.UnitEnd:
-                Debug.Log("UnitEnd: " + " " + sourceUnit.displayName);
-                
+                Debug.Log("UnitEnd: " + " " + sourceUnit.displayName + " " + sourceUnit.cell.index);
+                if (sourceUnit.state == MMUnitState.Dead)
+                {
+                    isSourceUnitDead = true;
+                }
                 sourceUnit.OnRoundEnd();
                 UnselectSourceCell();
                 ClearDeadUnits();
-                EnterPhase(MMBattlePhase.Routing);
+                break;
 
+            case MMBattlePhase.RoundEnd:
+                BroadCast(MMTriggerTime.OnRoundEnd);
                 break;
 
 
-            case MMBattlePhase.End:
-                Debug.Log("--------End--------");
+            case MMBattlePhase.BattleEnd:
+                isPlayerRound = 0;
                 MMBattleManager.Instance.Clear();
                 break;
 
-
-            case MMBattlePhase.Routing:
-                //AutoRouting();
-                //StartRoutingNextPhase();
-                AutoRouting();
-                break;
-
-        }
-
-
-        OnEnterPhase(this.phase);
-
-    }
-
-
-    void OnExitPhase(MMBattlePhase phase)
-    {
-        switch (phase)
-        {
-            case MMBattlePhase.Begin:
-                BroadCast(MMTriggerTime.OnBattleBegin);
-                break;
-
-
-            case MMBattlePhase.PlayerRound:
-                BroadCast(MMTriggerTime.OnRoundEnd);
-                IncreaseAPUnits(units1);
-                break;
-
-
-            case MMBattlePhase.EnemyRound:
-                BroadCast(MMTriggerTime.OnRoundEnd);
-                IncreaseAPUnits(units2);
-                break;
-
-
-            case MMBattlePhase.UnitEnd:
-                EnterState(MMBattleState.Normal);
-                break;
-
-
-            default:
-                break;
         }
     }
 
 
-
-    void OnEnterPhase(MMBattlePhase phase)
+    void UpdateUI()
     {
-
         ClosePanels();
 
-
         switch (phase)
         {
-            case MMBattlePhase.End:
+            case MMBattlePhase.BattleEnd:
                 ShowTitle("Begin");
                 ShowButton("End");
                 MMUnitPanel.Instance.OpenUI();
                 break;
 
-            case MMBattlePhase.Begin:
+            case MMBattlePhase.BattleBegin:
                 ShowTitle("Round 1");
                 ShowButton("Begin");
                 MMCardPanel.Instance.OpenUI();
                 break;
 
-            case MMBattlePhase.PlayerRound:
+            case MMBattlePhase.PickUnit:
+                ShowButton("PickUnit");
+                MMCardPanel.Instance.OpenUI();
+                break;
+
+            case MMBattlePhase.RoundBegin:
                 ShowButton("PlayerRound");
                 MMCardPanel.Instance.OpenUI();
-                break;
-
-            case MMBattlePhase.EnemyRound:
-                ShowButton("EnemyRound");
-                MMCardPanel.Instance.OpenUI();
-                break;
-
-            case MMBattlePhase.Routing:
-                MMCardPanel.Instance.OpenUI();
-                ShowButton("Routing");
                 break;
 
             case MMBattlePhase.UnitBegin:
@@ -259,12 +312,26 @@ public partial class MMBattleManager
         }
 
         textPhase.text = phase.ToString();
+        if (isPlayerRound == 1)
+        {
+            backgroundNote.SetColor(MMUtility.FindColorLightGreen());
+        }
+        else if (isPlayerRound == 1)
+        {
+            backgroundNote.SetColor(MMUtility.FindColorLightRed());
+        }
+        else
+        {
+            backgroundNote.SetColor(MMUtility.FindColorWhite());
+        }
     }
 
 
 
-    public void AutoRouting()
+    public void AutoRoute_Phase()
     {
+
+        ClearDeadUnits();
 
         if (CheckGameOver())
         {
@@ -273,39 +340,76 @@ public partial class MMBattleManager
         }
 
 
-        if(this.phase != MMBattlePhase.Routing)
+        switch (phase)
         {
-            Debug.LogError(this.phase + "");
+            case MMBattlePhase.BattleBegin:
+                EnterPhase(MMBattlePhase.RoundBegin);
+                break;
+
+            case MMBattlePhase.RoundBegin:
+                EnterPhase(MMBattlePhase.PickUnit);
+                break;
+
+            case MMBattlePhase.PickUnit:
+                if (isPlayerRound == 1)
+                {
+                    if (isSourceUnitDead)
+                    {
+                        EnterPhase(MMBattlePhase.RoundEnd);
+                        return;
+                    }
+
+                    foreach (var unit in units1)
+                    {
+                        if (unit.isActived)
+                        {
+                            EnterPhase(MMBattlePhase.RoundEnd);
+                            return;
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var unit in tempEnemyUnits)
+                    {
+                        if (unit.ap == unit.maxAP && unit.isActived == false)
+                        {
+                            TryEnterPhase_UnitBegin(unit);
+                            return;
+                        }
+                    }
+                    EnterPhase(MMBattlePhase.RoundEnd);
+                }
+                break;
+
+            case MMBattlePhase.UnitBegin:
+                EnterPhase(MMBattlePhase.UnitActing);
+                break;
+
+            case MMBattlePhase.UnitActing:
+                if (isPlayerRound == 1)
+                {
+
+                }
+                else
+                {
+                    EnterPhase(MMBattlePhase.UnitEnd);
+                }
+                break;
+
+            case MMBattlePhase.UnitEnd:
+                EnterPhase(MMBattlePhase.PickUnit);
+                break;
+
+            case MMBattlePhase.RoundEnd:
+                EnterPhase(MMBattlePhase.RoundBegin);
+                break;
+
+            case MMBattlePhase.BattleEnd:
+                break;
         }
 
-
-        if (isPlayerRound)
-        {
-            foreach(var unit in units1)
-            {
-                if(unit.isActived)
-                {
-                    EnterPhase(MMBattlePhase.EnemyRound);
-                    return;
-                }
-            }
-        }
-        else
-        {
-            foreach(var unit in tempEnemyUnits)
-            {
-                if(unit.ap == unit.maxAP && unit.isActived == false)
-                {
-                    TryEnterPhase_UnitBegin(unit);
-                    return;
-                }
-            }
-            EnterPhase(MMBattlePhase.PlayerRound);
-        }
-        
     }
-
-    
 
 
     public void TryEnterPhase_UnitBegin(MMUnitNode unit)
@@ -314,7 +418,6 @@ public partial class MMBattleManager
         EnterPhase(MMBattlePhase.UnitBegin);
     }
 
-    
 
 
     /// <summary>

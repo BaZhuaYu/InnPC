@@ -24,7 +24,7 @@ public class MMCardNode_Battle : MonoBehaviour, IPointerClickHandler, IPointerEn
     
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (MMBattleManager.Instance.phase == MMBattlePhase.End)
+        if (MMBattleManager.Instance.phase == MMBattlePhase.BattleEnd)
         {
             return;
         }
@@ -47,14 +47,13 @@ public class MMCardNode_Battle : MonoBehaviour, IPointerClickHandler, IPointerEn
 
         siblingIndex = card.transform.GetSiblingIndex();
         card.transform.SetSiblingIndex(1000);
+        card.MoveToCenterY();
         card.MoveUp(20);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        
-
-        card.MoveDown(20);
+        card.MoveToCenterY();
         card.transform.SetSiblingIndex(siblingIndex);
     }
 

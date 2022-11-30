@@ -294,6 +294,8 @@ MonoBehaviour:
   textCost: {fileID: 6165936599948241727}
   textATK: {fileID: 7869783348311601377}
   textDEF: {fileID: 3959937243787504945}
+  bgATK: {fileID: 3859572424432684049}
+  bgDEF: {fileID: 9024336919233310938}
   id: 0
   key: 
   displayName: 

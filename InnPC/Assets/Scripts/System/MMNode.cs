@@ -51,18 +51,15 @@ public class MMNode : MonoBehaviour
 
     public virtual void OpenUI()
     {
-        Debug.LogWarning(gameObject.name + " Open");
         this.gameObject.SetActive(true);
     }
 
     public virtual void CloseUI()
     {
-        Debug.LogWarning(gameObject.name + " Close");
         this.gameObject.SetActive(false);
     }
 
-
-
+    
 
     public MMNode FindParent()
     {

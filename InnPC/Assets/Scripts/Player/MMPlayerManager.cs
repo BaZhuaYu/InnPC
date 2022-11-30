@@ -37,8 +37,6 @@ public class MMPlayerManager : MonoBehaviour
         skills = new List<MMSkill>();
         cards = new List<MMCard>();
         
-
-
         LoadData();
     }
 
@@ -54,14 +52,22 @@ public class MMPlayerManager : MonoBehaviour
             cards.Add(card);
         }
 
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 0; i++)
         {
-            MMCard card1 = MMCard.Create(10000);
-            MMCard card2 = MMCard.Create(10000);
-            cards.Add(card1);
-            cards.Add(card2);
+            MMCard cardx = MMCard.Create(10000);
+            MMCard cardy = MMCard.Create(10000);
+            cards.Add(cardx);
+            cards.Add(cardy);
         }
-        
+
+        MMCard card1 = MMCard.Create(1301);
+        cards.Add(card1);
+        MMCard card2 = MMCard.Create(1303);
+        cards.Add(card2);
+        MMCard card3 = MMCard.Create(1305);
+        cards.Add(card3);
+        MMCard card4 = MMCard.Create(1307);
+        cards.Add(card4);
     }
 
     

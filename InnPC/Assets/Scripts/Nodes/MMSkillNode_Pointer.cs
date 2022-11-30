@@ -13,7 +13,7 @@ public partial class MMSkillNode : MMNode, IBeginDragHandler, IDragHandler, IEnd
             return;
         }
 
-        if (MMBattleManager.Instance.phase == MMBattlePhase.End)
+        if (MMBattleManager.Instance.phase == MMBattlePhase.BattleEnd)
         {
             return;
         }

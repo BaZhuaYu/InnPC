@@ -29,7 +29,6 @@ public partial class MMBattleManager : MonoBehaviour
 
     public void AutoUnitActing()
     {
-        Debug.Log("AutoUnitActing");
         MMUnitNode dest = sourceUnit.FindTarget();
         sourceUnit.isActived = true;
         if (dest == null)
@@ -44,7 +43,6 @@ public partial class MMBattleManager : MonoBehaviour
             TryEnterStateSelectedTargetUnit(dest);
         }
         
-        EnterPhase(MMBattlePhase.UnitEnd);
     }
     
 

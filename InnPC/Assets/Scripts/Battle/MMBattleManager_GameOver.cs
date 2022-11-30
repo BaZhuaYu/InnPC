@@ -9,13 +9,13 @@ public partial class MMBattleManager : MonoBehaviour
     {
         if (CheckGameLost())
         {
-            EnterPhase(MMBattlePhase.End);
+            EnterPhase(MMBattlePhase.BattleEnd);
             MMGameOverManager.Instance.SetLost();
             return true;
         }
         else if (CheckGameWin())
         {
-            EnterPhase(MMBattlePhase.End);
+            EnterPhase(MMBattlePhase.BattleEnd);
             MMGameOverManager.Instance.SetWin();
             return true;
         }

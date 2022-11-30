@@ -3,6 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+public enum MMTriggerTime
+{
+    None,
+
+    Gain,               //1
+    OnBattleBegin,      //2
+    OnRoundBegin,       //3
+    OnRoundEnd,         //4
+    OnActiveUnit,
+
+    OnAttack,
+    BeforeAttack,
+    AfterAttack,
+    BeforeBeAttack,
+    AfterBeAttack,
+    OnDead,
+    OnKillTarget,
+    OnSummon,
+
+    NormalAttackNum2,
+}
+
+
+
 public enum MMEffectType
 {
     None,       //0

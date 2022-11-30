@@ -83,7 +83,16 @@ public partial class MMUnitNode : MMNode
         //m_DamageText = transform.Find("Damage/Text").GetComponent<Text>();
         //m_DamageAnimator.gameObject.SetActive(false);
     }
-    
+
+    private void Update()
+    {
+        if(this.id == 10200)
+        {
+            Debug.Log(this.tempATK);
+        }
+        
+    }
+
 
     public void Accept(MMUnit unit)
     {
@@ -102,6 +111,7 @@ public partial class MMUnitNode : MMNode
         hp = unit.hp;
         maxAP = unit.maxAP;
         ap = unit.ap;
+        ap = 2;
         
         atk = unit.atk;
         def = unit.def;
@@ -252,7 +262,20 @@ public partial class MMUnitNode : MMNode
         UpdateUI();
     }
 
+    public void IncreaseTempATK(int value)
+    {
+        this.tempATK += value;
+        this.atk += value;
+        UpdateUI();
+    }
 
+    public void DecreaseTempATK(int value)
+    {
+        this.tempATK -= value;
+        this.atk -= value;
+        UpdateUI();
+        Debug.Log(this.displayName + " " + this.atk);
+    }
 
 
 

@@ -257,7 +257,6 @@ public partial class MMMap : MMNode
         }
 
         return cells[Random.Range(0, cells.Count)];
-
     }
     
 

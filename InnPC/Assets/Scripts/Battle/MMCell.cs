@@ -90,7 +90,7 @@ public partial class MMCell : MMNode
                 GetComponent<Image>().color = MMUtility.FindColorBlue();
                 break;
             case MMNodeState.Green:
-                GetComponent<Image>().color = MMUtility.FindColorGreen();
+                GetComponent<Image>().color = MMUtility.FindColorLightGreen();
                 break;
         }
     }

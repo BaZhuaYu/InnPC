@@ -30,7 +30,15 @@ public partial class MMBattleManager : MonoBehaviour
 
         List<MMUnitNode> units = null;
 
-        if (this.phase == MMBattlePhase.PlayerRound)
+        //if (this.phase == MMBattlePhase.RoundBegin || this.phase == MMBattlePhase.RoundEnd)
+        //{
+        //    units = units1;
+        //}
+        //else
+        //{
+        //    units = units2;
+        //}
+        if (isPlayerRound == 1)
         {
             units = units1;
         }
@@ -38,6 +46,7 @@ public partial class MMBattleManager : MonoBehaviour
         {
             units = units2;
         }
+
 
         foreach (var unit in units)
         {
@@ -142,10 +151,10 @@ public partial class MMBattleManager : MonoBehaviour
             return;
         }
 
-        MMDebugManager.Warning("Source:" + effect.source.displayName + " Cell: " + effect.source.unit.id + 
+        MMDebugManager.Warning("Source:" + effect.source.displayName + " Cell: " + effect.source.unit.id +
                                " Target: " + effect.target.displayName +
                                " Effect: " + effect.type);
-        
+
         switch (effect.type)
         {
             case MMEffectType.Attack:
@@ -211,9 +220,9 @@ public partial class MMBattleManager : MonoBehaviour
                 break;
 
             case (MMEffectType)1078:
-                foreach(var unit in units1)
+                foreach (var unit in units1)
                 {
-                    if(unit == effect.source)
+                    if (unit == effect.source)
                     {
 
                     }
@@ -223,7 +232,32 @@ public partial class MMBattleManager : MonoBehaviour
                     }
                 }
                 break;
-                
+
+            case (MMEffectType)1107:
+                effect.target.DecreaseHP(1);
+                effect.target.IncreaseATK(1);
+                break;
+
+            case (MMEffectType)1201:
+                effect.target.IncreaseATK(1);
+                AddHand(MMCardNode.Create(1200));
+                break;
+
+            case (MMEffectType)1203:
+                effect.target.IncreaseHP(1);
+                AddHand(MMCardNode.Create(1200));
+                break;
+
+            case (MMEffectType)1207:
+                effect.target.IncreaseTempATK(1);
+                break;
+
+            //case (MMEffectType)1203:
+            //    effect.target.IncreaseHP(1);
+            //    AddHand(MMCardNode.Create(1200));
+            //    break;
+
+
             default:
                 MMDebugManager.Log("Not Find" + effect.type);
                 break;
@@ -245,7 +279,6 @@ public partial class MMBattleManager : MonoBehaviour
                 }
                 break;
         }
-
 
     }
 
@@ -275,7 +308,7 @@ public partial class MMBattleManager : MonoBehaviour
         //    }
         //}
 
-        if(effect.area == MMArea.Beside)
+        if (effect.area == MMArea.Beside)
         {
             List<MMCell> cells = MMMap.Instance.FindCellsBeside(target.cell);
             foreach (var cell in cells)
@@ -342,6 +375,8 @@ public partial class MMBattleManager : MonoBehaviour
         //{
         //    source.EnterPhase(MMUnitPhase.Combo);
         //}
+
+        source.DecreaseTempATK(source.tempATK);
     }
 
 
@@ -442,7 +477,7 @@ public partial class MMBattleManager : MonoBehaviour
             row = 3 - node.clss;
             int index = MMMap.Instance.FindFrontRowOfGroup(1);
             row = Mathf.Min(row, index);
-            
+
             c = MMMap.Instance.FindRandomEmptyCellInRow(row);
             units1.Add(node);
         }
@@ -456,7 +491,7 @@ public partial class MMBattleManager : MonoBehaviour
             units2.Add(node);
         }
 
-        if(c == null)
+        if (c == null)
         {
             MMTipManager.instance.CreateTip("没有更多格子");
             return;
@@ -474,6 +509,14 @@ public partial class MMBattleManager : MonoBehaviour
     {
         effect.target.tempATK += effect.value;
         effect.target.tempDEF += effect.value;
+    }
+
+
+    private void AddHand(MMCardNode card)
+    {
+        card.gameObject.AddComponent<MMCardNode_Battle>();
+        MMCardPanel.Instance.hand.Add(card);
+        MMCardPanel.Instance.UpdateUI();
     }
 
 }

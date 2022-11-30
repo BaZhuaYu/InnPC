@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class MMDebugManager : MonoBehaviour
 {
+
+    public int cardid;
+
     public static void Log(string s)
     {
         return;
@@ -21,11 +24,24 @@ public class MMDebugManager : MonoBehaviour
     }
 
 
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.C))
+        {
+            Debug.Log("AddHandCard: " + gameObject.name);
+            AddHandCard(cardid);
+        }
+    }
+
+
+
+
     public void GMWin()
     {
         PrintSkillHistory();
         //MMBattleManager.Instance.CheckGameWin();
-        MMBattleManager.Instance.EnterPhase(MMBattlePhase.End);
+        MMBattleManager.Instance.EnterPhase(MMBattlePhase.BattleEnd);
     }
 
 
@@ -47,6 +63,15 @@ public class MMDebugManager : MonoBehaviour
                 Debug.Log(round + ": " + skill.displayName);
             }
         }
+    }
+
+
+    public void AddHandCard(int id)
+    {
+        MMCardNode card = MMCardNode.Create(id);
+        card.gameObject.AddComponent<MMCardNode_Battle>();
+        MMCardPanel.Instance.hand.Add(card);
+        MMCardPanel.Instance.UpdateUI();
     }
 
 }

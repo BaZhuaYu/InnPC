@@ -7,6 +7,8 @@ public class MMUnitNode_Battle : MonoBehaviour, IPointerClickHandler, IPointerEn
 {
     int index = 0;
     MMUnitNode unit;
+    MMCardNode tempCard;
+    int tempSiblingIndex;
 
     // Start is called before the first frame update
     void Start()
@@ -22,26 +24,26 @@ public class MMUnitNode_Battle : MonoBehaviour, IPointerClickHandler, IPointerEn
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (MMBattleManager.Instance.phase == MMBattlePhase.End)
+        if (MMBattleManager.Instance.phase == MMBattlePhase.BattleEnd)
         {
             return;
         }
-        
-        if(MMBattleManager.Instance.phase == MMBattlePhase.PlayerRound)
-        {
-            if(unit.group != 1)
-            {
-                return;
-            }
-        }
 
-        if (MMBattleManager.Instance.phase == MMBattlePhase.EnemyRound)
-        {
-            if (unit.group != 2)
-            {
-                return;
-            }
-        }
+        //if (MMBattleManager.Instance.state == MMBattleState.Normal)
+        //{
+        //    if (unit.group != 1)
+        //    {
+        //        return;
+        //    }
+        //}
+
+        //if (MMBattleManager.Instance.state == MMBattleState.Normal)
+        //{
+        //    if (unit.group != 2)
+        //    {
+        //        return;
+        //    }
+        //}
 
 
         if (MMBattleManager.Instance.state == MMBattleState.Normal)
@@ -58,8 +60,22 @@ public class MMUnitNode_Battle : MonoBehaviour, IPointerClickHandler, IPointerEn
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if(MMBattleManager.Instance.state == MMBattleState.Normal)
+        if (MMBattleManager.Instance.state == MMBattleState.None)
         {
+            tempCard = MMCardNode.Create();
+            tempCard.Accept(unit.cards[0].card);
+            tempSiblingIndex = tempCard.transform.GetSiblingIndex();
+            tempCard.transform.SetSiblingIndex(1000);
+            tempCard.SetParent(MMMap.Instance);
+            if (unit.group == 1)
+            {
+                tempCard.MoveLeft(MMMap.Instance.FindWidth() / 2 + tempCard.FindWidth() );
+            }
+            else
+            {
+                tempCard.MoveRight(MMMap.Instance.FindWidth() / 2 + tempCard.FindWidth() );
+            }
+            
             unit.ShowAttackCells();
         }
     }
@@ -67,8 +83,10 @@ public class MMUnitNode_Battle : MonoBehaviour, IPointerClickHandler, IPointerEn
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (MMBattleManager.Instance.state == MMBattleState.Normal)
+        if (MMBattleManager.Instance.state == MMBattleState.None)
         {
+            tempCard.DestroySelf();
+            tempCard.transform.SetSiblingIndex(tempSiblingIndex);
             unit.HideAttackCells();
         }
     }

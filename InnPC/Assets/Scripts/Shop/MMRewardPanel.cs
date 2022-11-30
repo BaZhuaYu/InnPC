@@ -20,7 +20,7 @@ public class MMRewardPanel : MMNode
     
     private void Start()
     {
-        CloseUI();
+        
     }
 
 

@@ -5,11 +5,12 @@ using UnityEngine;
 public partial class MMBattleManager : MonoBehaviour
 {
     int cardindex = 0;
+
     public void HandlePlayCard()
     {
         sourceUnit.DecreaseAP(selectingCard.cost);
+        MMCardPanel.Instance.PlayCard(selectingCard);
         
-
         if (selectingCard.type == MMSkillType.Power)
         {
             sourceUnit.IncreaseATK(selectingCard.tempATK);
@@ -41,50 +42,14 @@ public partial class MMBattleManager : MonoBehaviour
             }
             selectingCard.isEnabled = true;
         }
-
-
-        if (sourceUnit.group == 1)
-        {
-            MMCardPanel.Instance.PlayCard(selectingCard);
-        }
-
         
-
-        if (effect.target.state == MMUnitState.Dead)
-        {
-            effect.source.isMoved = false;
-        }
-
-
-        if (effect.source.state == MMUnitState.Dead)
-        {
-            EnterPhase(MMBattlePhase.UnitEnd);
-        }
-        else
-        {
-            //Final Card
-            if (selectingCard.keywords.Contains(MMSkillKeyWord.Final))
-            {
-                EnterPhase(MMBattlePhase.UnitEnd);
-            }
-            else
-            {
-                if (sourceUnit.group == 1)
-                {
-                    EnterState(MMBattleState.SelectedSourceUnit);
-                    EnterPhase(MMBattlePhase.UnitActing);
-                }
-                else
-                {
-
-                }
-            }
-        }
-        
-
-        ClearDeadUnits();
     }
 
 
+    public void ClearSelectCard()
+    {
+        this.selectingCard = null;
+        MMCardPanel.Instance.SetSelectingCard(null);
+    }
 
 }

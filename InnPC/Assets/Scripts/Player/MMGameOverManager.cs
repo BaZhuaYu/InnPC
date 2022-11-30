@@ -39,14 +39,17 @@ public class MMGameOverManager : MMNode
         isLost = false;
 
         rewards = new List<MMRewardType>();
-        //rewards.Add(MMRewardType.Gold);
 
         rewards.Add(MMRewardType.Item);
-        rewards.Add(MMRewardType.Skill);
         rewards.Add(MMRewardType.Card);
+        rewards.Add(MMRewardType.Skill);
         
-        
-        MMPlayerManager.Instance.gold += MMBattleManager.Instance.level + 2;
+        int coin = MMBattleManager.Instance.level + 2;
+        if(coin > 10)
+        {
+            coin = 10;
+        }
+        MMPlayerManager.Instance.gold += coin;
 
         buttons = new List<MMButton>();
         foreach (var reward in rewards)
@@ -160,13 +163,13 @@ public class MMGameOverManager : MMNode
 
     public void OnClickRewardUnitButton()
     {
-        if(MMPlayerManager.Instance.gold < 8)
+        if(MMPlayerManager.Instance.gold < 10)
         {
             MMTipManager.instance.CreateTip("金币不足");
             return;
         }
 
-        MMPlayerManager.Instance.gold -= 8;
+        MMPlayerManager.Instance.gold -= 10;
         
         MMRewardPanel.instance.OpenUI();
         MMRewardPanel.instance.LoadUnitPanel();
@@ -178,13 +181,13 @@ public class MMGameOverManager : MMNode
 
     public void OnClickRewardCardButton()
     {
-        if (MMPlayerManager.Instance.gold < 3)
+        if (MMPlayerManager.Instance.gold < 5)
         {
             MMTipManager.instance.CreateTip("金币不足");
             return;
         }
 
-        MMPlayerManager.Instance.gold -= 3;
+        MMPlayerManager.Instance.gold -= 5;
 
         MMRewardPanel.instance.OpenUI();
         MMRewardPanel.instance.LoadCardPanel();
@@ -197,13 +200,13 @@ public class MMGameOverManager : MMNode
 
     public void OnClickRewardSkillButton()
     {
-        if (MMPlayerManager.Instance.gold < 3)
+        if (MMPlayerManager.Instance.gold < 5)
         {
             MMTipManager.instance.CreateTip("金币不足");
             return;
         }
 
-        MMPlayerManager.Instance.gold -= 3;
+        MMPlayerManager.Instance.gold -= 5;
 
 
         MMRewardPanel.instance.OpenUI();
@@ -215,13 +218,13 @@ public class MMGameOverManager : MMNode
 
     public void OnClickRewardItemButton()
     {
-        if (MMPlayerManager.Instance.gold < 2)
+        if (MMPlayerManager.Instance.gold < 3)
         {
             MMTipManager.instance.CreateTip("金币不足");
             return;
         }
 
-        MMPlayerManager.Instance.gold -= 2;
+        MMPlayerManager.Instance.gold -= 3;
 
         MMRewardPanel.instance.OpenUI();
         MMRewardPanel.instance.LoadItemPanel();

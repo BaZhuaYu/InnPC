@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MMCardNode : MMNode
+public partial class MMCardNode : MMNode
 {
 
     public MMCard card;
@@ -21,6 +21,8 @@ public class MMCardNode : MMNode
     public Text textCost;
     public Text textATK;
     public Text textDEF;
+    public GameObject bgATK;
+    public GameObject bgDEF;
 
 
     /// <summary>
@@ -32,9 +34,10 @@ public class MMCardNode : MMNode
     public string displayName;
     public string displayNote;
 
-    public int race;
-    public MMSkillType type;
     public int cost;
+    public int clss;
+    public MMSkillType type;
+    public int sortingOrder;
 
     public MMArea area;
     public MMEffectTarget target;
@@ -85,7 +88,8 @@ public class MMCardNode : MMNode
         this.displayName = card.displayName;
         this.displayNote = card.displayNote;
 
-        this.race = card.clss;
+        this.clss = card.clss;
+        this.sortingOrder = this.clss;
         this.type = MMUtility.DeserializeSkillType(card.type);
         if (type == MMSkillType.Power)
         {
@@ -148,33 +152,33 @@ public class MMCardNode : MMNode
         switch (this.type)
         {
             case MMSkillType.Attack:
-                textATK.gameObject.SetActive(true);
-                textDEF.gameObject.SetActive(true);
+                bgATK.gameObject.SetActive(true);
+                bgDEF.gameObject.SetActive(true);
                 textATK.text = "" + tempATK;
                 textDEF.text = "" + tempDEF;
                 break;
             case MMSkillType.Spell:
-                textATK.gameObject.SetActive(false);
-                textDEF.gameObject.SetActive(false);
+                bgATK.gameObject.SetActive(false);
+                bgDEF.gameObject.SetActive(false);
                 break;
             case MMSkillType.Power:
-                textATK.gameObject.SetActive(true);
-                textDEF.gameObject.SetActive(true);
+                bgATK.gameObject.SetActive(true);
+                bgDEF.gameObject.SetActive(true);
                 textATK.text = "" + tempATK;
                 textDEF.text = "" + tempDEF;
                 break;
             case MMSkillType.Passive:
-                textATK.gameObject.SetActive(false);
-                textDEF.gameObject.SetActive(false);
+                bgATK.gameObject.SetActive(false);
+                bgDEF.gameObject.SetActive(false);
                 break;
             default:
-                textATK.gameObject.SetActive(false);
-                textDEF.gameObject.SetActive(false);
+                bgATK.gameObject.SetActive(false);
+                bgDEF.gameObject.SetActive(false);
                 break;
         }
 
         Color c = Color.black;
-        switch (this.race)
+        switch (this.clss)
         {
             case 1:
                 c = MMUtility.FindColorRed();
@@ -257,103 +261,5 @@ public class MMCardNode : MMNode
         return MMCardNode.Create(card);
     }
 
-
-
-
-
-
-
-
-    public MMEffect CreateEffect()
-    {
-        MMEffect effect = new MMEffect();
-        effect.type = this.effectType;
-        effect.area = card.area;
-        effect.value = this.value;
-        effect.source = this.unit;
-
-        switch (this.target)
-        {
-            case MMEffectTarget.Source:
-                effect.target = this.unit;
-                break;
-            case MMEffectTarget.Target:
-                effect.target = this.unit.FindTarget();
-                break;
-            default:
-                break;
-        }
-
-        switch (this.type)
-        {
-            case MMSkillType.Attack:
-            case MMSkillType.Power:
-                effect.userinfo.Add("TempATK", tempATK);
-                effect.userinfo.Add("TempDEF", tempDEF);
-                break;
-            default:
-                break;
-        }
-
-        if (effect.target != null)
-        {
-            effect.sideTargets = FindSideTargets(effect.target.cell);
-        }
-
-        return effect;
-    }
-
-
-
-
-    public List<MMCell> FindSideTargetCells(MMCell target)
-    {
-        List<MMCell> ret = new List<MMCell>();
-        switch (this.area)
-        {
-            case MMArea.Single:
-                break;
-            case MMArea.Row:
-                ret = MMMap.Instance.FindCellsInRow(target);
-                break;
-            case MMArea.Col:
-                ret = MMMap.Instance.FindCellsInCol(target);
-                break;
-            case MMArea.Beside:
-                ret = MMMap.Instance.FindCellsBeside(target);
-                break;
-            case MMArea.Behind:
-                ret = MMMap.Instance.FindCellsBehind(target);
-                break;
-            case MMArea.Target:
-                ret.Add(this.unit.FindTarget().cell);
-                //ret = MMMap.Instance.FindCellsInCol(this.unit.cell.col);
-                break;
-            case MMArea.RaceUnits:
-                ret = MMMap.Instance.FindCellsWithUnitRace(this.unit.race);
-                break;
-        }
-
-        return ret;
-    }
-
-
-
-    public List<MMUnitNode> FindSideTargets(MMCell tagetCell)
-    {
-        List<MMUnitNode> ret = new List<MMUnitNode>();
-        //ret.Add(tagetCell.unitNode);
-
-        List<MMCell> cells = FindSideTargetCells(tagetCell);
-        foreach (var cell in cells)
-        {
-            if (cell.unitNode != null)
-            {
-                ret.Add(cell.unitNode);
-            }
-        }
-
-        return ret;
-    }
-
+    
 }

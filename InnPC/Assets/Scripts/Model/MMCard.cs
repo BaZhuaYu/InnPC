@@ -34,7 +34,7 @@ public partial class MMCard
     {
         if (allValues.ContainsKey(id) == false)
         {
-            MMDebugManager.FatalError("MMSkill Create: " + id);
+            MMDebugManager.FatalError("MMCard Create: " + id);
         }
         return CreateFromString(allValues[id]);
     }
