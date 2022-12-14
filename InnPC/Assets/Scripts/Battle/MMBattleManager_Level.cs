@@ -17,9 +17,11 @@ public partial class MMBattleManager : MonoBehaviour
     
     public void LoadPlayerUnits()
     {
+        Debug.Log("LoadPlayerUnits: " + MMExplorePanel.Instance.units.Count);
         int i = 0;
-        foreach (var unit in MMPlayerManager.Instance.units)
+        foreach (var unit in MMExplorePanel.Instance.units)
         {
+            Debug.Log("LoadPlayerUnits: " + unit.displayName);
             MMUnitNode node = MMUnitNode.Create();
             node.gameObject.AddComponent<MMUnitNode_Battle>();
             node.group = 1;

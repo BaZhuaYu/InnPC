@@ -50,7 +50,7 @@ public class MMCardPanel : MMNode
         foreach (var card in cards)
         {
             MMCardNode node = MMCardNode.Create(card);
-            node.gameObject.AddComponent<MMCardNode_Battle>();
+            //node.gameObject.AddComponent<MMCardNode_Battle>();
             this.deck.Add(node);
         }
     }
@@ -178,9 +178,16 @@ public class MMCardPanel : MMNode
 
         SortHand();
 
+        float Start = -this.FindWidth() * 0.4f;
         for (int i = 0; i < hand.Count; i++)
         {   
-            float x = this.FindWidth() / 2f - hand[i].FindWidth() / 2f - (float)i / (float)(hand.Count + 1) * this.FindWidth();
+            float W = this.FindWidth() * 0.9f;
+            float C = (float)hand.Count;
+            float offset = W / C * (float)i;
+            float x = Start + offset;
+
+
+            //float x = this.FindWidth() / 2f - hand[i].FindWidth() / 2f - (float)i / (float)(hand.Count + 1) * this.FindWidth();
 
             hand[i].transform.localPosition = new Vector2(x, hand[i].transform.localPosition.y);
 
@@ -189,6 +196,12 @@ public class MMCardPanel : MMNode
                 hand[i].MoveToCenterY();
                 hand[i].MoveUp(20);
             }
+            
+            if(hand[i].gameObject.GetComponent<MMCardNode_Battle>() == null)
+            {
+                hand[i].gameObject.AddComponent<MMCardNode_Battle>();
+            }
+            
         }
 
         
@@ -202,11 +215,13 @@ public class MMCardPanel : MMNode
         foreach (var card in used)
         {
             card.gameObject.transform.SetParent(textUsedCount.gameObject.transform);
+            Destroy(card.GetComponent<MMCardNode_Battle>());
             card.SetActive(false);
         }
         foreach (var card in deck)
         {
             card.gameObject.transform.SetParent(textDeckCount.gameObject.transform);
+            Destroy(card.GetComponent<MMCardNode_Battle>());
             card.SetActive(false);
         }
 

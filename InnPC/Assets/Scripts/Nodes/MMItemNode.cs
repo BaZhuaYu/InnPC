@@ -5,24 +5,32 @@ using UnityEngine.UI;
 
 public class MMItemNode : MMNode
 {
-
-    public Image icon;
+    //
+    public MMNode icon;
     public Text textName;
     public Text textNote;
+    public Text textPrice;
 
+    //
     public MMItem item;
 
+    [HideInInspector]
     public int id;
+    [HideInInspector]
     public string key;
+    [HideInInspector]
     public string displayName;
+    [HideInInspector]
     public string displayNote;
+    [HideInInspector]
+    public int price;
 
+    [HideInInspector]
     public int effect;
+    [HideInInspector]
     public int value;
 
-
-
-
+    
 
     // Start is called before the first frame update
     void Start()
@@ -39,6 +47,7 @@ public class MMItemNode : MMNode
         this.key = item.key;
         this.displayName = item.displayName;
         this.displayNote = item.displayNote;
+        this.price = item.price;
 
         this.effect = item.effect;
         this.value = item.value;
@@ -48,8 +57,10 @@ public class MMItemNode : MMNode
 
     public void Reload()
     {
+        this.name = key;
         textName.text = displayName;
-        //this.icon.sprite = //LoadImage(key);
+        textNote.text = displayNote;
+        textPrice.text = price + "";
     }
 
     public void Clear()
@@ -70,9 +81,7 @@ public class MMItemNode : MMNode
         return obj.GetComponent<MMItemNode>();
     }
 
-
-
-
+    
     public MMEffect CreateEffect()
     {
         MMEffect ret = new MMEffect();
@@ -82,6 +91,5 @@ public class MMItemNode : MMNode
         return ret;
     }
 
-
-
+    
 }

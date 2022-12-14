@@ -83,6 +83,11 @@ public class MMUnitNode_Battle : MonoBehaviour, IPointerClickHandler, IPointerEn
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        if(tempCard == null)
+        {
+            return;
+        }
+
         if (MMBattleManager.Instance.state == MMBattleState.None)
         {
             tempCard.DestroySelf();

@@ -6,23 +6,24 @@ using UnityEngine;
 public enum MMTriggerTime
 {
     None,
+    
+    OnBattleBegin,      
+    OnRoundBegin,       
+    OnRoundEnd,         
 
-    Gain,               //1
-    OnBattleBegin,      //2
-    OnRoundBegin,       //3
-    OnRoundEnd,         //4
-    OnActiveUnit,
+    OnActive,
+    OnLeave,
+    OnKill,
+    OnDead,
 
-    OnAttack,
+    OnBeSummon,
+    OnSummon,
+    
     BeforeAttack,
     AfterAttack,
     BeforeBeAttack,
     AfterBeAttack,
-    OnDead,
-    OnKillTarget,
-    OnSummon,
-
-    NormalAttackNum2,
+    
 }
 
 

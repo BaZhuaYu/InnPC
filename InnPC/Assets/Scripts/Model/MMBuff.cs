@@ -8,8 +8,12 @@ public enum MMEffectTarget
     None,
     Source,
     Target,
-    MinHPTarget,
-    MaxHPTarget,
+    Unit,
+    Cell,
+    MinHPTeam,
+    MaxHPTeam,
+    MinHPEnemy,
+    MaxHPEnemy,
 }
 
 
@@ -23,6 +27,9 @@ public enum MMArea
     Behind,
     Target,
     RaceUnits,
+    TeamUnits,
+    Nine,
+    All,
 }
 
 
@@ -36,7 +43,8 @@ public enum MMSkillKeyWord
 
 public enum MMBuff
 {
-    JinZhongZhao,
+    BuQu,
+    YinNi,
 }
 
 

@@ -27,7 +27,6 @@ public partial class MMBattleManager
 
     public void EnterPhase(MMBattlePhase p)
     {
-
         if (p == MMBattlePhase.BattleBegin)
         {
             if (phase != MMBattlePhase.BattleEnd)
@@ -132,8 +131,7 @@ public partial class MMBattleManager
                 break;
 
             case MMBattlePhase.UnitActing:
-
-
+                
                 break;
 
             case MMBattlePhase.UnitEnd:
@@ -169,9 +167,9 @@ public partial class MMBattleManager
                 round = 0;
                 historySkills = new Dictionary<int, List<MMSkillNode>>();
 
-                MMCardPanel.Instance.LoadDeck(MMPlayerManager.Instance.cards);
+                MMCardPanel.Instance.LoadDeck(MMExplorePanel.Instance.cards);
                 MMCardPanel.Instance.ShuffleDeck();
-
+                
                 DebugConfig();
 
                 DrawCards(4, true);
@@ -219,9 +217,8 @@ public partial class MMBattleManager
 
             case MMBattlePhase.UnitBegin:
                 Debug.Log("UnitBegin: " + " " + sourceUnit.displayName + " " + sourceUnit.cell.index);
-                sourceUnit.OnRoundBegin();
+                sourceUnit.OnActive();
                 MMSkillPanel.Instance.Accept(sourceUnit.skills);
-                BroadCast(MMTriggerTime.OnActiveUnit);
                 break;
 
 
@@ -244,7 +241,6 @@ public partial class MMBattleManager
                 {
                     isSourceUnitDead = true;
                 }
-                sourceUnit.OnRoundEnd();
                 UnselectSourceCell();
                 ClearDeadUnits();
                 break;
@@ -266,6 +262,7 @@ public partial class MMBattleManager
     void UpdateUI()
     {
         ClosePanels();
+        
 
         switch (phase)
         {
@@ -278,27 +275,43 @@ public partial class MMBattleManager
             case MMBattlePhase.BattleBegin:
                 ShowTitle("Round 1");
                 ShowButton("Begin");
-                MMCardPanel.Instance.OpenUI();
+                MMUnitPanel.Instance.OpenUI();
                 break;
 
             case MMBattlePhase.PickUnit:
                 ShowButton("PickUnit");
+                MMSkillPanel.Instance.OpenUI();
+                avatar.LoadImage("Units/Unit_10000QS");
+
                 MMCardPanel.Instance.OpenUI();
                 break;
 
             case MMBattlePhase.RoundBegin:
                 ShowButton("PlayerRound");
+                MMSkillPanel.Instance.OpenUI();
+                avatar.LoadImage("Units/Unit_10000QS");
+                MMCardPanel.Instance.OpenUI();
+                break;
+
+            case MMBattlePhase.RoundEnd:
+                ShowButton("PlayerRound");
+                MMSkillPanel.Instance.OpenUI();
+                avatar.LoadImage("Units/Unit_10000QS");
                 MMCardPanel.Instance.OpenUI();
                 break;
 
             case MMBattlePhase.UnitBegin:
                 ShowButton("UnitBegin");
+                sourceUnit.HandleHighlight(MMNodeHighlight.Green);
+                avatar.LoadImage("Units/" + sourceUnit.key + "A");
                 MMCardPanel.Instance.OpenUI();
                 MMSkillPanel.Instance.OpenUI();
                 break;
 
             case MMBattlePhase.UnitActing:
                 ShowButton("UnitActing");
+                sourceUnit.HandleHighlight(MMNodeHighlight.Green);
+                avatar.LoadImage("Units/" + sourceUnit.key + "A");
                 MMCardPanel.Instance.OpenUI();
                 MMSkillPanel.Instance.OpenUI();
                 break;
@@ -306,7 +319,7 @@ public partial class MMBattleManager
             case MMBattlePhase.UnitEnd:
                 ShowButton("UnitEnd");
                 MMCardPanel.Instance.OpenUI();
-                MMSkillPanel.Instance.OpenUI();
+                //MMSkillPanel.Instance.OpenUI();
                 break;
 
         }

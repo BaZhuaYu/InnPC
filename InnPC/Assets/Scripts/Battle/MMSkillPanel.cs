@@ -6,13 +6,13 @@ public class MMSkillPanel : MMNode
 {
 
     public static MMSkillPanel Instance;
-
-
+    
     private void Awake()
     {
         Instance = this;
     }
 
+    public GameObject skillBorder;
 
     public List<MMSkillNode> skills;
 
@@ -58,16 +58,18 @@ public class MMSkillPanel : MMNode
         {
             skill.SetParent(this);
             skill.MoveToCenterY();
+            skill.MoveDown(this.FindHeight() * 0.25f);
             skill.MoveToParentLeftOffset(offset);
             offset += 10 + skill.FindWidth();
 
-            if (this.selectingSkill != null)
-            {
-                if (this.selectingSkill == skill)
-                {
-                    skill.MoveUp(20);
-                }
-            }
+            skill.transform.position = skillBorder.transform.position;
+            //if (this.selectingSkill != null)
+            //{
+            //    if (this.selectingSkill == skill)
+            //    {
+            //        skill.MoveUp(20);
+            //    }
+            //}
         }
     }
 

@@ -10,13 +10,13 @@ public partial class MMBattleManager : MonoBehaviour
         if (CheckGameLost())
         {
             EnterPhase(MMBattlePhase.BattleEnd);
-            MMGameOverManager.Instance.SetLost();
+            MMExplorePanel.Instance.SetLost();
             return true;
         }
         else if (CheckGameWin())
         {
             EnterPhase(MMBattlePhase.BattleEnd);
-            MMGameOverManager.Instance.SetWin();
+            MMExplorePanel.Instance.SetWin();
             return true;
         }
         else
@@ -32,19 +32,15 @@ public partial class MMBattleManager : MonoBehaviour
         {
             if (unit.state == MMUnitState.Dead)
             {
-                BroadCastOnDead(unit);
+                unit.OnLeave();
                 unit.Clear();
             }
         }
-
-
+        
         units1.RemoveAll(unit => unit.state == MMUnitState.Dead);
         units2.RemoveAll(unit => unit.state == MMUnitState.Dead);
-
     }
-
-
-
+    
 
     public bool CheckGameWin()
     {
@@ -82,11 +78,6 @@ public partial class MMBattleManager : MonoBehaviour
 
         return true;
     }
-
-
-
-
-
-
+    
 
 }

@@ -20,7 +20,7 @@ public class MMRewardPanel : MMNode
     
     private void Start()
     {
-        
+        CloseUI();
     }
 
 
@@ -44,7 +44,6 @@ public class MMRewardPanel : MMNode
 
         List<MMUnit> units = MMUnit.FindRandomCount(3);
         
-
         foreach (var unit in units)
         {
             MMUnitNode node = MMUnitNode.Create();
@@ -73,20 +72,20 @@ public class MMRewardPanel : MMNode
         MMSkill skill = MMSkill.FindRandomOne();
         skillNode.Accept(skill);
         skillNode.SetParent(this);
-        skillNode.MoveUp(50);
+        skillNode.MoveUp(this.FindHeight() * 0.25f);
 
-        unitNodes = MMPlayerManager.Instance.CreateAllUnitNodes();
+        unitNodes = MMExplorePanel.Instance.CreateAllUnitNodes();
         //List<MMUnitNode> nodes = MMPlayerManager.Instance.CreateAllUnitNodes();
         foreach (var unit in unitNodes)
         {
             unit.SetParent(this);
-            unit.MoveDown(100);
+            unit.MoveDown(this.FindHeight() * 0.15f);
             MMReward_SkillNode rewardSkill = unit.gameObject.AddComponent<MMReward_SkillNode>();
             rewardSkill.skill = skillNode;
         }
 
-        unitNodes[0].MoveLeft(200);
-        unitNodes[2].MoveRight(200);
+        unitNodes[0].MoveLeft(this.FindWidth() * 0.25f);
+        unitNodes[2].MoveRight(this.FindWidth() * 0.25f);
     }
 
 
@@ -113,8 +112,8 @@ public class MMRewardPanel : MMNode
         cardNodes[1].gameObject.AddComponent<MMReward_CardNode>();
         cardNodes[2].gameObject.AddComponent<MMReward_CardNode>();
 
-        cardNodes[0].MoveLeft(400);
-        cardNodes[2].MoveRight(400);
+        cardNodes[0].MoveLeft(this.FindWidth() * 0.25f);
+        cardNodes[2].MoveRight(this.FindWidth() * 0.25f);
     }
 
 
@@ -126,9 +125,9 @@ public class MMRewardPanel : MMNode
         MMItem item = MMItem.FindRandomOne();
         itemNode.Accept(item);
         itemNode.SetParent(this);
-        itemNode.MoveUp(50);
+        itemNode.MoveUp(this.FindHeight() * 0.25f);
 
-        unitNodes = MMPlayerManager.Instance.CreateAllUnitNodes();
+        unitNodes = MMExplorePanel.Instance.CreateAllUnitNodes();
         foreach (var unit in unitNodes)
         {
             unit.SetParent(this);
@@ -137,8 +136,8 @@ public class MMRewardPanel : MMNode
             rewardItem.item = itemNode;
         }
 
-        unitNodes[0].MoveLeft(200);
-        unitNodes[2].MoveRight(200);
+        unitNodes[0].MoveLeft(this.FindWidth() * 0.25f);
+        unitNodes[2].MoveRight(this.FindWidth() * 0.25f);
     }
 
 

@@ -13,12 +13,13 @@ public partial class MMBattleManager : MonoBehaviour
         Instance = this;
     }
 
+    //
     public MMNode background;
     public MMNode backgroundNote;
     public Button buttonMain;
-    public Button buttonAttack;
     public Button buttonAwait;
     public Text textButtonMain;
+
     public Text title;
     public Text textPhase;
     public Text textHP;
@@ -26,7 +27,7 @@ public partial class MMBattleManager : MonoBehaviour
     public Button buttonUsed;
     public MMNode avatar;
 
-
+    //
     public MMBattlePhase phase;
     public MMBattleState state;
 
@@ -39,27 +40,37 @@ public partial class MMBattleManager : MonoBehaviour
     public MMUnitNode sourceUnit;
     public MMUnitNode targetUnit;
 
+
+    //
     public int round;
-    public int level;
     public int isPlayerRound;
 
     public Dictionary<int, List<MMSkillNode>> historySkills;
 
-    MMBattlePhase last;
 
     private void Start()
     {
+        //TopBar
         buttonMain = GameObject.Find("MainButton").GetComponent<Button>();
-        backgroundNote = GameObject.Find("Canvas/PanelBattle/Note").GetComponent<MMNode>();
-        buttonAttack = GameObject.Find("AttackButton").GetComponent<Button>();
-        buttonAwait = GameObject.Find("AwaitButton").GetComponent<Button>();
+        backgroundNote = GameObject.Find("Canvas/PanelBattle/TopBar/Note").GetComponent<MMNode>();
+
+        //PanelButton
+        //buttonAttack = GameObject.Find("AttackButton").GetComponent<Button>();
+
         textButtonMain = GameObject.Find("MainButton").GetComponentInChildren<Text>();
+        buttonMain.onClick.AddListener(OnClickMainButton);
+
+        //PanelSkill
+        buttonAwait = GameObject.Find("AwaitButton").GetComponent<Button>();
+        buttonAwait.onClick.AddListener(OnClickAwaitButton);
         textHP = GameObject.Find("TextHP").GetComponent<Text>();
+
+        //PanelAvatar
         avatar = GameObject.Find("Avatar").GetComponent<MMNode>();
 
-        buttonMain.onClick.AddListener(OnClickMainButton);
-        buttonAttack.onClick.AddListener(OnClickAttackButton);
-        buttonAwait.onClick.AddListener(OnClickAwaitButton);
+
+        //buttonAttack.onClick.AddListener(OnClickAttackButton);
+
 
         MMCardPanel.Instance.CloseUI();
         MMSkillPanel.Instance.CloseUI();
@@ -68,17 +79,15 @@ public partial class MMBattleManager : MonoBehaviour
         historySkills = new Dictionary<int, List<MMSkillNode>>();
 
         isPlayerRound = 0;
-        this.phase = MMBattlePhase.BattleEnd;
 
-        last = MMBattlePhase.BattleEnd;
-
+        gameObject.SetActive(false);
     }
 
 
 
     private void Update()
     {
-        textHP.text = MMPlayerManager.Instance.hp + "";
+        textHP.text = MMExplorePanel.Instance.hp + "";
 
         if (Input.GetMouseButtonDown(1))
         {
@@ -108,10 +117,6 @@ public partial class MMBattleManager : MonoBehaviour
         textPhase.text = phase.ToString() + " " + state.ToString();
         //OnEnterPhase(this.phase);
 
-        if (last != phase)
-        {
-            last = phase;
-        }
     }
 
 
@@ -121,7 +126,6 @@ public partial class MMBattleManager : MonoBehaviour
         //unit.ap = 1;
         unit.UpdateUI();
         //unit.skills.Add()
-
     }
 
 
@@ -142,9 +146,12 @@ public partial class MMBattleManager : MonoBehaviour
 
     public void LoadLevel()
     {
-        level = MMPlayerManager.Instance.level;
         LoadPlayerUnits();
-        LoadLevel(this.level);
+        this.phase = MMBattlePhase.BattleEnd;
+        MMUnitPanel.Instance.OpenUI();
+        MMUnitPanel.Instance.Accept(MMExplorePanel.Instance.minions);
+
+        LoadLevel(MMExplorePanel.Instance.level);
         if (GameObject.Find("BattleStartButton") == null)
         {
 
@@ -162,7 +169,7 @@ public partial class MMBattleManager : MonoBehaviour
 
     }
 
-    
+
 
     public void OnClickMainButton()
     {
@@ -171,7 +178,7 @@ public partial class MMBattleManager : MonoBehaviour
             case MMBattlePhase.BattleEnd:
                 EnterPhase(MMBattlePhase.BattleBegin);
                 break;
-
+                
             default:
                 ShowTitle(phase.ToString());
                 Debug.LogError(phase.ToString());
@@ -212,9 +219,28 @@ public partial class MMBattleManager : MonoBehaviour
     }
 
 
+    public void OnClickAwaitButton()
+    {
+        if (this.sourceUnit == null)
+        {
+            return;
+        }
+
+        EnterPhase(MMBattlePhase.UnitEnd);
+    }
 
 
-
+    public void OnClickButtonBack()
+    {
+        if (this.state == MMBattleState.SelectingSkill)
+        {
+            this.EnterState(MMBattleState.SelectedSourceUnit);
+        }
+        else if (this.state == MMBattleState.SelectingCard)
+        {
+            this.EnterState(MMBattleState.SelectedSourceUnit);
+        }
+    }
 
 
     public void Clear()
@@ -240,22 +266,6 @@ public partial class MMBattleManager : MonoBehaviour
     }
 
 
-
-    public void OnClickButtonBack()
-    {
-        if (this.state == MMBattleState.SelectingSkill)
-        {
-            this.EnterState(MMBattleState.SelectedSourceUnit);
-        }
-        else if (this.state == MMBattleState.SelectingCard)
-        {
-            this.EnterState(MMBattleState.SelectedSourceUnit);
-        }
-    }
-
-
-
-
     public void ShowButton(string s, bool isEnabled = true)
     {
         textButtonMain.text = s;
@@ -267,18 +277,6 @@ public partial class MMBattleManager : MonoBehaviour
     {
         title.text = s;
     }
-
-
-    public void OnClickAwaitButton()
-    {
-        if (this.sourceUnit == null)
-        {
-            return;
-        }
-
-        EnterPhase(MMBattlePhase.UnitEnd);
-    }
-
 
 
     public void OnClickAttackButton()
@@ -293,12 +291,6 @@ public partial class MMBattleManager : MonoBehaviour
 
         EnterPhase(MMBattlePhase.UnitEnd);
     }
-
-
-
-
-
-
 
 
 }

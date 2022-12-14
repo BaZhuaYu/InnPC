@@ -24,6 +24,8 @@ public partial class MMBattleManager : MonoBehaviour
         MMEffect effect = selectingCard.CreateEffect();
         effect.source = this.sourceUnit;
         effect.target = this.targetUnit;
+        effect.sideTargets = FindSideTargets(effect.source, effect.target, effect.area);
+
         ExecuteEffect(effect);
 
        

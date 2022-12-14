@@ -12,19 +12,38 @@ public class MMUtility : MonoBehaviour
         {
             case "None":
                 return MMArea.None;
+
             case "Single":
                 return MMArea.Single;
+
             case "Row":
                 return MMArea.Row;
+
             case "Col":
                 return MMArea.Col;
+
             case "Beside":
                 return MMArea.Beside;
+
             case "Behind":
                 return MMArea.Behind;
+
+            case "RaceUnits":
+                return MMArea.RaceUnits;
+
+            case "TeamUnits":
+                return MMArea.TeamUnits;
+
+            case "Nine":
+                return MMArea.Nine;
+
+            case "All":
+                return MMArea.All;
+
         }
         return MMArea.Single;
     }
+
 
     public static MMEffectTarget DeserializeEffectTarget(string s)
     {
@@ -34,6 +53,18 @@ public class MMUtility : MonoBehaviour
                 return MMEffectTarget.Source;
             case "Target":
                 return MMEffectTarget.Target;
+            case "MinHPTeam":
+                return MMEffectTarget.MinHPTeam;
+            case "MaxHPTeam":
+                return MMEffectTarget.MaxHPTeam;
+            case "MinHPEnemy":
+                return MMEffectTarget.MinHPEnemy;
+            case "MaxHPEnemy":
+                return MMEffectTarget.MaxHPEnemy;
+            case "Unit":
+                return MMEffectTarget.Unit;
+            case "Cell":
+                return MMEffectTarget.Cell;
             default:
                 return MMEffectTarget.None;
         }
@@ -48,19 +79,27 @@ public class MMUtility : MonoBehaviour
     {
         switch (s)
         {
-            case "Gain":
-                return MMTriggerTime.Gain;
+            case "OnBattleBegin":
+                return MMTriggerTime.OnBattleBegin;
             case "OnRoundBegin":
                 return MMTriggerTime.OnRoundBegin;
             case "OnRoundEnd":
                 return MMTriggerTime.OnRoundEnd;
-            case "OnBattleBegin":
-                return MMTriggerTime.OnBattleBegin;
-            case "OnActiveUnit":
-                return MMTriggerTime.OnActiveUnit;
+            
 
-            case "OnAttack":
-                return MMTriggerTime.OnAttack;
+            case "OnActive":
+                return MMTriggerTime.OnActive;
+            case "OnLeave":
+                return MMTriggerTime.OnLeave;
+            case "OnKill":
+                return MMTriggerTime.OnKill;
+            case "OnDead":
+                return MMTriggerTime.OnDead;
+            case "OnBeSummon":
+                return MMTriggerTime.OnBeSummon;
+            case "OnSummon":
+                return MMTriggerTime.OnSummon;
+                
             case "BeforeAttack":
                 return MMTriggerTime.BeforeAttack;
             case "AfterAttack":
@@ -69,12 +108,7 @@ public class MMUtility : MonoBehaviour
                 return MMTriggerTime.BeforeBeAttack;
             case "AfterBeAttack":
                 return MMTriggerTime.AfterBeAttack;
-            case "OnTargetDead":
-                return MMTriggerTime.OnKillTarget;
-            case "OnDead":
-                return MMTriggerTime.OnDead;
-            case "OnSummon":
-                return MMTriggerTime.OnSummon;
+                
         }
 
         return MMTriggerTime.None;

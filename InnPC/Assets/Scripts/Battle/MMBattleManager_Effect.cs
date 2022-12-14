@@ -30,14 +30,6 @@ public partial class MMBattleManager : MonoBehaviour
 
         List<MMUnitNode> units = null;
 
-        //if (this.phase == MMBattlePhase.RoundBegin || this.phase == MMBattlePhase.RoundEnd)
-        //{
-        //    units = units1;
-        //}
-        //else
-        //{
-        //    units = units2;
-        //}
         if (isPlayerRound == 1)
         {
             units = units1;
@@ -47,97 +39,47 @@ public partial class MMBattleManager : MonoBehaviour
             units = units2;
         }
 
-
-        foreach (var unit in units)
+        switch (time)
         {
-            foreach (var skill in unit.skills)
-            {
-                if (skill.time == time && skill.isEnabled)
+            case MMTriggerTime.OnBattleBegin:
+                foreach (var unit in units)
                 {
-                    MMTipManager.instance.CreateSkillTip(skill);
-                    MMEffect effect = skill.CreateEffect();
-                    ExecuteEffect(effect);
+                    unit.OnBattleBegin();
                 }
-            }
-        }
+                break;
 
-    }
-
-
-    public void BroadCastOnDead(MMUnitNode unit)
-    {
-        List<MMEffect> effects = unit.CreateEffect(MMTriggerTime.OnDead);
-
-        foreach (var effect in effects)
-        {
-            switch (effect.type)
-            {
-                case MMEffectType.Summon:
-                    effect.target = MMUnitNode.CreateFromID(effect.value);
-                    break;
-                default:
-                    break;
-            }
-            ExecuteEffect(effect);
-        }
-    }
-
-
-    public void BroadCastUnitSkill(MMTriggerTime time, MMUnitNode unit)
-    {
-        foreach (var skill in unit.skills)
-        {
-            if (skill.time == time)
-            {
-                MMEffect effect = skill.CreateEffect();
-
-                switch (effect.type)
+            case MMTriggerTime.OnRoundBegin:
+                foreach (var unit in units)
                 {
-                    case MMEffectType.Summon:
-                        effect.destCell = unit.cell;
-                        break;
-                    default:
-                        break;
+                    unit.OnRoundBegin();
                 }
-
-                ExecuteEffect(effect);
-            }
-        }
-
-    }
-
-
-    public void ExecuteEffectOnGain(MMEffect effect)
-    {
-        switch (effect.type)
-        {
-            case MMEffectType.InATK:
-                effect.target.unit.atk += 1;
                 break;
-            case MMEffectType.InHP:
-                effect.target.unit.maxHP += 1;
-                effect.target.unit.hp += 1;
-                break;
-            case MMEffectType.InAP:
-                effect.target.unit.ap += 1;
-                break;
-            default:
+
+            case MMTriggerTime.OnRoundEnd:
+                foreach (var unit in units)
+                {
+                    unit.OnRoundEnd();
+                }
                 break;
         }
+
+
+
+        //foreach (var unit in units)
+        //{
+        //foreach (var skill in unit.skills)
+        //{
+        //    if (skill.time == time && skill.isEnabled)
+        //    {
+        //        MMTipManager.instance.CreateSkillTip(skill);
+        //        MMEffect effect = skill.CreateEffect();
+        //        ExecuteEffect(effect);
+        //    }
+        //}
+        //}
     }
 
-
-    public void ExecuteEffectOnSummon(MMEffect effect)
-    {
-
-    }
-
-    public void ExecuteEffectOnDead(MMEffect effect)
-    {
-
-    }
-
-
+    
 
     public void ExecuteEffect(MMEffect effect)
     {
@@ -194,49 +136,44 @@ public partial class MMBattleManager : MonoBehaviour
                 InHP(effect);
                 break;
 
+            case MMEffectType.AddBuff:
+                AddBuff(effect);
+                break;
+
             case (MMEffectType)10101:
                 Damage(effect);
                 effect.source.IncreaseHP(effect.value);
-                break;
-
-            case (MMEffectType)1067:
-                effect.value = effect.source.maxHP - effect.source.hp;
-                Damage(effect);
-                break;
-
-            case (MMEffectType)1068:
-                effect.source.IncreaseATK(1);
-                effect.source.DecreaseHP(1);
-                break;
-
-            case (MMEffectType)1071:
-
-                break;
-
-            case (MMEffectType)1074:
-                Debug.Log("1074");
-                Debug.Log(effect.target.hp);
-                Attack(effect);
-                break;
-
-            case (MMEffectType)1078:
-                foreach (var unit in units1)
-                {
-                    if (unit == effect.source)
-                    {
-
-                    }
-                    else
-                    {
-                        unit.IncreaseAP(1);
-                    }
-                }
                 break;
 
             case (MMEffectType)1107:
                 effect.target.DecreaseHP(1);
                 effect.target.IncreaseATK(1);
                 break;
+
+            case (MMEffectType)1113:
+                effect.value = effect.source.maxHP - effect.source.hp;
+                Damage(effect);
+                break;
+
+            case (MMEffectType)1117:
+                effect.source.IncreaseATK(1);
+                effect.source.DecreaseHP(1);
+                break;
+
+            case (MMEffectType)1123:
+                effect.target.IncreaseTempATK(4);
+                break;
+
+            case (MMEffectType)1125:
+                effect.source.DecreaseHP(1);
+                DrawCards(3);
+                break;
+
+            case (MMEffectType)1127:
+                effect.target.DecreaseHP(effect.source.hp);
+                break;
+
+
 
             case (MMEffectType)1201:
                 effect.target.IncreaseATK(1);
@@ -252,10 +189,54 @@ public partial class MMBattleManager : MonoBehaviour
                 effect.target.IncreaseTempATK(1);
                 break;
 
-            //case (MMEffectType)1203:
-            //    effect.target.IncreaseHP(1);
-            //    AddHand(MMCardNode.Create(1200));
-            //    break;
+            case (MMEffectType)1211:
+
+                break;
+
+            case (MMEffectType)1213:
+                Debug.Log(effect.target.hp);
+                Attack(effect);
+                break;
+
+            case (MMEffectType)1215:
+
+                break;
+
+            case (MMEffectType)1217:
+                AddHand(MMCardNode.Create(1201));
+                AddHand(MMCardNode.Create(1203));
+                break;
+
+            case (MMEffectType)1225:
+                Attack(effect);
+                break;
+
+            case (MMEffectType)1227:
+                Attack(effect);
+                break;
+
+
+            //Clss 3
+            case (MMEffectType)1313:
+                AddHand(MMCardNode.Create(1303));
+                AddHand(MMCardNode.Create(1305));
+                break;
+
+            case (MMEffectType)1315:
+                effect.target.DecreaseHP(2);
+                effect.source.FindTarget().DecreaseHP(2);
+                //effect.target.DecreaseHP(2);
+                break;
+
+            case (MMEffectType)1325:
+                effect.target.DecreaseHP(3);
+                break;
+
+            case (MMEffectType)1327:
+
+                break;
+
+
 
 
             default:
@@ -266,18 +247,37 @@ public partial class MMBattleManager : MonoBehaviour
 
         switch (effect.type)
         {
-            case (MMEffectType)1074:
-                Debug.Log(effect.target.hp);
+            case (MMEffectType)1211:
                 if (effect.target.state == MMUnitState.Dead)
                 {
                     effect.source.IncreaseAP(1);
-                    Debug.Log("!!!!!!!!!!!!!!!selectingSkill: " + selectingSkill);
-                }
-                else
-                {
-                    Debug.Log("&&&&&&&&&&&&&&&selectingSkill: " + selectingSkill);
                 }
                 break;
+
+            case (MMEffectType)1325:
+                AddHand(MMCardNode.Create(1325));
+                break;
+
+            case (MMEffectType)1225:
+                if (effect.target.state == MMUnitState.Dead)
+                {
+                    effect.source.IncreaseAP(1);
+                }
+                break;
+
+            case (MMEffectType)1227:
+                if (effect.target.state == MMUnitState.Dead)
+                {
+                    DrawCards(1);
+                }
+                break;
+        }
+
+        if(effect.target.state == MMUnitState.Dead)
+        {
+            effect.source.OnKill(effect.target);
+            effect.target.OnDead(effect.source);
+            Debug.LogWarning("ExecuteEffect: " + effect.target);
         }
 
     }
@@ -291,22 +291,13 @@ public partial class MMBattleManager : MonoBehaviour
         MMUnitNode source = effect.source;
         MMUnitNode target = effect.target;
 
-        BroadCastUnitSkill(MMTriggerTime.BeforeAttack, source);
-        BroadCastUnitSkill(MMTriggerTime.BeforeBeAttack, target);
 
+        source.OnBeforeAttack(target);
+        target.OnBeforeBeAttack(source);
+        
 
-        target.DecreaseHP(source.atk + tempATK);
-        //if (source.hengsao > 0)
-        //{
-        //    List<MMCell> cells = MMMap.Instance.FindCellsBeside(target.cell);
-        //    foreach (var cell in cells)
-        //    {
-        //        if (cell.unitNode != null)
-        //        {
-        //            cell.unitNode.DecreaseHP(source.hengsao);
-        //        }
-        //    }
-        //}
+        int atk = source.atk + tempATK;
+        target.DecreaseHP(atk);
 
         if (effect.area == MMArea.Beside)
         {
@@ -315,7 +306,7 @@ public partial class MMBattleManager : MonoBehaviour
             {
                 if (cell.unitNode != null)
                 {
-                    cell.unitNode.DecreaseHP(source.atk);
+                    cell.unitNode.DecreaseHP(atk);
                 }
             }
         }
@@ -327,54 +318,17 @@ public partial class MMBattleManager : MonoBehaviour
             {
                 if (cell.unitNode != null)
                 {
-                    cell.unitNode.DecreaseHP(source.atk);
+                    cell.unitNode.DecreaseHP(atk);
                 }
             }
         }
 
-
-        //if (source.guanchuan > 0)
-        //{
-        //    List<MMCell> cells = MMMap.Instance.FindCellsBehind(target.cell);
-        //    foreach (var cell in cells)
-        //    {
-        //        if (cell.unitNode != null)
-        //        {
-        //            cell.unitNode.DecreaseHP(source.guanchuan);
-        //        }
-        //    }
-        //}
-
-
-
-        //if (target.unitState != MMUnitState.Stunned)
-        //{
-        //    //眩晕状态不还击    
-        //}
-        //else
-        //{
-        //    //还击
-        //    int value2 = Mathf.Max(target.atk - tempDEF, 0);
-        //    source.DecreaseHP(value2);
-        //}
         //还击
         int value2 = Mathf.Max(target.atk - tempDEF, 0);
         source.DecreaseHP(value2);
-
-        BroadCastUnitSkill(MMTriggerTime.AfterAttack, source);
-        BroadCastUnitSkill(MMTriggerTime.AfterBeAttack, target);
-
-        //Target从Weak状态进入Stunned的状态时，Source可以连击
-        //bool flag1 = (target.unitState == MMUnitState.Weak);
-        //if (target.group == 2)
-        //{
-        //    target.DecreaseAP();
-        //}
-        //bool flag2 = (target.unitState == MMUnitState.Stunned);
-        //if (flag1 && flag2)
-        //{
-        //    source.EnterPhase(MMUnitPhase.Combo);
-        //}
+        
+        source.OnAfterAttack(target);
+        target.OnAfterBeAttack(source);
 
         source.DecreaseTempATK(source.tempATK);
     }
@@ -408,11 +362,11 @@ public partial class MMBattleManager : MonoBehaviour
     {
         if (effect.target != null)
         {
-            effect.target.IncreaseAP(1);
+            effect.target.IncreaseAP(effect.value);
         }
         foreach (var tar in effect.sideTargets)
         {
-            tar.IncreaseAP(1);
+            tar.IncreaseAP(effect.value);
         }
     }
 
@@ -420,11 +374,11 @@ public partial class MMBattleManager : MonoBehaviour
     {
         if (effect.target != null)
         {
-            effect.target.DecreaseAP(1);
+            effect.target.DecreaseAP(effect.value);
         }
         foreach (var tar in effect.sideTargets)
         {
-            tar.DecreaseAP(1);
+            tar.DecreaseAP(effect.value);
         }
     }
 
@@ -469,6 +423,7 @@ public partial class MMBattleManager : MonoBehaviour
         effect.target.group = effect.source.group;
         MMUnitNode node = effect.target;
         node.gameObject.AddComponent<MMUnitNode_Battle>();
+
         MMCell c;
         int row;
 
@@ -499,9 +454,13 @@ public partial class MMBattleManager : MonoBehaviour
 
         c.Accept(node);
         effect.target = node;
-        //BroadCast(MMTriggerTime.OnSummon, effect);
-        ExecuteEffectOnSummon(effect);
+        effect.source.OnSummon(node);
+    }
 
+
+    public void AddBuff(MMEffect effect)
+    {
+        effect.target.AddBuff((MMBuff)effect.value);
     }
 
 
@@ -514,7 +473,7 @@ public partial class MMBattleManager : MonoBehaviour
 
     private void AddHand(MMCardNode card)
     {
-        card.gameObject.AddComponent<MMCardNode_Battle>();
+        //card.gameObject.AddComponent<MMCardNode_Battle>();
         MMCardPanel.Instance.hand.Add(card);
         MMCardPanel.Instance.UpdateUI();
     }

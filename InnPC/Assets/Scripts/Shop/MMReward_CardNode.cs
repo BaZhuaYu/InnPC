@@ -23,12 +23,12 @@ public class MMReward_CardNode : MonoBehaviour, IPointerClickHandler
     {
         MMCardNode node = GetComponent<MMCardNode>();
 
-        MMPlayerManager.Instance.cards.Add(node.card);
+        MMExplorePanel.Instance.cards.Add(node.card);
         
         gameObject.SetActive(false);
 
         MMRewardPanel.instance.CloseUI();
-        MMGameOverManager.Instance.UpdateUI();
+        MMExplorePanel.Instance.UpdateUI();
     }
 
 }

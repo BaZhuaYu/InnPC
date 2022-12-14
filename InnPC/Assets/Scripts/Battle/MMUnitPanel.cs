@@ -13,7 +13,7 @@ public class MMUnitPanel : MMNode
     }
 
 
-    public List<MMUnitNode> units;
+    public List<MMHeroNode> units;
 
     public MMUnitNode selectingUnit;
 
@@ -22,31 +22,40 @@ public class MMUnitPanel : MMNode
     // Start is called before the first frame update
     void Start()
     {
-        units = new List<MMUnitNode>();
+        units = new List<MMHeroNode>();
     }
 
 
 
-    public void Accept(List<MMUnitNode> units)
+    public void Accept(List<MMUnit> units)
     {
-        if(this.units.Count > 0)
+        if (this.units.Count > 0)
         {
             Clear();
         }
 
-        this.units = units;
+        this.units = new List<MMHeroNode>();
+        foreach (var unit in units)
+        {
+            MMHeroNode node = MMHeroNode.CreateFromUnit(unit);
+            node.gameObject.AddComponent<MMUnitNode_Panel>();
+            this.units.Add(node);
+        }
+        
         Reload();
     }
 
 
     public void Reload()
     {
-        float offset = 0;
+        float offset = -(float)(units.Count/2) * 200;
+        
         foreach (var unit in units)
         {
             unit.SetParent(this);
-            unit.MoveToParentLeftOffset(offset);
-            offset += 10 + unit.FindWidth();
+            //unit.MoveToParentLeftOffset(offset);
+            unit.MoveRight(offset);
+            offset += unit.FindWidth() * 1.1f;
         }
     }
 
@@ -57,7 +66,7 @@ public class MMUnitPanel : MMNode
         {
             unit.RemoveFromParent();
         }
-        units = new List<MMUnitNode>();
+        units = new List<MMHeroNode>();
         selectingUnit = null;
         Reload();
     }

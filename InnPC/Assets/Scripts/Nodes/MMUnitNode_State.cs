@@ -18,9 +18,7 @@ public partial class MMUnitNode : MMNode
         }
 
         this.state = s;
-
-        this.iconRage.SetActive(false);
-        this.iconWeak.SetActive(false);
+        
 
         switch (state)
         {

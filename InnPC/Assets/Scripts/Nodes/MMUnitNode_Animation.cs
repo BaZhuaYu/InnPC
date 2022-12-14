@@ -68,7 +68,7 @@ public partial class MMUnitNode : MMNode
         tempMoveCells = cells;
         foreach (var cell in cells)
         {
-            cell.HandleFill(MMNodeState.Green);
+            cell.HandleHighlight(MMNodeHighlight.Green);
         }
     }
 
@@ -82,7 +82,7 @@ public partial class MMUnitNode : MMNode
 
         foreach (var cell in tempMoveCells)
         {
-            cell.HandleFill(MMNodeState.Normal);
+            cell.HandleHighlight(MMNodeHighlight.Normal);
         }
         
     }
@@ -114,12 +114,12 @@ public partial class MMUnitNode : MMNode
         tempAttackCells = FindAttackCells();
         foreach (var cell in tempAttackCells)
         {
-            cell.HandleFill(MMNodeState.Blue);
+            cell.HandleHighlight(MMNodeHighlight.Blue);
             if (cell.unitNode != null)
             {
                 if (cell.unitNode.group != this.group)
                 {
-                    cell.HandleBorder(MMNodeHighlight.Red);
+                    cell.HandleHighlight(MMNodeHighlight.Red);
                 }
             }
         }
@@ -136,10 +136,10 @@ public partial class MMUnitNode : MMNode
         List<MMCell> cells = tempAttackCells;
         foreach (var cell in cells)
         {
-            cell.HandleFill(MMNodeState.Normal);
+            cell.HandleHighlight(MMNodeHighlight.Normal);
             if (cell.unitNode != null)
             {
-                cell.HandleBorder(MMNodeHighlight.Normal);
+                cell.HandleHighlight(MMNodeHighlight.Normal);
             }
         }
         
@@ -158,7 +158,7 @@ public partial class MMUnitNode : MMNode
     {
         if(this.cell !=null)
         {
-            this.cell.HandleBorder(MMNodeHighlight.Green);
+            this.cell.HandleHighlight(MMNodeHighlight.Green);
         }
     }
 
@@ -166,7 +166,7 @@ public partial class MMUnitNode : MMNode
     {
         if (this.cell != null)
         {
-            this.cell.HandleBorder(MMNodeHighlight.Normal);
+            this.cell.HandleHighlight(MMNodeHighlight.Normal);
         }
     }
 

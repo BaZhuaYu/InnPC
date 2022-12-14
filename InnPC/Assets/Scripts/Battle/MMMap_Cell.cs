@@ -216,6 +216,53 @@ public partial class MMMap : MMNode
     }
 
 
+    public List<MMCell> FindCellsNine(MMCell cell)
+    {
+        List<MMCell> ret = new List<MMCell>();
+
+        MMCell cell1 = MMMap.Instance.FindCellInXY(cell.row - 1, cell.col + 0);
+        MMCell cell2 = MMMap.Instance.FindCellInXY(cell.row - 1, cell.col + 1);
+        MMCell cell3 = MMMap.Instance.FindCellInXY(cell.row + 0, cell.col + 1);
+        MMCell cell4 = MMMap.Instance.FindCellInXY(cell.row + 1, cell.col + 1);
+        MMCell cell5 = MMMap.Instance.FindCellInXY(cell.row + 1, cell.col + 0);
+        MMCell cell6 = MMMap.Instance.FindCellInXY(cell.row + 1, cell.col - 1);
+        MMCell cell7 = MMMap.Instance.FindCellInXY(cell.row + 0, cell.col - 1);
+        MMCell cell8 = MMMap.Instance.FindCellInXY(cell.row - 1, cell.col - 1);
+
+        if (cell1 != null) { ret.Add(cell1); }
+        if (cell2 != null) { ret.Add(cell2); }
+        if (cell3 != null) { ret.Add(cell3); }
+        if (cell4 != null) { ret.Add(cell4); }
+        if (cell5 != null) { ret.Add(cell5); }
+        if (cell6 != null) { ret.Add(cell6); }
+        if (cell7 != null) { ret.Add(cell7); }
+        if (cell8 != null) { ret.Add(cell8); }
+
+        return ret;
+    }
+
+    public List<MMCell> FindCellsTeamCells(MMCell cell)
+    {
+        List<int> cells;
+        if (cell.row < 4)
+        {
+            cells = new List<int> { 0, 1, 2 };
+        }
+        else
+        {
+            cells = new List<int> { 4, 5, 6 };
+        }
+
+        return MMMap.Instance.FindCellsInRows(cells);
+        
+    }
+
+    public List<MMCell> FindCellsAll()
+    {
+        return MMMap.Instance.cells;
+    }
+
+
     public List<MMCell> FindEmptyCells()
     {
         List<MMCell> ret = new List<MMCell>();
@@ -258,7 +305,7 @@ public partial class MMMap : MMNode
 
         return cells[Random.Range(0, cells.Count)];
     }
-    
+
 
     public List<MMCell> FindCellsWithUnitRace(int race)
     {
@@ -282,15 +329,15 @@ public partial class MMMap : MMNode
     public int FindFrontRowOfGroup(int group)
     {
         int ret = 0;
-        if(group == 2)
+        if (group == 2)
         {
             ret = 7;
         }
-        foreach(var cell in cells)
+        foreach (var cell in cells)
         {
             if (cell.unitNode != null && cell.unitNode.group == group)
             {
-                if(group == 1)
+                if (group == 1)
                 {
                     if (cell.row > ret)
                     {

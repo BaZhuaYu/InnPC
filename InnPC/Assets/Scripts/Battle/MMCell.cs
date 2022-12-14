@@ -15,6 +15,7 @@ public partial class MMCell : MMNode
     public int col;
 
     public Text labelID;
+    public MMNode border;
 
 
     private void Awake()
@@ -24,8 +25,7 @@ public partial class MMCell : MMNode
 
     private void Start()
     {
-        HandleFill(MMNodeState.Normal);
-        HandleBorder(MMNodeHighlight.Normal);
+        HandleHighlight(MMNodeHighlight.Normal);
     }
 
 
@@ -67,72 +67,40 @@ public partial class MMCell : MMNode
             this.unitNode.cell = null;
             this.unitNode = null;
         }
-        HandleFill(MMNodeState.Normal);
-        HandleBorder(MMNodeHighlight.Normal);
+        HandleHighlight(MMNodeHighlight.Normal);
     }
 
 
-    public void HandleFill(MMNodeState s)
-    {
-        this.nodeState = s;
-        switch (s)
-        {
-            case MMNodeState.Normal:
-                GetComponent<Image>().color = MMUtility.FindColorWhite();
-                break;
-            case MMNodeState.Red:
-                GetComponent<Image>().color = MMUtility.FindColorRed();
-                break;
-            case MMNodeState.Yellow:
-                GetComponent<Image>().color = MMUtility.FindColorYellow();
-                break;
-            case MMNodeState.Blue:
-                GetComponent<Image>().color = MMUtility.FindColorBlue();
-                break;
-            case MMNodeState.Green:
-                GetComponent<Image>().color = MMUtility.FindColorLightGreen();
-                break;
-        }
-    }
-
-
-    public void HandleBorder(MMNodeHighlight s)
+    public void HandleHighlight(MMNodeHighlight s)
     {
         this.nodeHighlight = s;
         switch (s)
         {
             case MMNodeHighlight.Normal:
-                GetComponent<Outline>().effectColor = new Color(0f, 0f, 0f, 0f);
-                this.transform.SetSiblingIndex(0);
+                //GetComponent<Image>().color = MMUtility.FindColorWhite();
+                LoadImage("");
                 break;
             case MMNodeHighlight.Red:
-                GetComponent<Outline>().effectColor = new Color(1f, 0f, 0f, 1f);
-                this.transform.SetSiblingIndex(100);
+//                GetComponent<Image>().color = MMUtility.FindColorRed();
+                LoadImage("UI/aaa/CellFill_Red");
                 break;
             case MMNodeHighlight.Yellow:
-                GetComponent<Outline>().effectColor = new Color(1f, 0.5f, 0f, 1f);
-                this.transform.SetSiblingIndex(100);
+                //GetComponent<Image>().color = MMUtility.FindColorYellow();
+                LoadImage("UI/aaa/CellFill_Yellow");
                 break;
             case MMNodeHighlight.Blue:
-                GetComponent<Outline>().effectColor = new Color(0f, 0f, 1f, 1f);
-                this.transform.SetSiblingIndex(100);
+                //GetComponent<Image>().color = MMUtility.FindColorBlue();
+                LoadImage("UI/aaa/CellFill_Blue");
                 break;
             case MMNodeHighlight.Green:
-                GetComponent<Outline>().effectColor = new Color(0f, 1f, 0f, 1f);
-                this.transform.SetSiblingIndex(100);
+                //GetComponent<Image>().color = MMUtility.FindColorLightGreen();
+                LoadImage("UI/aaa/CellFill_Green");
                 break;
         }
-
     }
+    
 
-
-
-
-
-
-
-
-
+    
 
 
 

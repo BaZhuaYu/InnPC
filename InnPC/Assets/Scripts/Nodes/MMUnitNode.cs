@@ -17,6 +17,7 @@ public partial class MMUnitNode : MMNode
     public Text textHP;
     public Text textAP;
     public Text textATK;
+    public MMNode border;
 
 
     public MMUnitNode target;
@@ -44,8 +45,7 @@ public partial class MMUnitNode : MMNode
     public int clss;
 
     public int attackRange;
-    public int hengsao;
-    public int guanchuan;
+
 
     public List<MMSkillNode> skills;
     public List<MMCardNode> cards;
@@ -57,9 +57,7 @@ public partial class MMUnitNode : MMNode
     public int tempATK;
     public int tempDEF;
 
-    public MMNode iconRage;
-    public MMNode iconWeak;
-
+    
     public GameObject backgroundATK;
     public GameObject backgroundHP;
     public MMNode groupSP;
@@ -86,11 +84,10 @@ public partial class MMUnitNode : MMNode
 
     private void Update()
     {
-        if(this.id == 10200)
-        {
-            Debug.Log(this.tempATK);
-        }
-        
+        //if(this.id == 10200)
+        //{
+        //    Debug.Log(this.tempATK);
+        //}
     }
 
 
@@ -111,8 +108,8 @@ public partial class MMUnitNode : MMNode
         hp = unit.hp;
         maxAP = unit.maxAP;
         ap = unit.ap;
-        ap = 2;
-        
+        //ap = unit.maxAP;
+
         atk = unit.atk;
         def = unit.def;
         mag = unit.mag;
@@ -122,8 +119,7 @@ public partial class MMUnitNode : MMNode
         clss = unit.clss;
 
         attackRange = unit.attackRange;
-        hengsao = 0;
-        guanchuan = 0;
+
 
         skills = new List<MMSkillNode>();
         foreach(var s in unit.skills)
@@ -153,6 +149,7 @@ public partial class MMUnitNode : MMNode
 
 
         EnterState(MMUnitState.Normal);
+        HandleHighlight(MMNodeHighlight.Normal);
 
         m_DamageAnimator.gameObject.SetActive(false);
 
@@ -186,7 +183,15 @@ public partial class MMUnitNode : MMNode
 
         if(hp <= 0)
         {
-            EnterState(MMUnitState.Dead);
+            if(HasBuff(MMBuff.BuQu))
+            {
+                hp = 1;
+                RemoveBuff(MMBuff.BuQu);
+            }
+            else
+            {
+                EnterState(MMUnitState.Dead);
+            }
         }
 
         UpdateUI();
@@ -285,22 +290,22 @@ public partial class MMUnitNode : MMNode
         textATK.text = atk + "";
         
 
-        if(maxAP == 0)
-        {
-            groupSP.SetActive(false);
-        }
-        else
-        {
-            groupSP.SetActive(true);
-            if(maxAP == ap)
-            {
-                groupSP.LoadImage("UI/IconRage");
-            }
-            else
-            {
-                groupSP.LoadImage("UI/IconWeak");
-            }
-        }
+        //if(maxAP == 0)
+        //{
+        //    groupSP.SetActive(false);
+        //}
+        //else
+        //{
+        //    groupSP.SetActive(true);
+        //    if(maxAP == ap)
+        //    {
+        //        groupSP.LoadImage("UI/IconRage");
+        //    }
+        //    else
+        //    {
+        //        groupSP.LoadImage("UI/IconWeak");
+        //    }
+        //}
         
 
         for(int i = 0; i < 5;i++)
@@ -344,6 +349,37 @@ public partial class MMUnitNode : MMNode
             
         }
         
+    }
+
+
+    public void HandleHighlight(MMNodeHighlight state)
+    {
+        this.nodeHighlight = state;
+        this.border.gameObject.SetActive(true);
+        switch(state)
+        {
+            case MMNodeHighlight.Normal:
+                //this.border.LoadImage("");
+                this.border.gameObject.SetActive(false);
+                break;
+
+            case MMNodeHighlight.Red:
+                this.border.LoadImage("UI/aaa/CellBorder_Red");
+                break;
+
+            case MMNodeHighlight.Yellow:
+                this.border.LoadImage("UI/aaa/CellBorder_Yellow");
+                break;
+
+            case MMNodeHighlight.Blue:
+                this.border.LoadImage("UI/aaa/CellBorder_Blue");
+                break;
+
+            case MMNodeHighlight.Green:
+                this.border.LoadImage("UI/aaa/CellBorder_Green");
+                break;
+
+        }
     }
 
 
@@ -424,7 +460,7 @@ public partial class MMUnitNode : MMNode
     {
         foreach(var skill in skills)
         {
-            if(skill.id == id && skill.enabled)
+            if(skill.id == id)
             {
                 return true;
             }
@@ -432,5 +468,45 @@ public partial class MMUnitNode : MMNode
         return false;
     }
 
+
+    public bool HasSkillEffect(int id)
+    {
+        foreach (var skill in skills)
+        {
+            if (skill.effectType == (MMEffectType)(id))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public bool HasBuff(MMBuff buff)
+    {
+        foreach(var b in buffs)
+        {
+            if(b == buff)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void AddBuff(MMBuff b)
+    {
+        if(HasBuff(b))
+        {
+            return;
+        }
+        this.buffs.Add(b);
+    }
+
+    public void RemoveBuff(MMBuff b)
+    {
+        this.buffs.Remove(b);
+    }
 
 }

@@ -22,8 +22,6 @@ public enum MMSkillType
 
 
 
-
-
 public enum MMNodeHighlight
 {
     Normal,
@@ -33,15 +31,6 @@ public enum MMNodeHighlight
     Green
 }
 
-
-public enum MMNodeState
-{
-    Normal,
-    Yellow,
-    Red,
-    Blue,
-    Green
-}
 
 
 public enum MMUnitState
@@ -53,12 +42,3 @@ public enum MMUnitState
     Dead
 }
 
-
-public enum MMRewardType : int
-{
-    Gold,
-    Unit,
-    Skill,
-    Card,
-    Item
-}

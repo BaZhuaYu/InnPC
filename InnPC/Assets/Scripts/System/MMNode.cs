@@ -6,9 +6,6 @@ using UnityEngine.UI;
 public class MMNode : MonoBehaviour
 {
     [HideInInspector]
-    public MMNodeState nodeState;
-
-    [HideInInspector]
     public MMNodeHighlight nodeHighlight;
 
     [HideInInspector]
@@ -18,7 +15,6 @@ public class MMNode : MonoBehaviour
     private void Start()
     {
         nodeHighlight = MMNodeHighlight.Normal;
-        nodeState = MMNodeState.Normal;
     }
 
 
@@ -177,6 +173,12 @@ public class MMNode : MonoBehaviour
     {
         GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size.x);
         GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size.y);
+    }
+
+    public void AddChild(MMNode child)
+    {
+        child.transform.SetParent(this.transform);
+        child.transform.localPosition = Vector3.zero;
     }
 
     public void SetParent(MMNode parent)
