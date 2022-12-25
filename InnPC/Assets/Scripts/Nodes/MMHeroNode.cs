@@ -34,6 +34,12 @@ public class MMHeroNode : MMNode
         this.unit = unit;
         this.clss = unit.clss;
 
+        MMSkill s = MMSkill.Create(unit.skills[0]);
+        this.nodeSkill.Accept(s);
+        AddChild(nodeSkill);
+        nodeSkill.MoveLeft(FindWidth() * 0.25f);
+        nodeSkill.MoveDown(FindHeight() * 0.2f);
+
         Reload();
     }
 
@@ -75,20 +81,24 @@ public class MMHeroNode : MMNode
     public static MMHeroNode Create()
     {
         GameObject obj = Instantiate(Resources.Load("Prefabs/MMHeroNode") as GameObject);
-        return obj.GetComponent<MMHeroNode>();
+        MMHeroNode ret = obj.GetComponent<MMHeroNode>();
+        ret.AddChild(ret.nodeSkill);
+        ret.nodeSkill.MoveLeft(ret.FindWidth() * 0.25f);
+        ret.nodeSkill.MoveDown(ret.FindHeight() * 0.2f);
+        return ret;
     }
 
-    public static MMHeroNode CreateFromUnit(MMUnit unit)
+    public static MMHeroNode Create(MMUnit unit)
     {
         MMHeroNode node = MMHeroNode.Create();
         node.Accept(unit);
         return node;
     }
 
-    public static MMHeroNode CreateFromID(int id)
+    public static MMHeroNode Create(int id)
     {
         MMUnit unit = MMUnit.Create(id);
-        return MMHeroNode.CreateFromUnit(unit);
+        return MMHeroNode.Create(unit);
     }
 
 

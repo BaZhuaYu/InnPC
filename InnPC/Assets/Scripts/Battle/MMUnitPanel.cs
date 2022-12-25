@@ -37,7 +37,7 @@ public class MMUnitPanel : MMNode
         this.units = new List<MMHeroNode>();
         foreach (var unit in units)
         {
-            MMHeroNode node = MMHeroNode.CreateFromUnit(unit);
+            MMHeroNode node = MMHeroNode.Create(unit);
             node.gameObject.AddComponent<MMUnitNode_Panel>();
             this.units.Add(node);
         }

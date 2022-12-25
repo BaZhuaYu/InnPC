@@ -17,20 +17,31 @@ public class MMExplorePanel : MMNode
     public bool isLost;
 
     public Button mainButton;
+    public Button discoverButton;
     public Text mainText;
     public Text goldText;
-    
-    public List<MMPlaceNode> places;
+    public Text numText;
+    public Text textDiscover;
+
 
     /// <summary>
     /// Public 
     /// </summary>
 
+    public int hp;
+
     public int gold;
 
-    public int level;
+    public int levelBattle;
 
-    public int hp;
+    public int levelShop;
+
+    public int numBuy;
+
+    public int probTanSuo;
+    
+
+    public List<MMPlaceNode> places;
 
     public List<MMUnit> units;
     
@@ -48,52 +59,87 @@ public class MMExplorePanel : MMNode
 
     void Start()
     {
-        mainButton = GameObject.Find("PanelGameOver/MainButton").GetComponent<Button>();
-        mainText = GameObject.Find("PanelGameOver/MainButton/Text").GetComponent<Text>();
+        mainButton = GameObject.Find("PanelExplore/MainButton").GetComponent<Button>();
+        mainText = mainButton.GetComponentInChildren<Text>();
         mainButton.onClick.AddListener(OnClickMainButton);
-        
-        LoadReward();
+
+        numText = GameObject.Find("PanelExplore/BGNum/Text").GetComponent<Text>();
+
+        discoverButton = GameObject.Find("PanelExplore/DiscoverButton").GetComponent<Button>();
+        discoverButton.onClick.AddListener(OnClickButtonDiscover);
+
+        textDiscover = discoverButton.GetComponentInChildren<Text>();
 
         CloseUI();
-        
     }
 
 
-    public void StartNewGame()
+    public override void OpenUI()
     {
-        gold = 100;
-        level = 1;
-        hp = 100;
-
-        units = new List<MMUnit>();
-        cards = new List<MMCard>();
-        minions = new List<MMUnit>();
-        items = new List<MMItem>();
-
-        //for (int i = 0; i < 3; i++)
-        //{
-        //    MMUnit unit = MMUnit.Create((i + 1) * 100 + 10000);
-        //    units.Add(unit);
-
-        //    MMCard card = MMCard.Create(unit.id + 1);
-        //    cards.Add(card);
-        //}
-
-        //for (int i = 0; i < 4; i++)
-        //{
-        //    MMCard cardx = MMCard.Create(10000);
-        //    MMCard cardy = MMCard.Create(10000);
-        //    cards.Add(cardx);
-        //    cards.Add(cardy);
-        //}
+        base.OpenUI();
+        UpdateUI();
     }
 
 
-    public void Accept(List<MMUnit> units)
+
+    public void AcceptProps()
+    {
+        hp = 100;
+        gold = 0;
+        levelBattle = 1;
+        levelShop = 1;
+        numBuy = 1;
+        probTanSuo = 100;
+    }
+
+
+    public void AcceptHeroes(List<MMUnit> units)
     {
         this.units = units;
     }
 
+    public void AcceptCards(List<MMCard> cards)
+    {
+        this.cards = new List<MMCard>();
+        for (int i = 0; i < 3; i++)
+        {
+            MMCard cardx = MMCard.Create(10000);
+            MMCard cardy = MMCard.Create(10000);
+            this.cards.Add(cardx);
+            this.cards.Add(cardy);
+        }
+
+        foreach(var unit in units)
+        {
+            foreach(var id in unit.cards)
+            {
+                this.cards.Add(MMCard.Create(id));
+            }
+        }
+    }
+
+    public void AcceptMinions(List<MMUnit> units)
+    {
+        this.minions = new List<MMUnit>();
+    }
+
+    public void AcceptItems(List<MMItem> items)
+    {
+        this.items = new List<MMItem>();
+    }
+
+    public void AcceptPlaces(MMPlaceNode p)
+    {
+        this.places = new List<MMPlaceNode>();
+
+        MMPlaceNode place1 = MMPlaceNode.Create("LuoYangCheng");
+        MMPlaceNode place2 = MMPlaceNode.Create("JiShi");
+        MMPlaceNode place3 = MMPlaceNode.Create("YouJianKeZhan");
+        places.Add(place1);
+        //places.Add(place2);
+        //places.Add(place3);
+        //this.places = places;
+    }
 
 
     public List<MMUnitNode> CreateAllUnitNodes()
@@ -138,43 +184,21 @@ public class MMExplorePanel : MMNode
     }
 
 
-    void LoadReward()
-    {
-
-        places = new List<MMPlaceNode>();
-
-        MMPlaceNode place1 = MMPlaceNode.Create("LuoYangCheng");
-        MMPlaceNode place2 = MMPlaceNode.Create("JiShi");
-        MMPlaceNode place3 = MMPlaceNode.Create("YouJianKeZhan");
-        places.Add(place1);
-        places.Add(place2);
-        places.Add(place3);
-
-        place1.SetParent(this);
-        place2.SetParent(this);
-        place3.SetParent(this);
-
-        place1.MoveUp(150);
-        place2.MoveUp(150);
-        place3.MoveUp(150);
-
-        place1.MoveLeft(500);
-        place3.MoveRight(500);
-        
-        UpdateUI();
-    }
 
     public void SetWin()
     {
         isWin = true;
         isLost = false;
 
-        MMExplorePanel.Instance.level += 1;
+        MMExplorePanel.Instance.levelBattle += 1;
 
         int coin = HandleRewardGold();
         MMExplorePanel.Instance.gold += coin;
         
-        this.SetActive(true);
+        numBuy = 2;
+
+        OpenUI();
+        MMRewardPanel.instance.CloseUI();
 
         UpdateUI();
     }
@@ -185,11 +209,14 @@ public class MMExplorePanel : MMNode
         isWin = false;
         isLost = true;
 
+        MMExplorePanel.Instance.levelBattle += 1;
+
         int coin = HandleRewardGold();
         MMExplorePanel.Instance.gold += coin;
 
-        this.SetActive(true);
-
+        numBuy = 2;
+        
+        OpenUI();
         MMRewardPanel.instance.CloseUI();
 
         UpdateUI();
@@ -198,20 +225,24 @@ public class MMExplorePanel : MMNode
 
     public void UpdateUI()
     {
-        if (isWin)
+        mainText.text = "开始战斗: " + levelBattle;
+        goldText.text = gold + "";
+        numText.text = numBuy + "";
+        textDiscover.text = "探索（" + probTanSuo + "）";
+
+
+        //Reward
+        float offset = 500f;
+        foreach (var place in places)
         {
-            mainText.text = "下一关";
-        }
-        else
-        {
-            mainText.text = "重新战斗";
+            place.SetParent(this);
+            place.MoveUp(150);
+            place.MoveLeft(offset);
+            offset -= 500f;
         }
 
-        mainText.text = "开始战斗:" + (MMExplorePanel.Instance.level);
-        
-        goldText.text = MMExplorePanel.Instance.gold + "";
     }
-
+    
 
     public void Clear()
     {
@@ -225,22 +256,58 @@ public class MMExplorePanel : MMNode
         {
             place.SetEnable(true);
         }
-
-        this.SetActive(false);
+        
+        this.CloseUI();
         MMBattleManager.Instance.LoadLevel();
-        MMBattleManager.Instance.gameObject.SetActive(true);
-        //MMBattleManager.Instance.EnterPhase(MMBattlePhase.Begin);
+        MMBattleManager.Instance.OpenUI();
     }
 
 
+    public void OnClickButtonDiscover()
+    {
+        if(numBuy < 1)
+        {
+            MMTipManager.instance.CreateTip("没有更多使用次数");
+            return;
+        }
+
+        if(this.places.Count >= MMPlace.places.Count)
+        {
+            MMTipManager.instance.CreateTip("没有更多地点");
+            return;
+        }
+
+        numBuy -= 1;
+        
+        if (Random.Range(0,100) > probTanSuo)
+        {
+            probTanSuo += 10;
+            UpdateUI();
+            MMTipManager.instance.CreateTip("什么都没有发现");
+            return;
+        }
+
+        probTanSuo = 35;
+        MMPlaceNode n = MMPlaceNode.Create(MMPlace.FindOne());
+        this.places.Add(n);
+        UpdateUI();
+
+    }
+
+    
     int HandleRewardGold()
     {
-        int ret = MMExplorePanel.Instance.level + 2;
+        int ret = MMExplorePanel.Instance.levelBattle + 2;
         if (ret > 10)
         {
             ret = 10;
         }
         return ret;
+    }
+
+    public void SkipReward()
+    {
+        MMRewardPanel.instance.CloseUI();
     }
     
 }

@@ -33,6 +33,19 @@ public partial class MMCard
     }
 
 
+    public static MMCard FindOne(int id)
+    {
+        foreach (var one in all)
+        {
+            if (one.id == id)
+            {
+                return one;
+            }
+        }
+        return null;
+    }
+
+
     public static List<MMCard> FindAll()
     {
         List<MMCard> ret = new List<MMCard>(); ;
@@ -49,15 +62,13 @@ public partial class MMCard
 
     public static MMCard FindRandomOne()
     {
-        List<MMCard> all = FindAll();
-        return all[Random.Range(0, all.Count)];
+        return cards[Random.Range(0, cards.Count)];
     }
 
 
     public static List<MMCard> FindRandomCount(int count)
     {
-        List<MMCard> all = FindAll();
-        if (count > all.Count)
+        if (count > cards.Count)
         {
             MMDebugManager.FatalError("FindRandom: " + count);
         }
@@ -66,10 +77,10 @@ public partial class MMCard
 
         while (ret.Count < count)
         {
-            MMCard skill = FindRandomOne();
-            if (MMUtility.CheckListNotHasOne<MMCard>(ret, skill))
+            MMCard card = FindRandomOne();
+            if (MMUtility.CheckListNotHasOne<MMCard>(ret, card))
             {
-                ret.Add(skill);
+                ret.Add(card);
             }
         }
 

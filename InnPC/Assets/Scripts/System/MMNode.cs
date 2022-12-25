@@ -54,7 +54,7 @@ public class MMNode : MonoBehaviour
     {
         this.gameObject.SetActive(false);
     }
-
+    
     
 
     public MMNode FindParent()

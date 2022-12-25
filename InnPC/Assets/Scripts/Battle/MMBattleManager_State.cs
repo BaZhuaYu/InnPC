@@ -15,7 +15,7 @@ public enum MMBattleState
 }
 
 
-public partial class MMBattleManager : MonoBehaviour
+public partial class MMBattleManager
 {
     int index = 0;
     bool isLock = false;
@@ -243,7 +243,6 @@ public partial class MMBattleManager : MonoBehaviour
         }
 
         textPhase.text = phase.ToString() + " " + state.ToString();
-
     }
 
 
@@ -286,8 +285,7 @@ public partial class MMBattleManager : MonoBehaviour
             MMTipManager.instance.CreateTip("行动力不足");
             return false;
         }
-
-
+        
         selectingCard = card;
         EnterState(MMBattleState.SelectingCard);
         return true;
@@ -296,7 +294,6 @@ public partial class MMBattleManager : MonoBehaviour
 
     public void TryEnterStateSelectingSkill(MMSkillNode skill)
     {
-
         if (sourceUnit == null)
         {
             MMTipManager.instance.CreateTip("需要选中己方英雄");
@@ -308,8 +305,7 @@ public partial class MMBattleManager : MonoBehaviour
             MMTipManager.instance.CreateTip("行动力不足");
             return;
         }
-
-
+        
         selectingSkill = skill;
         EnterState(MMBattleState.SelectingSkill);
     }
@@ -335,15 +331,11 @@ public partial class MMBattleManager : MonoBehaviour
             MMTipManager.instance.CreateTip("没有己方英雄");
             return;
         }
-
-
+        
         EnterState(MMBattleState.PlayCard);
     }
 
-
-
-
-
+    
 
     void HandleStateSelectingCard()
     {
@@ -386,7 +378,6 @@ public partial class MMBattleManager : MonoBehaviour
 
     void HandleStateSelectingSkill()
     {
-
         if (selectingSkill.target == MMEffectTarget.None)
         {
             //MMBattleManager.Instance.EnterState(MMBattleState.SelectingSkill);
@@ -410,13 +401,20 @@ public partial class MMBattleManager : MonoBehaviour
 
             EnterState(MMBattleState.SelectedTargetUnit);
         }
-
     }
 
 
 
 
 
+    public void HandleUnitActionDone()
+    {
+        Debug.Log("Clear Source");
+        this.ClearSource();
+        this.ClearTarget();
+        selectingCard = null;
+        selectingSkill = null;
+    }
 
 
 
@@ -453,29 +451,12 @@ public partial class MMBattleManager : MonoBehaviour
             targetUnit = null;
             return;
         }
-
+        
+        targetUnit.HandleHighlight(MMNodeHighlight.Normal);
         targetUnit.cell.HandleHighlight(MMNodeHighlight.Normal);
         targetUnit = null;
     }
-
-
-    public void UnselectSourceCell()
-    {
-        Debug.Log("Clear Source");
-        sourceUnit.HandleHighlight(MMNodeHighlight.Normal);
-        targetUnit.HandleHighlight(MMNodeHighlight.Normal);
-        this.ClearSource();
-        this.ClearTarget();
-        selectingCard = null;
-        selectingSkill = null;
-    }
-
-
-    public void HandleSourceActionDone()
-    {
-        sourceUnit.tempCell = sourceUnit.cell;
-    }
-
+    
 
     public void ClosePanels()
     {

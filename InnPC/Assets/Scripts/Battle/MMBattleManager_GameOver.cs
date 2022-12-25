@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public partial class MMBattleManager : MonoBehaviour
+public partial class MMBattleManager : MMNode
 {
     
     public bool CheckGameOver()
@@ -10,12 +10,14 @@ public partial class MMBattleManager : MonoBehaviour
         if (CheckGameLost())
         {
             EnterPhase(MMBattlePhase.BattleEnd);
+            CloseUI();
             MMExplorePanel.Instance.SetLost();
             return true;
         }
         else if (CheckGameWin())
         {
             EnterPhase(MMBattlePhase.BattleEnd);
+            CloseUI();
             MMExplorePanel.Instance.SetWin();
             return true;
         }

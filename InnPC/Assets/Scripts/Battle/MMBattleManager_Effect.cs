@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public partial class MMBattleManager : MonoBehaviour
+public partial class MMBattleManager : MMNode
 {
 
     public List<MMUnitNode> FindAllUnits()
@@ -144,6 +144,7 @@ public partial class MMBattleManager : MonoBehaviour
                 Damage(effect);
                 effect.source.IncreaseHP(effect.value);
                 break;
+
 
             case (MMEffectType)1107:
                 effect.target.DecreaseHP(1);

@@ -10,7 +10,7 @@ public partial class MMPlaceNode : MMNode, IPointerClickHandler
     {
         if(isEnabled)
         {
-            SetEnable(false);
+            
             OnClick();
         }
     }
@@ -18,13 +18,23 @@ public partial class MMPlaceNode : MMNode, IPointerClickHandler
 
     void OnClick()
     {
+        if (MMExplorePanel.Instance.numBuy < 1)
+        {
+            MMTipManager.instance.CreateTip("使用次数不足");
+            return;
+        }
+
         if (MMExplorePanel.Instance.gold < price)
         {
             MMTipManager.instance.CreateTip("金币不足");
             return;
         }
 
+        SetEnable(false);
+
         MMExplorePanel.Instance.gold -= price;
+        MMExplorePanel.Instance.numBuy -= 1;
+        MMExplorePanel.Instance.UpdateUI();
 
         MMRewardPanel.instance.OpenUI();
 

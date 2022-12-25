@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public partial class MMBattleManager : MonoBehaviour
+public partial class MMBattleManager : MMNode
 {
 
     public static MMBattleManager Instance;
@@ -58,11 +58,11 @@ public partial class MMBattleManager : MonoBehaviour
         //buttonAttack = GameObject.Find("AttackButton").GetComponent<Button>();
 
         textButtonMain = GameObject.Find("MainButton").GetComponentInChildren<Text>();
-        buttonMain.onClick.AddListener(OnClickMainButton);
+        buttonMain.onClick.AddListener(OnClickButtonMain);
 
         //PanelSkill
         buttonAwait = GameObject.Find("AwaitButton").GetComponent<Button>();
-        buttonAwait.onClick.AddListener(OnClickAwaitButton);
+        buttonAwait.onClick.AddListener(OnClickButtonAwait);
         textHP = GameObject.Find("TextHP").GetComponent<Text>();
 
         //PanelAvatar
@@ -80,11 +80,11 @@ public partial class MMBattleManager : MonoBehaviour
 
         isPlayerRound = 0;
 
-        gameObject.SetActive(false);
+        CloseUI();
+        
     }
 
-
-
+    
     private void Update()
     {
         textHP.text = MMExplorePanel.Instance.hp + "";
@@ -92,6 +92,7 @@ public partial class MMBattleManager : MonoBehaviour
         if (Input.GetMouseButtonDown(1))
         {
             OnClickButtonBack();
+            return;
         }
 
         if (this.phase == MMBattlePhase.UnitActing)
@@ -115,17 +116,13 @@ public partial class MMBattleManager : MonoBehaviour
         }
 
         textPhase.text = phase.ToString() + " " + state.ToString();
-        //OnEnterPhase(this.phase);
-
+        
     }
 
 
     public void DebugConfig()
     {
-        MMUnitNode unit = FindUnit(10100);
-        //unit.ap = 1;
-        unit.UpdateUI();
-        //unit.skills.Add()
+        
     }
 
 
@@ -140,9 +137,7 @@ public partial class MMBattleManager : MonoBehaviour
         }
         return null;
     }
-
-
-
+    
 
     public void LoadLevel()
     {
@@ -151,7 +146,7 @@ public partial class MMBattleManager : MonoBehaviour
         MMUnitPanel.Instance.OpenUI();
         MMUnitPanel.Instance.Accept(MMExplorePanel.Instance.minions);
 
-        LoadLevel(MMExplorePanel.Instance.level);
+        LoadLevel(MMExplorePanel.Instance.levelBattle);
         if (GameObject.Find("BattleStartButton") == null)
         {
 
@@ -160,7 +155,6 @@ public partial class MMBattleManager : MonoBehaviour
         {
             GameObject.Find("BattleStartButton").SetActive(false);
         }
-
     }
 
 
@@ -169,9 +163,8 @@ public partial class MMBattleManager : MonoBehaviour
 
     }
 
-
-
-    public void OnClickMainButton()
+    
+    public void OnClickButtonMain()
     {
         switch (phase)
         {
@@ -219,7 +212,7 @@ public partial class MMBattleManager : MonoBehaviour
     }
 
 
-    public void OnClickAwaitButton()
+    public void OnClickButtonAwait()
     {
         if (this.sourceUnit == null)
         {
@@ -240,12 +233,18 @@ public partial class MMBattleManager : MonoBehaviour
         {
             this.EnterState(MMBattleState.SelectedSourceUnit);
         }
-    }
 
+
+        //移动以后
+        //选择卡牌以后
+
+
+
+    }
+    
 
     public void Clear()
     {
-
         foreach (var unit in units1)
         {
             unit.Clear();

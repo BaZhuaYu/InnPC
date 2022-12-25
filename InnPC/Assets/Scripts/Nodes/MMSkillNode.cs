@@ -108,7 +108,7 @@ public partial class MMSkillNode : MMNode
 
         this.keywords = skill.keywords;
 
-        this.name = "Card_" + id;
+        this.name = "Skill_" + id;
 
         this.time = skill.time;
 
@@ -124,7 +124,7 @@ public partial class MMSkillNode : MMNode
         this.skill = null;
         this.textName.text = "";
         this.textNote.text = "";
-        this.name = "Card_0";
+        this.name = "Skill_0";
         this.gameObject.transform.SetParent(null);
     }
 

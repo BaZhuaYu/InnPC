@@ -327,14 +327,26 @@ public class MMCardPanel : MMNode
 
     public void ShowDeck()
     {
-        MMCardIndexPanel.Instance.Accept(deck);
-        MMCardIndexPanel.Instance.OpenUI();
+        MMCardIndexPanel panel = MMCardIndexPanel.Create();
+        List<MMCard> cards = new List<MMCard>();
+        foreach(var card in deck)
+        {
+            cards.Add(card.card);
+        }
+        panel.Accept(cards);
+        MMBattleManager.Instance.AddChild(panel);
     }
 
     public void ShowUsed()
     {
-        MMCardIndexPanel.Instance.Accept(used);
-        MMCardIndexPanel.Instance.OpenUI();
+        MMCardIndexPanel panel = MMCardIndexPanel.Create();
+        List<MMCard> cards = new List<MMCard>();
+        foreach (var card in used)
+        {
+            cards.Add(card.card);
+        }
+        panel.Accept(cards);
+        MMBattleManager.Instance.AddChild(panel);
     }
 
 

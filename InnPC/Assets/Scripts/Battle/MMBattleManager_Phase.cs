@@ -241,7 +241,7 @@ public partial class MMBattleManager
                 {
                     isSourceUnitDead = true;
                 }
-                UnselectSourceCell();
+                HandleUnitActionDone();
                 ClearDeadUnits();
                 break;
 
@@ -281,22 +281,24 @@ public partial class MMBattleManager
             case MMBattlePhase.PickUnit:
                 ShowButton("PickUnit");
                 MMSkillPanel.Instance.OpenUI();
-                avatar.LoadImage("Units/Unit_10000QS");
-
+                //avatar.LoadImage("Units/Unit_10000QS");
+                avatar.LoadImage("");
                 MMCardPanel.Instance.OpenUI();
                 break;
 
             case MMBattlePhase.RoundBegin:
                 ShowButton("PlayerRound");
                 MMSkillPanel.Instance.OpenUI();
-                avatar.LoadImage("Units/Unit_10000QS");
+                //avatar.LoadImage("Units/Unit_10000QS");
+                avatar.LoadImage("");
                 MMCardPanel.Instance.OpenUI();
                 break;
 
             case MMBattlePhase.RoundEnd:
                 ShowButton("PlayerRound");
                 MMSkillPanel.Instance.OpenUI();
-                avatar.LoadImage("Units/Unit_10000QS");
+                //avatar.LoadImage("Units/Unit_10000QS");
+                avatar.LoadImage("");
                 MMCardPanel.Instance.OpenUI();
                 break;
 

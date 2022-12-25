@@ -7,10 +7,13 @@ public class MMHeroNode_PickHero : MonoBehaviour, IPointerClickHandler
 {
 
     MMHeroNode hero;
+
+    public bool isSelected;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        isSelected = false;
     }
 
     // Update is called once per frame
@@ -22,14 +25,18 @@ public class MMHeroNode_PickHero : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         hero = this.gameObject.GetComponent<MMHeroNode>();
-
-        if(MMPickHeroPanel.Instance.heroes.Contains(hero))
+        
+        if(MMPickHeroPanel.Instance.selectedHeroes.Contains(hero))
         {
-            MMPickHeroPanel.Instance.SelectHero(hero);
+            isSelected = false;
+            hero.avatar.SetColor(Color.white);
+            MMPickHeroPanel.Instance.UnselectHero(hero);
         }
         else
         {
-            MMPickHeroPanel.Instance.UnselectHero(hero);
+            isSelected = true;
+            hero.avatar.SetColor(Color.gray);
+            MMPickHeroPanel.Instance.SelectHero(hero);
         }
         
     }

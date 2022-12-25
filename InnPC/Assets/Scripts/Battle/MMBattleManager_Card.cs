@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public partial class MMBattleManager : MonoBehaviour
+public partial class MMBattleManager : MMNode
 {
     int cardindex = 0;
 

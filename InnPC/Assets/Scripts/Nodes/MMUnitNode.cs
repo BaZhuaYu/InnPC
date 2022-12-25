@@ -391,17 +391,17 @@ public partial class MMUnitNode : MMNode
         return obj.GetComponent<MMUnitNode>();
     }
 
-    public static MMUnitNode CreateFromUnit(MMUnit unit)
+    public static MMUnitNode Create(MMUnit unit)
     {
         MMUnitNode node = MMUnitNode.Create();
         node.Accept(unit);
         return node;
     }
 
-    public static MMUnitNode CreateFromID(int id)
+    public static MMUnitNode Create(int id)
     {
         MMUnit unit = MMUnit.Create(id);
-        return MMUnitNode.CreateFromUnit(unit);
+        return MMUnitNode.Create(unit);
     }
 
     

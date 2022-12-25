@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public partial class MMBattleManager : MonoBehaviour
+public partial class MMBattleManager : MMNode
 {
 
     public void LoadLevel(int id)
@@ -27,10 +27,26 @@ public partial class MMBattleManager : MonoBehaviour
             node.group = 1;
             node.Accept(unit);
             units1.Add(node);
-            MMMap.Instance.FindCellOfIndex(i++).Accept(node);
+            //MMMap.Instance.FindCellOfIndex(i++).Accept(node);
+
+            if(node.clss == 1)
+            {
+                MMMap.Instance.FindRandomEmptyCellInRow(2).Accept(node);
+            }
+            else if (node.clss == 2)
+            {
+                MMMap.Instance.FindRandomEmptyCellInRow(1).Accept(node);
+            }
+            else if (node.clss == 3)
+            {
+                MMMap.Instance.FindRandomEmptyCellInRow(0).Accept(node);
+            }
+            else
+            {
+                MMMap.Instance.FindRandomEmptyCellInRow(0).Accept(node);
+            }
         }
     }
-
     
 
     public void AddEnemy(int id, int pos)

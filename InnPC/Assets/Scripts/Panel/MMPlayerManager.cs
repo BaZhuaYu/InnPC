@@ -31,7 +31,17 @@ public class MMPlayerManager : MonoBehaviour
         this.heroes.Add(unit);
     }
 
-
+    public bool HasHero(MMUnit hero)
+    {
+        foreach(var unit  in heroes)
+        {
+            if(unit.key == hero.key)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
 
 }

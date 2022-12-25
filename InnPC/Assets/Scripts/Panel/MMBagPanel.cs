@@ -11,6 +11,10 @@ public class MMBagPanel : MMNode
         Instance = this;
     }
 
+
+    public GameObject content;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,10 +41,11 @@ public class MMBagPanel : MMNode
         float offset = 200f;
         foreach(var hero in MMPlayerManager.Instance.heroes)
         {
-            MMHeroNode node = MMHeroNode.CreateFromUnit(hero);
-            AddChild(node);
+            MMHeroNode node = MMHeroNode.Create(hero);
+            node.transform.SetParent(content.transform);
+            //AddChild(node);
             node.MoveLeft(offset);
-            offset -= 100;
+            offset -= node.FindWidth() * 1.1f;
         }
     }
 
