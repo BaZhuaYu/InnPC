@@ -17,13 +17,14 @@ public class MMDataManager : MonoBehaviour
         string[] levelData = MMDataManager.ReadFile("Data/InnPC - Level");
         string[] itemData = MMDataManager.ReadFile("Data/InnPC - Item");
         string[] cardData = MMDataManager.ReadFile("Data/InnPC - Card");
+        string[] placeData = MMDataManager.ReadFile("Data/InnPC - Place");
 
         Deserialize(skillData, out MMSkill.allKeys, out MMSkill.allValues);
         Deserialize(unitData, out MMUnit.allKeys, out MMUnit.allValues);
         Deserialize(levelData, out MMLevel.allKeys, out MMLevel.allValues);
         Deserialize(itemData, out MMItem.allKeys, out MMItem.allValues);
         Deserialize(cardData, out MMCard.allKeys, out MMCard.allValues);
-
+        Deserialize(placeData, out MMPlace.allKeys, out MMPlace.allValues);
     }
 
 
@@ -33,6 +34,7 @@ public class MMDataManager : MonoBehaviour
         MMSkill.Init();
         MMUnit.Init();
         MMItem.Init();
+        MMPlace.Init();
     }
 
 
@@ -44,15 +46,15 @@ public class MMDataManager : MonoBehaviour
     }
     
 
-    public static void Deserialize(string[] ss, out Dictionary<string, int> allKeys, out Dictionary<int, string> allValues)
+    public static void Deserialize(string[] lines, out Dictionary<string, int> allKeys, out Dictionary<int, string> allValues)
     {
         allKeys = new Dictionary<string, int>();
         allValues = new Dictionary<int, string>();
 
         int index = 0;
-        foreach (var s in ss)
+        foreach (var line in lines)
         {
-            string[] values = s.Split(',');
+            string[] values = line.Split(',');
 
             if (values[0] == null || values[0] == "")
             {
@@ -73,7 +75,7 @@ public class MMDataManager : MonoBehaviour
             else
             {
                 int id = int.Parse(values[allKeys["ID"]]);
-                allValues.Add(id, s);
+                allValues.Add(id, line);
             }
             index++;
         }

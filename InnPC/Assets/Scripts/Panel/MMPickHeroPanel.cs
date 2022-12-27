@@ -72,7 +72,6 @@ public class MMPickHeroPanel : MMNode
             MMHeroNode hero = allHeroes[i];
             hero.transform.SetParent(content.transform);
             hero.transform.localPosition = new Vector2(offsetX, offsetY);
-            Debug.Log(hero.transform.localPosition);
             offsetX += 250;
 
             if (i % 5 == 4)
@@ -92,13 +91,6 @@ public class MMPickHeroPanel : MMNode
         offsetX = 500;
         foreach (var hero in selectedHeroes)
         {
-            //hero.transform.SetParent(selectedContent.transform);
-            //hero.transform.position = Vector3.zero;
-            //hero.MoveToCenter();
-            //hero.MoveLeft(offsetX);
-            //offsetX -= 250;
-
-
             MMUnitNode node = MMUnitNode.Create(hero.unit);
             node.transform.SetParent(selectedContent.transform);
             node.MoveToCenter();

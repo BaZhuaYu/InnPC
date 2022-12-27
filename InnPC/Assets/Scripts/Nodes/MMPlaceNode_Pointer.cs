@@ -18,11 +18,6 @@ public partial class MMPlaceNode : MMNode, IPointerClickHandler
 
     void OnClick()
     {
-        if (MMExplorePanel.Instance.numBuy < 1)
-        {
-            MMTipManager.instance.CreateTip("使用次数不足");
-            return;
-        }
 
         if (MMExplorePanel.Instance.gold < price)
         {
@@ -33,22 +28,21 @@ public partial class MMPlaceNode : MMNode, IPointerClickHandler
         SetEnable(false);
 
         MMExplorePanel.Instance.gold -= price;
-        MMExplorePanel.Instance.numBuy -= 1;
         MMExplorePanel.Instance.UpdateUI();
 
         MMRewardPanel.instance.OpenUI();
 
         switch (key)
         {
-            case "YouJianKeZhan":
+            case "Place_YouJianKeZhan":
                 MMRewardPanel.instance.LoadUnitPanel();
                 break;
 
-            case "LuoYangCheng":
+            case "Place_LuoYangJiaoWai":
                 MMRewardPanel.instance.LoadCardPanel();
                 break;
 
-            case "JiShi":
+            case "Place_JiShi":
                 MMRewardPanel.instance.LoadItemPanel();
                 break;
 

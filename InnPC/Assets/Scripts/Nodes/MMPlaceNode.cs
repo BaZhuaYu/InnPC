@@ -12,6 +12,8 @@ public partial class MMPlaceNode : MMNode
     public GameObject bgPrice;
     public Text textPrice;
 
+    public MMPlace place;
+
     [HideInInspector]
     public string key;
     public int id;
@@ -19,6 +21,10 @@ public partial class MMPlaceNode : MMNode
     public string displayNote;
     public int price;
 
+
+    /// <summary>
+    /// 
+    /// </summary>
     bool isEnabled;
 
 
@@ -42,6 +48,29 @@ public partial class MMPlaceNode : MMNode
     }
 
 
+    public void Accpet(MMPlace place)
+    {
+        this.place = place;
+        Reload();
+    }
+
+    public void Reload()
+    {
+        this.id = place.id;
+        this.key = place.key;
+        this.displayName = place.displayName;
+        this.displayNote = place.displayNote;
+
+        this.price = place.price;
+        isEnabled = true;
+
+    }
+
+    public void Clear()
+    {
+
+    }
+
 
 
     void UpdateUI()
@@ -49,7 +78,7 @@ public partial class MMPlaceNode : MMNode
         this.textName.text = this.displayName;
         this.textNote.text = this.displayNote;
         this.textPrice.text = "" + this.price;
-        this.avatar.LoadImage("Places/Place_" + this.key);
+        this.avatar.LoadImage("Places/" + this.key);
         
         if(isEnabled)
         {
@@ -64,40 +93,28 @@ public partial class MMPlaceNode : MMNode
 
 
 
-    public static MMPlaceNode Create(string key)
+    public static MMPlaceNode Create()
     {
         GameObject obj = Instantiate(Resources.Load("Prefabs/MMPlaceNode") as GameObject);
         obj.name = "MMPlaceNode";
         MMPlaceNode ret = obj.GetComponent<MMPlaceNode>();
-        ret.key = key;
-        ret.isEnabled = true;
+        return ret;
+    }
 
-        switch (key)
-        {
-            case "LuoYangCheng":
-                ret.displayName = "洛阳城";
-                ret.displayNote = "发现一张卡牌";
-                ret.price = 5;
-                break;
+    public static MMPlaceNode Create(MMPlace place)
+    {
+        MMPlaceNode ret = Create();
+        ret.Accpet(place);
+        ret.UpdateUI();
+        return ret;
+    }
 
-            case "JiShi":
-                ret.displayName = "集市";
-                ret.displayNote = "发现一个物品";
-                ret.price = 3;
-                break;
 
-            case "YouJianKeZhan":
-                ret.displayName = "有间客栈";
-                ret.displayNote = "发现一名侠客";
-                ret.price = 8;
-                break;
-
-            default:
-                ret.displayName = "默认地点";
-                ret.displayNote = "默认地点";
-                ret.price = 99;
-                break;
-        }
+    public static MMPlaceNode Create(string key)
+    {
+        MMPlaceNode ret = Create();
+        MMPlace one = MMPlace.FindOne(key);
+        ret.Accpet(one);
 
         ret.UpdateUI();
         return ret;

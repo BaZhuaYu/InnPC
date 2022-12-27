@@ -35,16 +35,16 @@ public class MMExplorePanel : MMNode
     public int levelBattle;
 
     public int levelShop;
-
-    public int numBuy;
-
-    public int probTanSuo;
     
+    public int expTanSuo;
+
+    
+
 
     public List<MMPlaceNode> places;
 
     public List<MMUnit> units;
-    
+
     public List<MMCard> cards;
 
     public List<MMUnit> minions;
@@ -85,11 +85,10 @@ public class MMExplorePanel : MMNode
     public void AcceptProps()
     {
         hp = 100;
-        gold = 0;
+        gold = 100;
         levelBattle = 1;
         levelShop = 1;
-        numBuy = 1;
-        probTanSuo = 100;
+        expTanSuo = 0;
     }
 
 
@@ -109,9 +108,9 @@ public class MMExplorePanel : MMNode
             this.cards.Add(cardy);
         }
 
-        foreach(var unit in units)
+        foreach (var unit in units)
         {
-            foreach(var id in unit.cards)
+            foreach (var id in unit.cards)
             {
                 this.cards.Add(MMCard.Create(id));
             }
@@ -132,13 +131,14 @@ public class MMExplorePanel : MMNode
     {
         this.places = new List<MMPlaceNode>();
 
-        MMPlaceNode place1 = MMPlaceNode.Create("LuoYangCheng");
-        MMPlaceNode place2 = MMPlaceNode.Create("JiShi");
-        MMPlaceNode place3 = MMPlaceNode.Create("YouJianKeZhan");
+        MMPlaceNode place1 = MMPlaceNode.Create("Place_JiShi");
         places.Add(place1);
+
+        //MMPlaceNode place2 = MMPlaceNode.Create("Place_YouJianKeZhan");
         //places.Add(place2);
+
+        //MMPlaceNode place3 = MMPlaceNode.Create("Place_LuoYangJiaoWai");
         //places.Add(place3);
-        //this.places = places;
     }
 
 
@@ -195,7 +195,7 @@ public class MMExplorePanel : MMNode
         int coin = HandleRewardGold();
         MMExplorePanel.Instance.gold += coin;
         
-        numBuy = 2;
+        expTanSuo += 1;
 
         OpenUI();
         MMRewardPanel.instance.CloseUI();
@@ -213,9 +213,9 @@ public class MMExplorePanel : MMNode
 
         int coin = HandleRewardGold();
         MMExplorePanel.Instance.gold += coin;
-
-        numBuy = 2;
         
+        expTanSuo += 1;
+
         OpenUI();
         MMRewardPanel.instance.CloseUI();
 
@@ -227,36 +227,45 @@ public class MMExplorePanel : MMNode
     {
         mainText.text = "开始战斗: " + levelBattle;
         goldText.text = gold + "";
-        numText.text = numBuy + "";
-        textDiscover.text = "探索（" + probTanSuo + "）";
+        
+        textDiscover.text = "探索（" + expTanSuo + "/5）";
 
 
         //Reward
-        float offset = 500f;
-        foreach (var place in places)
+        float offsetX = 500f;
+        float offsetY = 200f;
+
+        for(int i =0;i<places.Count;i++)
         {
+            MMPlaceNode place = places[i];
             place.SetParent(this);
-            place.MoveUp(150);
-            place.MoveLeft(offset);
-            offset -= 500f;
+            place.MoveUp(offsetY);
+            place.MoveLeft(offsetX);
+
+            offsetX -= 500f;
+            if(i %3 == 2)
+            {
+                offsetX = 500;
+                offsetY -= 400;
+            }
         }
 
     }
-    
+
 
     public void Clear()
     {
-        
+
     }
 
-    
+
     public void OnClickMainButton()
     {
-        foreach(var place in places)
+        foreach (var place in places)
         {
             place.SetEnable(true);
         }
-        
+
         this.CloseUI();
         MMBattleManager.Instance.LoadLevel();
         MMBattleManager.Instance.OpenUI();
@@ -265,36 +274,28 @@ public class MMExplorePanel : MMNode
 
     public void OnClickButtonDiscover()
     {
-        if(numBuy < 1)
-        {
-            MMTipManager.instance.CreateTip("没有更多使用次数");
-            return;
-        }
-
-        if(this.places.Count >= MMPlace.places.Count)
+        if (this.places.Count >= MMPlace.places.Count)
         {
             MMTipManager.instance.CreateTip("没有更多地点");
             return;
         }
 
-        numBuy -= 1;
-        
-        if (Random.Range(0,100) > probTanSuo)
+        if (gold < (5 - expTanSuo))
         {
-            probTanSuo += 10;
-            UpdateUI();
-            MMTipManager.instance.CreateTip("什么都没有发现");
+            MMTipManager.instance.CreateTip("银两不足");
             return;
         }
 
-        probTanSuo = 35;
-        MMPlaceNode n = MMPlaceNode.Create(MMPlace.FindOne());
+        gold -= (5 - expTanSuo);
+        levelShop += 1;
+        expTanSuo = 0;
+
+        MMPlaceNode n = MMPlaceNode.Create(FindRandomPlace());
         this.places.Add(n);
         UpdateUI();
-
     }
 
-    
+
     int HandleRewardGold()
     {
         int ret = MMExplorePanel.Instance.levelBattle + 2;
@@ -305,9 +306,43 @@ public class MMExplorePanel : MMNode
         return ret;
     }
 
+
     public void SkipReward()
     {
         MMRewardPanel.instance.CloseUI();
     }
-    
+
+
+
+    MMPlace FindRandomPlace()
+    {
+        MMPlace place = MMPlace.FindRandomOne();
+        if(HasPlace(place))
+        {
+            return FindRandomPlace();
+        }
+        else
+        {
+            return place;
+        }
+    }
+
+
+    bool HasPlace(MMPlace p)
+    {
+        foreach (var place in places)
+        {
+            if (place.id == p.id)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+
+
+
 }
