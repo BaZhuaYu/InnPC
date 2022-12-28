@@ -38,6 +38,8 @@ public class MMExplorePanel : MMNode
     
     public int expTanSuo;
 
+
+    List<int> exps;
     
 
 
@@ -70,6 +72,8 @@ public class MMExplorePanel : MMNode
 
         textDiscover = discoverButton.GetComponentInChildren<Text>();
 
+        exps = new List<int>() {0, 1, 2, 4, 7, 11, 16, 22 };
+
         CloseUI();
     }
 
@@ -100,13 +104,16 @@ public class MMExplorePanel : MMNode
     public void AcceptCards(List<MMCard> cards)
     {
         this.cards = new List<MMCard>();
-        for (int i = 0; i < 3; i++)
-        {
-            MMCard cardx = MMCard.Create(10000);
-            MMCard cardy = MMCard.Create(10000);
-            this.cards.Add(cardx);
-            this.cards.Add(cardy);
-        }
+        
+        this.cards.Add(MMCard.Create(1003));
+        this.cards.Add(MMCard.Create(1003));
+        this.cards.Add(MMCard.Create(1005));
+        this.cards.Add(MMCard.Create(1005));
+        this.cards.Add(MMCard.Create(1005));
+        this.cards.Add(MMCard.Create(1007));
+        this.cards.Add(MMCard.Create(1007));
+        this.cards.Add(MMCard.Create(1007));
+
 
         foreach (var unit in units)
         {
@@ -227,8 +234,8 @@ public class MMExplorePanel : MMNode
     {
         mainText.text = "开始战斗: " + levelBattle;
         goldText.text = gold + "";
-        
-        textDiscover.text = "探索（" + expTanSuo + "/5）";
+        numText.text = "等级：" + levelShop;
+        textDiscover.text = "新地点（" + expTanSuo + "/" + exps[levelShop] + "）";
 
 
         //Reward
@@ -269,6 +276,7 @@ public class MMExplorePanel : MMNode
         this.CloseUI();
         MMBattleManager.Instance.LoadLevel();
         MMBattleManager.Instance.OpenUI();
+        MMBattleManager.Instance.panelGameover.SetActive(false);
     }
 
 
@@ -280,13 +288,13 @@ public class MMExplorePanel : MMNode
             return;
         }
 
-        if (gold < (5 - expTanSuo))
+        if (gold < (exps[levelShop] - expTanSuo))
         {
             MMTipManager.instance.CreateTip("银两不足");
             return;
         }
 
-        gold -= (5 - expTanSuo);
+        gold -= (exps[levelShop] - expTanSuo);
         levelShop += 1;
         expTanSuo = 0;
 
@@ -340,9 +348,5 @@ public class MMExplorePanel : MMNode
         return false;
     }
 
-
-
-
-
-
+    
 }

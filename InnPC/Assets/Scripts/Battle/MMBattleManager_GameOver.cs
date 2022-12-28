@@ -10,15 +10,26 @@ public partial class MMBattleManager : MMNode
         if (CheckGameLost())
         {
             EnterPhase(MMBattlePhase.BattleEnd);
-            CloseUI();
-            MMExplorePanel.Instance.SetLost();
+            //CloseUI();
+            //MMExplorePanel.Instance.SetLost();
+            Debug.Log("aaaaaaaaaa");
+
+            textGameOver.text = "战斗失败";
+            panelGameover.SetActive(true);
+
+
             return true;
         }
         else if (CheckGameWin())
         {
             EnterPhase(MMBattlePhase.BattleEnd);
-            CloseUI();
-            MMExplorePanel.Instance.SetWin();
+            //CloseUI();
+            //MMExplorePanel.Instance.SetWin();
+            Debug.Log("bbbbbbbbbbbbbbbb");
+
+            textGameOver.text = "战斗胜利";
+            panelGameover.SetActive(true);
+
             return true;
         }
         else

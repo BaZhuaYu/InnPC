@@ -39,9 +39,9 @@ public class MMDebugManager : MonoBehaviour
 
     public void GMWin()
     {
-        PrintSkillHistory();
-        //MMBattleManager.Instance.CheckGameWin();
         MMBattleManager.Instance.EnterPhase(MMBattlePhase.BattleEnd);
+        MMBattleManager.Instance.textGameOver.text = "战斗胜利";
+        MMBattleManager.Instance.panelGameover.SetActive(true);
     }
 
 
@@ -53,6 +53,7 @@ public class MMDebugManager : MonoBehaviour
             Debug.Log("Cell: " + unit.cell.index);
         }
     }
+
 
     public void PrintSkillHistory()
     {

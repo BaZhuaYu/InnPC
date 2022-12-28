@@ -253,6 +253,7 @@ public partial class MMBattleManager
             case MMBattlePhase.BattleEnd:
                 isPlayerRound = 0;
                 MMBattleManager.Instance.Clear();
+                panelGameover.gameObject.SetActive(true);
                 break;
 
         }
@@ -270,6 +271,7 @@ public partial class MMBattleManager
                 ShowTitle("Begin");
                 ShowButton("End");
                 MMUnitPanel.Instance.OpenUI();
+                
                 break;
 
             case MMBattlePhase.BattleBegin:
@@ -348,11 +350,19 @@ public partial class MMBattleManager
 
         ClearDeadUnits();
 
-        if (CheckGameOver())
+        if(this.phase == MMBattlePhase.BattleEnd)
         {
-            ShowButton("Game Over");
-            return;
+
         }
+        else
+        {
+            if (CheckGameOver())
+            {
+                ShowButton("Game Over");
+                return;
+            }
+        }
+        
 
 
         switch (phase)

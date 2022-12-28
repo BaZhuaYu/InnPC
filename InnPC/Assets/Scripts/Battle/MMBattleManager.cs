@@ -26,6 +26,10 @@ public partial class MMBattleManager : MMNode
     public Button buttonDeck;
     public Button buttonUsed;
     public MMNode avatar;
+    public GameObject panelGameover;
+    public Text textGameOver;
+    public Button buttonGameOver;
+    public GameObject panelSettings;
 
     //
     public MMBattlePhase phase;
@@ -68,9 +72,10 @@ public partial class MMBattleManager : MMNode
         //PanelAvatar
         avatar = GameObject.Find("Avatar").GetComponent<MMNode>();
 
+        panelGameover.SetActive(false);
+        buttonGameOver.onClick.AddListener(OnClickGameOverButton);
 
-        //buttonAttack.onClick.AddListener(OnClickAttackButton);
-
+        panelSettings.SetActive(false);
 
         MMCardPanel.Instance.CloseUI();
         MMSkillPanel.Instance.CloseUI();
@@ -278,18 +283,22 @@ public partial class MMBattleManager : MMNode
     }
 
 
-    public void OnClickAttackButton()
+    public void OnClickGameOverButton()
     {
-        MMEffect effect = new MMEffect();
-        effect.type = MMEffectType.Attack;
-        effect.source = sourceUnit;
-        effect.target = sourceUnit.FindTarget();
-        effect.userinfo.Add("TempATK", 0);
-        effect.userinfo.Add("TempDEF", 0);
-        ExecuteEffect(effect);
+        panelGameover.SetActive(false);
+        this.CloseUI();
+        MMExplorePanel.Instance.SetWin();
+    }
+    
 
-        EnterPhase(MMBattlePhase.UnitEnd);
+    public void OpenSettingPanel()
+    {
+        panelSettings.SetActive(true);
     }
 
+    public void CloseSettingPanel()
+    {
+        panelSettings.SetActive(false);
+    }
 
 }
