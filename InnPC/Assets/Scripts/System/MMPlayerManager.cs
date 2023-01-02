@@ -23,6 +23,10 @@ public class MMPlayerManager : MonoBehaviour
     {
         heroes = new List<MMUnit>();
         diamond = 100;
+
+        AddHero(MMUnit.Create(10100));
+        AddHero(MMUnit.Create(10200));
+        AddHero(MMUnit.Create(10300));
     }
 
     

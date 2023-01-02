@@ -79,6 +79,7 @@ public partial class MMCell : MMNode
             case MMNodeHighlight.Normal:
                 //GetComponent<Image>().color = MMUtility.FindColorWhite();
                 LoadImage("");
+                //LoadImage("UI/aaa/CellFill_Blue");
                 break;
             case MMNodeHighlight.Red:
 //                GetComponent<Image>().color = MMUtility.FindColorRed();

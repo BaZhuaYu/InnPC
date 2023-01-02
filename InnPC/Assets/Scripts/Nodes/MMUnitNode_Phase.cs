@@ -13,6 +13,7 @@ public partial class MMUnitNode : MMNode
     public void OnRoundBegin()
     {
         tempCell = this.cell;
+        //isActived = false;
         if (this.HasSkillEnabled(10300))
         {
             this.IncreaseAP(1);
@@ -21,7 +22,14 @@ public partial class MMUnitNode : MMNode
 
     public void OnRoundEnd()
     {
-        
+        if (isActived)
+        {
+            isActived = false;
+        }
+        else
+        {
+            IncreaseAP(1);
+        }
     }
 
 

@@ -132,6 +132,7 @@ public partial class MMCardNode : MMNode
 
     public void DestroySelf()
     {
+        StopAnimation();
         Destroy(gameObject);
     }
 

@@ -168,12 +168,11 @@ public class MMCardPanel : MMNode
 
     public void UpdateUI()
     {
-        Debug.Log("MMCardPanel UpdateUI");
 
         foreach(var card in hand)
         {
             card.SetActive(true);
-            card.SetParent(this);
+            card.transform.SetParent(gameObject.transform);
         }
 
         SortHand();
@@ -189,7 +188,9 @@ public class MMCardPanel : MMNode
 
             //float x = this.FindWidth() / 2f - hand[i].FindWidth() / 2f - (float)i / (float)(hand.Count + 1) * this.FindWidth();
 
-            hand[i].transform.localPosition = new Vector2(x, hand[i].transform.localPosition.y);
+            //hand[i].transform.localPosition = new Vector2(x, hand[i].transform.localPosition.y);
+            
+            hand[i].StartAnimationMoveTo(new Vector2(x, hand[i].transform.localPosition.y));
 
             if (selectingCard != null && this.selectingCard == hand[i])
             {

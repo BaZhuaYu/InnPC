@@ -114,46 +114,6 @@ public partial class MMBattleManager
     void OnExitPhase(MMBattlePhase p)
     {
         Debug.Log("--------" + p.ToString() + "--------" + isPlayerRound);
-
-        switch (this.phase)
-        {
-            case MMBattlePhase.BattleBegin:
-                break;
-
-            case MMBattlePhase.RoundBegin:
-                break;
-
-            case MMBattlePhase.PickUnit:
-                break;
-
-            case MMBattlePhase.UnitBegin:
-
-                break;
-
-            case MMBattlePhase.UnitActing:
-                
-                break;
-
-            case MMBattlePhase.UnitEnd:
-                break;
-
-            case MMBattlePhase.RoundEnd:
-                isSourceUnitDead = false;
-                if (isPlayerRound == 1)
-                {
-                    IncreaseAPUnits(units1);
-                }
-                else if (isPlayerRound == 2)
-                {
-                    IncreaseAPUnits(units2);
-                }
-                isPlayerRound = (isPlayerRound + 1) % 2 + 1;
-                break;
-
-            case MMBattlePhase.BattleEnd:
-                break;
-
-        }
     }
 
 
@@ -169,13 +129,22 @@ public partial class MMBattleManager
 
                 MMCardPanel.Instance.LoadDeck(MMExplorePanel.Instance.cards);
                 MMCardPanel.Instance.ShuffleDeck();
-                
+                isPlayerRound = 1;
+
                 DebugConfig();
 
                 DrawCards(4, true);
-                isPlayerRound += 1;
+                
+                foreach(var unit in units1)
+                {
+                    unit.OnBattleBegin();
+                }
+                foreach (var unit in units2)
+                {
+                    unit.OnBattleBegin();
+                }
 
-                BroadCast(MMTriggerTime.OnBattleBegin);
+
                 break;
 
             case MMBattlePhase.RoundBegin:
@@ -184,18 +153,23 @@ public partial class MMBattleManager
 
                 if (isPlayerRound == 1)
                 {
+                    MMRoundNode node = MMRoundNode.Create();
+                    node.SetPlayerRound();
+
                     DrawCards(2);
                     foreach (var unit in units1)
                     {
-                        unit.tempCell = unit.cell;
-                        unit.isActived = false;
+                        unit.OnRoundBegin();
                     }
                 }
                 else
                 {
+                    MMRoundNode node = MMRoundNode.Create();
+                    node.SetEnemyRound();
+
                     foreach (var unit in units2)
                     {
-                        unit.isActived = false;
+                        unit.OnRoundBegin();
                     }
 
                     tempEnemyUnits = new List<MMUnitNode>();
@@ -208,8 +182,9 @@ public partial class MMBattleManager
                     }
                 }
 
+                
                 EnterState(MMBattleState.Normal);
-                BroadCast(MMTriggerTime.OnRoundBegin);
+                
                 break;
 
             case MMBattlePhase.PickUnit:
@@ -218,7 +193,8 @@ public partial class MMBattleManager
             case MMBattlePhase.UnitBegin:
                 Debug.Log("UnitBegin: " + " " + sourceUnit.displayName + " " + sourceUnit.cell.index);
                 sourceUnit.OnActive();
-                MMSkillPanel.Instance.Accept(sourceUnit.skills);
+                //EnterState(MMBattleState.SelectedSourceUnit);
+                MMSkillPanel.Instance.Accept(sourceUnit);
                 break;
 
 
@@ -241,12 +217,32 @@ public partial class MMBattleManager
                 {
                     isSourceUnitDead = true;
                 }
+                
                 HandleUnitActionDone();
+                EnterState(MMBattleState.None);
                 ClearDeadUnits();
                 break;
 
             case MMBattlePhase.RoundEnd:
-                BroadCast(MMTriggerTime.OnRoundEnd);
+                
+                if (isPlayerRound == 1)
+                {
+                    foreach (var unit in units1)
+                    {
+                        unit.OnRoundEnd();
+                    }
+                }
+                else 
+                {
+                    foreach (var unit in units2)
+                    {
+                        unit.OnRoundEnd();
+                    }
+                }
+
+                isSourceUnitDead = false;
+                isPlayerRound = (isPlayerRound + 1) % 2;
+                
                 break;
 
 
@@ -264,7 +260,6 @@ public partial class MMBattleManager
     {
         ClosePanels();
         
-
         switch (phase)
         {
             case MMBattlePhase.BattleEnd:
@@ -282,48 +277,44 @@ public partial class MMBattleManager
 
             case MMBattlePhase.PickUnit:
                 ShowButton("PickUnit");
-                MMSkillPanel.Instance.OpenUI();
-                //avatar.LoadImage("Units/Unit_10000QS");
-                avatar.LoadImage("");
                 MMCardPanel.Instance.OpenUI();
+                MMSkillPanel.Instance.OpenUI();
+                MMSkillPanel.Instance.Clear();
                 break;
 
             case MMBattlePhase.RoundBegin:
                 ShowButton("PlayerRound");
-                MMSkillPanel.Instance.OpenUI();
-                //avatar.LoadImage("Units/Unit_10000QS");
-                avatar.LoadImage("");
                 MMCardPanel.Instance.OpenUI();
+                MMSkillPanel.Instance.OpenUI();
+                MMSkillPanel.Instance.Clear();
                 break;
 
             case MMBattlePhase.RoundEnd:
                 ShowButton("PlayerRound");
-                MMSkillPanel.Instance.OpenUI();
-                //avatar.LoadImage("Units/Unit_10000QS");
-                avatar.LoadImage("");
                 MMCardPanel.Instance.OpenUI();
+                MMSkillPanel.Instance.OpenUI();
+                MMSkillPanel.Instance.Clear();
                 break;
 
             case MMBattlePhase.UnitBegin:
                 ShowButton("UnitBegin");
                 sourceUnit.HandleHighlight(MMNodeHighlight.Green);
-                avatar.LoadImage("Units/" + sourceUnit.key + "A");
                 MMCardPanel.Instance.OpenUI();
                 MMSkillPanel.Instance.OpenUI();
+                MMSkillPanel.Instance.Accept(sourceUnit);
                 break;
 
             case MMBattlePhase.UnitActing:
                 ShowButton("UnitActing");
                 sourceUnit.HandleHighlight(MMNodeHighlight.Green);
-                avatar.LoadImage("Units/" + sourceUnit.key + "A");
                 MMCardPanel.Instance.OpenUI();
                 MMSkillPanel.Instance.OpenUI();
+                MMSkillPanel.Instance.Accept(sourceUnit);
                 break;
 
             case MMBattlePhase.UnitEnd:
                 ShowButton("UnitEnd");
                 MMCardPanel.Instance.OpenUI();
-                //MMSkillPanel.Instance.OpenUI();
                 break;
 
         }
@@ -333,7 +324,7 @@ public partial class MMBattleManager
         {
             backgroundNote.SetColor(MMUtility.FindColorLightGreen());
         }
-        else if (isPlayerRound == 1)
+        else if (isPlayerRound == 2)
         {
             backgroundNote.SetColor(MMUtility.FindColorLightRed());
         }
@@ -363,8 +354,7 @@ public partial class MMBattleManager
             }
         }
         
-
-
+        
         switch (phase)
         {
             case MMBattlePhase.BattleBegin:
@@ -395,20 +385,29 @@ public partial class MMBattleManager
                 }
                 else
                 {
-                    foreach (var unit in tempEnemyUnits)
+                    MMUnitNode unit = FindFirstEnemy();
+                    if(unit == null)
                     {
-                        if (unit.ap == unit.maxAP && unit.isActived == false)
-                        {
-                            TryEnterPhase_UnitBegin(unit);
-                            return;
-                        }
+                        EnterPhase(MMBattlePhase.RoundEnd);
                     }
-                    EnterPhase(MMBattlePhase.RoundEnd);
+                    else
+                    {
+                        sourceUnit = unit;
+                        Invoke("AutoBegin", 0.5f);
+                    }
                 }
                 break;
 
             case MMBattlePhase.UnitBegin:
-                EnterPhase(MMBattlePhase.UnitActing);
+                if (isPlayerRound == 1)
+                {
+                    EnterPhase(MMBattlePhase.UnitActing);
+                }
+                else
+                {
+                    Invoke("AutoSelectTarget", 1.0f);
+                    Invoke("AutoActing", 2.0f);
+                }
                 break;
 
             case MMBattlePhase.UnitActing:
@@ -418,16 +417,23 @@ public partial class MMBattleManager
                 }
                 else
                 {
-                    EnterPhase(MMBattlePhase.UnitEnd);
+                    Invoke("AutoEnd", 2.0f);
                 }
                 break;
 
             case MMBattlePhase.UnitEnd:
-                EnterPhase(MMBattlePhase.PickUnit);
+                if (isPlayerRound == 1)
+                {
+                    EnterPhase(MMBattlePhase.PickUnit);
+                }
+                else
+                {
+                    Invoke("AutoPickUnit", 0.5f);
+                }
                 break;
 
             case MMBattlePhase.RoundEnd:
-                EnterPhase(MMBattlePhase.RoundBegin);
+                Invoke("AutoRoundBegin", 2.0f);
                 break;
 
             case MMBattlePhase.BattleEnd:
@@ -443,6 +449,59 @@ public partial class MMBattleManager
         EnterPhase(MMBattlePhase.UnitBegin);
     }
 
+    void AutoBegin()
+    {
+        EnterPhase(MMBattlePhase.UnitBegin);
+    }
+
+    void AutoActing()
+    {
+        EnterPhase(MMBattlePhase.UnitActing);
+    }
+    
+    void AutoEnd()
+    {
+        EnterPhase(MMBattlePhase.UnitEnd);
+    }
+
+    void AutoPickUnit()
+    {
+        EnterPhase(MMBattlePhase.PickUnit);
+    }
+
+    void AutoRoundBegin()
+    {
+        EnterPhase(MMBattlePhase.RoundBegin);
+    }
+
+    void AutoSelectTarget()
+    {
+        MMUnitNode target = sourceUnit.FindTarget();
+        if(target == null)
+        {
+
+        }
+        else
+        {
+            target.HandleHighlight(MMNodeHighlight.Red);
+        }
+    }
+
+
+
+    MMUnitNode FindFirstEnemy()
+    {
+        foreach (var unit in tempEnemyUnits)
+        {
+            if (unit.ap == unit.maxAP && unit.isActived == false)
+            {
+                return unit;
+            }
+        }
+
+        return null;
+    }
+
 
 
     /// <summary>
@@ -450,14 +509,6 @@ public partial class MMBattleManager
     /// </summary>
     /// <param name="units"></param>
 
-
-    private void IncreaseAPUnits(List<MMUnitNode> units)
-    {
-        foreach (var unit in units)
-        {
-            unit.IncreaseAP(1);
-        }
-    }
 
 
     public void ClearUnitEnd()

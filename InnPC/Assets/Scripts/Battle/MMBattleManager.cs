@@ -25,7 +25,6 @@ public partial class MMBattleManager : MMNode
     public Text textHP;
     public Button buttonDeck;
     public Button buttonUsed;
-    public MMNode avatar;
     public GameObject panelGameover;
     public Text textGameOver;
     public Button buttonGameOver;
@@ -68,9 +67,7 @@ public partial class MMBattleManager : MMNode
         buttonAwait = GameObject.Find("AwaitButton").GetComponent<Button>();
         buttonAwait.onClick.AddListener(OnClickButtonAwait);
         textHP = GameObject.Find("TextHP").GetComponent<Text>();
-
-        //PanelAvatar
-        avatar = GameObject.Find("Avatar").GetComponent<MMNode>();
+        
 
         panelGameover.SetActive(false);
         buttonGameOver.onClick.AddListener(OnClickGameOverButton);

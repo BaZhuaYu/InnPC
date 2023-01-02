@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class MMDebugManager : MonoBehaviour
 {
+    public static MMDebugManager Instance;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     public int cardid;
 

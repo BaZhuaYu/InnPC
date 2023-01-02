@@ -158,7 +158,6 @@ public partial class MMBattleManager
 
             case MMBattleState.SelectedSourceUnit:
                 ClearTarget();
-                ClearSelectSkill();
                 ClearSelectCard();
                 EnterPhase(MMBattlePhase.UnitBegin);
                 break;
@@ -169,7 +168,7 @@ public partial class MMBattleManager
                 break;
 
             case MMBattleState.SelectingSkill:
-                MMSkillPanel.Instance.SetSelectedSkill(selectingSkill);
+                //MMSkillPanel.Instance.SetSelectedSkill(selectingSkill);
                 //HandleStateSelectingSkill();
                 break;
 
@@ -249,7 +248,6 @@ public partial class MMBattleManager
     public void TryEnterStateSelectedSourceUnit(MMUnitNode unit)
     {
         sourceUnit = unit;
-        //EnterPhase(MMBattlePhase.UnitBegin);
         EnterState(MMBattleState.SelectedSourceUnit);
     }
 
@@ -431,8 +429,8 @@ public partial class MMBattleManager
             sourceUnit = null;
             return;
         }
-
-        sourceUnit.cell.HandleHighlight(MMNodeHighlight.Normal);
+        
+        sourceUnit.HideSelected();
         sourceUnit.HideMoveCells();
         sourceUnit.HideAttackCells();
         sourceUnit = null;

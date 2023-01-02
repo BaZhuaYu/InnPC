@@ -199,7 +199,17 @@ public partial class MMUnitNode : MMNode
 
     public void IncreaseAP(int value)
     {
+        if(this.id == 10200)
+        {
+            Debug.LogWarning("IncreaseAP xxxxxxxxxxxxxxxxxxxx");
+        }
+
         this.ap += value;
+
+        MMAPNode node = MMAPNode.Create();
+        node.ShowIncrease();
+        node.SetParent(this);
+        node.MoveUp(50);
 
         if (this.ap >= maxAP)
         {
@@ -213,6 +223,11 @@ public partial class MMUnitNode : MMNode
     public void DecreaseAP(int value)
     {
         this.ap -= value;
+
+        MMAPNode node = MMAPNode.Create();
+        node.ShowDecrease();
+        node.SetParent(this);
+        node.MoveUp(50);
 
         if (this.ap <= 0)
         {

@@ -41,9 +41,7 @@ public partial class MMBattleManager
 
         
         this.historySkills[round].Add(selectingSkill);
-
-        MMSkillPanel.Instance.PlaySkill(selectingSkill);
-
+        
 
         //Power Card
         if(selectingSkill.type == MMSkillType.Power)
@@ -76,30 +74,9 @@ public partial class MMBattleManager
 
 
 
-
-
-
-
-
-
     public void DrawCards(int count, bool instance = false)
     {
         MMCardPanel.Instance.DrawCard(count, instance);
-    }
-
-
-    public void DrawSkill()
-    {
-        //MMCardPanel.Instance.Draw(count);
-
-        MMSkillPanel.Instance.Accept(sourceUnit.skills);
-    }
-
-
-    public void ClearSelectSkill()
-    {
-        this.selectingSkill = null;
-        MMSkillPanel.Instance.selectingSkill = null;
     }
     
 

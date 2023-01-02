@@ -99,6 +99,13 @@ public class MMExplorePanel : MMNode
     public void AcceptHeroes(List<MMUnit> units)
     {
         this.units = units;
+        //foreach(var unit in units)
+        //{
+        //    unit.maxHP += 30;
+        //    unit.hp += 30;
+        //    unit.atk += 10;
+        //    unit.ap += 5;
+        //}
     }
 
     public void AcceptCards(List<MMCard> cards)

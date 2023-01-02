@@ -23,62 +23,6 @@ public partial class MMBattleManager : MMNode
         return ret;
     }
 
-
-    public void BroadCast(MMTriggerTime time)
-    {
-        MMDebugManager.Warning("BroadCast: " + time);
-
-        List<MMUnitNode> units = null;
-
-        if (isPlayerRound == 1)
-        {
-            units = units1;
-        }
-        else
-        {
-            units = units2;
-        }
-
-        switch (time)
-        {
-            case MMTriggerTime.OnBattleBegin:
-                foreach (var unit in units)
-                {
-                    unit.OnBattleBegin();
-                }
-                break;
-
-            case MMTriggerTime.OnRoundBegin:
-                foreach (var unit in units)
-                {
-                    unit.OnRoundBegin();
-                }
-                break;
-
-            case MMTriggerTime.OnRoundEnd:
-                foreach (var unit in units)
-                {
-                    unit.OnRoundEnd();
-                }
-                break;
-        }
-
-
-
-        //foreach (var unit in units)
-        //{
-        //foreach (var skill in unit.skills)
-        //{
-        //    if (skill.time == time && skill.isEnabled)
-        //    {
-        //        MMTipManager.instance.CreateSkillTip(skill);
-        //        MMEffect effect = skill.CreateEffect();
-        //        ExecuteEffect(effect);
-        //    }
-        //}
-        //}
-    }
-
     
 
     public void ExecuteEffect(MMEffect effect)

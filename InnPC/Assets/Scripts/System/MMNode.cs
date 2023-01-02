@@ -10,12 +10,18 @@ public class MMNode : MonoBehaviour
 
     [HideInInspector]
     public string userinfo;
-
+    
 
     private void Start()
     {
         nodeHighlight = MMNodeHighlight.Normal;
     }
+
+    private void Update()
+    {
+        
+    }
+
 
 
     public void LoadImage(string key)
@@ -28,17 +34,18 @@ public class MMNode : MonoBehaviour
     {
         RectTransform rect = GetComponent<RectTransform>();
 
-        float x =transform.position.x;
+        float x = transform.position.x;
         float y = transform.position.y;
         float w = rect.rect.width;
         float h = rect.rect.height;
-        
-        if (pos.x > x - w/2f && pos.x < x + w/2f) { 
+
+        if (pos.x > x - w / 2f && pos.x < x + w / 2f)
+        {
             if (pos.y > y - h / 2f && pos.y < y + h / 2f)
             {
                 return true;
             }
-            
+
         }
 
         return false;
@@ -54,8 +61,8 @@ public class MMNode : MonoBehaviour
     {
         this.gameObject.SetActive(false);
     }
-    
-    
+
+
 
     public MMNode FindParent()
     {
@@ -103,7 +110,7 @@ public class MMNode : MonoBehaviour
         float y = transform.localPosition.y;
         transform.localPosition = new Vector2(x, y);
     }
-    
+
     public void MoveToParentBottomOffset(float offset = 0f)
     {
         MMNode parent = FindParent();
@@ -197,5 +204,33 @@ public class MMNode : MonoBehaviour
         this.gameObject.SetActive(flag);
     }
 
+
+    Vector2 tempPosition;
     
+    public void StartAnimationMoveTo(Vector2 pos)
+    {
+        tempPosition = pos;
+        MMDebugManager.Instance.gameObject.GetComponent<MonoBehaviour>().StartCoroutine(MoveToAAA());
+        //StartCoroutine(MoveToAAA());
+    }
+
+
+    IEnumerator MoveToAAA()
+    {
+        int i = 0;
+        while (i++ < 1000)
+        {
+            if(this.gameObject.activeSelf)
+            {
+                this.transform.localPosition = Vector3.Lerp(transform.localPosition, tempPosition, 0.01f);
+            }
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
+    public void StopAnimation()
+    {
+        MMDebugManager.Instance.gameObject.GetComponent<MonoBehaviour>().StopAllCoroutines();
+    }
+
 }

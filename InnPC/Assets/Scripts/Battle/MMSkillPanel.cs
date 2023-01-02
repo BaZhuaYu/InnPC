@@ -6,17 +6,18 @@ public class MMSkillPanel : MMNode
 {
 
     public static MMSkillPanel Instance;
-    
+
     private void Awake()
     {
         Instance = this;
     }
 
+    public MMNode avatar;
+
     public GameObject skillBorder;
 
     public List<MMSkillNode> skills;
-
-    public MMSkillNode selectingSkill;
+    
 
 
     private void Start()
@@ -25,14 +26,15 @@ public class MMSkillPanel : MMNode
     }
 
 
-    public void Accept(List<MMSkillNode> skills)
+    public void Accept(MMUnitNode unit)
     {
-        Clear();
-        this.skills = skills;
+        avatar.LoadImage("Units/" + unit.key + "A");
+        this.skills = unit.skills;
+
         Reload();
     }
 
-
+    
     public void Reload()
     {
         UpdateUI();
@@ -41,12 +43,12 @@ public class MMSkillPanel : MMNode
 
     public void Clear()
     {
-        foreach(var skill in skills)
+        this.avatar.LoadImage("");
+        foreach (var skill in skills)
         {
             skill.Clear();
         }
         skills = new List<MMSkillNode>();
-        selectingSkill = null;
         Reload();
     }
 
@@ -73,21 +75,5 @@ public class MMSkillPanel : MMNode
         }
     }
 
-
-
-
-    public void SetSelectedSkill(MMSkillNode skill)
-    {
-        this.selectingSkill = skill;
-        Reload();
-    }
-
-
-    public void PlaySkill(MMSkillNode skill)
-    {
-        this.selectingSkill = null;
-        Reload();
-    }
     
-
 }

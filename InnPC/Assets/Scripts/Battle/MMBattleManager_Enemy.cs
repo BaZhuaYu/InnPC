@@ -28,11 +28,11 @@ public partial class MMBattleManager : MMNode
 
     public void AutoUnitActing()
     {
+        Debug.Log(sourceUnit.displayName + " AutoUnitActing");
         MMUnitNode dest = sourceUnit.FindTarget();
         sourceUnit.isActived = true;
         if (dest == null)
         {
-
             sourceUnit.DecreaseAP(sourceUnit.maxAP);
             MMExplorePanel.Instance.hp -= 10;
         }

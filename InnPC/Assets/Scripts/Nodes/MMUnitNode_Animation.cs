@@ -156,18 +156,20 @@ public partial class MMUnitNode : MMNode
 
     public void ShowSelected()
     {
-        if(this.cell !=null)
-        {
-            this.cell.HandleHighlight(MMNodeHighlight.Green);
-        }
+        //if(this.cell !=null)
+        //{
+        //    this.cell.HandleHighlight(MMNodeHighlight.Green);
+        //}
+        this.HandleHighlight(MMNodeHighlight.Green);
     }
 
     public void HideSelected()
     {
-        if (this.cell != null)
-        {
-            this.cell.HandleHighlight(MMNodeHighlight.Normal);
-        }
+        //if (this.cell != null)
+        //{
+        //    this.cell.HandleHighlight(MMNodeHighlight.Normal);
+        //}
+        this.HandleHighlight(MMNodeHighlight.Normal);
     }
 
 
