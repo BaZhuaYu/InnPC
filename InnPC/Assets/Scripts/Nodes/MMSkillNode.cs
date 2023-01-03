@@ -15,9 +15,7 @@ public partial class MMSkillNode : MMNode
     public MMNode icon;
     public Text textName;
     public Text textNote;
-    public Text textCost;
-    public Text textATK;
-    public Text textDEF;
+
 
 
     /// <summary>
@@ -29,20 +27,14 @@ public partial class MMSkillNode : MMNode
     public string displayName;
     public string displayNote;
     
-    public int cost;
-
-    public MMArea area;
-    public MMEffectTarget target;
-
-    public MMTriggerTime time;
-
+    
     public List<MMSkillKeyWord> keywords;
     
     public MMEffectType effectType;
+    public MMEffectTarget target;
+    public MMTriggerTime time;
+    public MMArea area;
     public int value;
-
-    public int tempATK;
-    public int tempDEF;
     
 
     /// <summary>
@@ -84,15 +76,12 @@ public partial class MMSkillNode : MMNode
         this.displayName = skill.displayName;
         this.displayNote = skill.displayNote;
         
-        this.cost = skill.cost;
         this.area = skill.area;
         
         this.effectType = skill.effect;
         this.target = skill.target;
         this.value = skill.value;
-
-        this.tempATK = skill.tempATK;
-        this.tempDEF = skill.tempDEF;
+        
 
         this.keywords = skill.keywords;
 

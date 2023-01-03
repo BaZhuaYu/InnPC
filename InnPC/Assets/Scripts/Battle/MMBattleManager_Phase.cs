@@ -397,7 +397,7 @@ public partial class MMBattleManager
                     else
                     {
                         sourceUnit = unit;
-                        Invoke("AutoBegin", 0.5f);
+                        Invoke("AutoBegin", 1.0f);
                     }
                 }
                 break;

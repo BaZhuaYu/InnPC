@@ -47,14 +47,27 @@ public partial class MMCell : MMNode, IPointerEnterHandler, IPointerExitHandler,
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        Debug.Log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
         if(MMBattleManager.Instance.phase == MMBattlePhase.UnitActing)
         {
-            MMBattleManager.Instance.sourceUnit.ShowWillMove(this);
+            if(MMBattleManager.Instance.sourceUnit.isMoved)
+            {
+
+            }
+            else
+            {
+                if(MMBattleManager.Instance.sourceUnit.FindMovableCells().Contains(this))
+                {
+                    MMBattleManager.Instance.sourceUnit.ShowWillMove(this);
+                }
+            }
+            
         }
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        Debug.Log("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
         if (MMBattleManager.Instance.phase == MMBattlePhase.UnitActing)
         {
             MMBattleManager.Instance.sourceUnit.HideWillMove();

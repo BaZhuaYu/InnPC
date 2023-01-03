@@ -120,6 +120,7 @@ public partial class MMCardNode : MMNode
 
     public void Clear()
     {
+        Debug.Log("Clear: " + card.id);
         this.card = null;
         this.textName.text = "";
         this.textNote.text = "";

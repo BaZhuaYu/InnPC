@@ -20,7 +20,7 @@ public partial class MMUnitNode : MMNode
     public MMNode border;
     public MMNode iconRage;
 
-
+    [HideInInspector]
     public MMUnitNode target;
 
     public int group;

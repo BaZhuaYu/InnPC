@@ -241,8 +241,7 @@ public class MMCardPanel : MMNode
             foreach (var card in hand)
             {
                 card.sortingOrder = card.id;
-                card.MoveToCenterY();
-                card.MoveDown(card.FindHeight() * 0.5f);
+                card.ShowDown();
             }
         }
         else
@@ -252,7 +251,7 @@ public class MMCardPanel : MMNode
                 if (card.clss == MMBattleManager.Instance.sourceUnit.clss)
                 {
                     card.sortingOrder = card.id;
-                    card.MoveToCenterY();
+                    card.ShowMiddleY();
                 }
                 else if (card.clss == 0)
                 {
@@ -262,8 +261,7 @@ public class MMCardPanel : MMNode
                 else
                 {
                     card.sortingOrder = card.id + 200000;
-                    card.MoveToCenterY();
-                    card.MoveDown(card.FindHeight() * 0.5f);
+                    card.ShowDown();
                 }
             }
         }

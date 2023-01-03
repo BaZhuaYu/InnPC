@@ -67,29 +67,26 @@ public class MMCardNode_Battle : MonoBehaviour, IPointerClickHandler, IPointerEn
         card.transform.SetSiblingIndex(1000);
         if(MMBattleManager.Instance.sourceUnit == null)
         {
-            card.MoveToCenterY();
+            card.ShowMiddleY();
         }
         else
         {
-            card.MoveToCenterY();
-            card.MoveUp(20);
+            card.ShowUp();
         }
     }
 
     void HideCard()
     {
-        card.MoveToCenterY();
-        card.MoveDown(card.FindHeight() * 0.5f);
+        card.ShowDown();
         card.transform.SetSiblingIndex(siblingIndex);
 
         if (MMBattleManager.Instance.sourceUnit == null)
         {
-            card.MoveToCenterY();
-            card.MoveDown(card.FindHeight() * 0.5f);
+            card.ShowDown();
         }
         else
         {
-            card.MoveToCenterY();
+            card.ShowMiddleY();
         }
 
     }

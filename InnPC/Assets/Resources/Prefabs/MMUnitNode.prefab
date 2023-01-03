@@ -179,6 +179,7 @@ GameObject:
   - component: {fileID: 2499764044201349230}
   - component: {fileID: 3072256244396964205}
   - component: {fileID: 3709504586465709136}
+  - component: {fileID: 7906247994787276789}
   m_Layer: 5
   m_Name: IconRage
   m_TagString: Untagged
@@ -244,6 +245,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7906247994787276789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2198758065855554152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 186771d003c973b4c8e6b04790937335, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nodeHighlight: 0
+  userinfo: 
 --- !u!1 &2808858078975151168
 GameObject:
   m_ObjectHideFlags: 0
@@ -728,6 +743,7 @@ MonoBehaviour:
   textAP: {fileID: 0}
   textATK: {fileID: 7272343483609157455}
   border: {fileID: 3549246749310987347}
+  iconRage: {fileID: 7906247994787276789}
   target: {fileID: 0}
   group: 0
   key: 

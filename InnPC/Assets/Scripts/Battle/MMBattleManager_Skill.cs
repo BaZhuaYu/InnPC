@@ -8,8 +8,6 @@ public partial class MMBattleManager
     public void HandlePlaySkill()
     {
         
-        sourceUnit.DecreaseAP(selectingSkill.cost);
-        
 
         MMEffect effect = selectingSkill.CreateEffect();
         effect.target = this.targetUnit;

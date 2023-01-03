@@ -285,12 +285,6 @@ public partial class MMBattleManager
             MMTipManager.instance.CreateTip("需要选中己方英雄");
             return;
         }
-
-        if (skill.cost > sourceUnit.ap)
-        {
-            MMTipManager.instance.CreateTip("行动力不足");
-            return;
-        }
         
         selectingSkill = skill;
         EnterState(MMBattleState.SelectingSkill);
