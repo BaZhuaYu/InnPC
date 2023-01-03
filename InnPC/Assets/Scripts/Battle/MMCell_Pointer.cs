@@ -47,12 +47,18 @@ public partial class MMCell : MMNode, IPointerEnterHandler, IPointerExitHandler,
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        
+        if(MMBattleManager.Instance.phase == MMBattlePhase.UnitActing)
+        {
+            MMBattleManager.Instance.sourceUnit.ShowWillMove(this);
+        }
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        
+        if (MMBattleManager.Instance.phase == MMBattlePhase.UnitActing)
+        {
+            MMBattleManager.Instance.sourceUnit.HideWillMove();
+        }
     }
 
 }

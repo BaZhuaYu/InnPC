@@ -16,7 +16,7 @@ public partial class MMUnitNode : MMNode
         //isActived = false;
         if (this.HasSkillEnabled(10300))
         {
-            this.IncreaseAP(1);
+            this.IncreaseAP(1, true);
         }
     }
 
@@ -28,22 +28,75 @@ public partial class MMUnitNode : MMNode
         }
         else
         {
-            IncreaseAP(1);
+            IncreaseAP(1, true);
         }
     }
 
 
-    public void OnActive()
+    public void OnUnitBegin()
     {
         this.isActived = true;
+    }
+
+    public void OnUnitEnd()
+    {
+        
+    }
+
+
+
+    public void OnBeforeAttack(MMUnitNode defender)
+    {
+
+    }
+
+    public void OnAfterAttack(MMUnitNode defender)
+    {
+
+    }
+
+    public void OnAfterBeAttack(MMUnitNode attacker)
+    {
+        if(this.HasSkillEnabled(10100))
+        {
+            this.IncreaseHP(1);
+        }
+    }
+
+    public void OnBeforeBeAttack(MMUnitNode attacker)
+    {
+
+    }
+
+    public void OnKill(MMUnitNode target)
+    {
+        if (this.HasSkillEnabled(10200))
+        {
+            this.IncreaseATK(1);
+        }
+    }
+
+    public void OnDead(MMUnitNode attacker)
+    {
+
+    }
+
+    public void OnSummon(MMUnitNode unit)
+    {
+
+    }
+
+    public void OnEnter()
+    {
+
     }
 
 
     public void OnLeave()
     {
-        foreach(var skill in skills)
+        foreach (var skill in skills)
         {
-            if(skill.time == MMTriggerTime.OnLeave)
+            if (skill.time == MMTriggerTime.OnLeave)
             {
                 MMEffect effect = skill.CreateEffect();
                 MMBattleManager.Instance.ExecuteEffect(effect);
@@ -92,48 +145,6 @@ public partial class MMUnitNode : MMNode
         //        return effect;
         //    }
         //}
-    }
-
-
-    public void OnBeforeAttack(MMUnitNode defender)
-    {
-
-    }
-
-    public void OnAfterAttack(MMUnitNode defender)
-    {
-
-    }
-
-    public void OnAfterBeAttack(MMUnitNode attacker)
-    {
-        if(this.HasSkillEnabled(10100))
-        {
-            this.IncreaseHP(1);
-        }
-    }
-
-    public void OnBeforeBeAttack(MMUnitNode attacker)
-    {
-
-    }
-
-    public void OnKill(MMUnitNode target)
-    {
-        if (this.HasSkillEnabled(10200))
-        {
-            this.IncreaseATK(1);
-        }
-    }
-
-    public void OnDead(MMUnitNode attacker)
-    {
-
-    }
-
-    public void OnSummon(MMUnitNode unit)
-    {
-
     }
 
 

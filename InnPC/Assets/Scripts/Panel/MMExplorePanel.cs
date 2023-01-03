@@ -281,8 +281,8 @@ public class MMExplorePanel : MMNode
         }
 
         this.CloseUI();
-        MMBattleManager.Instance.LoadLevel();
         MMBattleManager.Instance.OpenUI();
+        MMBattleManager.Instance.EnterPhase(MMBattlePhase.None);
         MMBattleManager.Instance.panelGameover.SetActive(false);
     }
 

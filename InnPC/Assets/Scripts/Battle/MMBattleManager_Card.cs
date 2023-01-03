@@ -11,7 +11,7 @@ public partial class MMBattleManager : MMNode
         sourceUnit.DecreaseAP(selectingCard.cost);
         MMCardPanel.Instance.PlayCard(selectingCard);
         
-        if (selectingCard.type == MMSkillType.Power)
+        if (selectingCard.type == MMCardType.Power)
         {
             sourceUnit.IncreaseATK(selectingCard.tempATK);
             sourceUnit.IncreaseHP(selectingCard.tempDEF);
@@ -27,23 +27,6 @@ public partial class MMBattleManager : MMNode
         effect.sideTargets = FindSideTargets(effect.source, effect.target, effect.area);
 
         ExecuteEffect(effect);
-
-       
-        //如果Source是Dead状态，SelectingCard没有了
-        //Power Card
-        if (selectingCard.type == MMSkillType.Power)
-        {
-            selectingCard.EnterState(MMSkillState.Used);
-
-            foreach (var skill in selectingCard.unit.skills)
-            {
-                if (skill.type == MMSkillType.Power)
-                {
-                    selectingCard.isEnabled = false;
-                }
-            }
-            selectingCard.isEnabled = true;
-        }
         
     }
 

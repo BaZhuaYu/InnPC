@@ -10,54 +10,15 @@ public partial class MMBattleManager
         
         sourceUnit.DecreaseAP(selectingSkill.cost);
         
-        if(selectingSkill.type == MMSkillType.Power)
-        {
-            sourceUnit.IncreaseATK(selectingSkill.tempATK);
-            sourceUnit.IncreaseHP(selectingSkill.tempDEF);
-        }
-        else
-        {
-
-        }
 
         MMEffect effect = selectingSkill.CreateEffect();
         effect.target = this.targetUnit;
         
 
-        if(selectingSkill.id == 1034)
-        {
-            effect.value = 0;
-            List<MMSkillNode> skills = sourceUnit.FindAllHistorySkills();
-            foreach(var skill in skills)
-            {
-                if(skill.type == MMSkillType.Attack)
-                {
-                    effect.value += 1;
-                }
-            }
-        }
-
         ExecuteEffect(effect);
 
         
         this.historySkills[round].Add(selectingSkill);
-        
-
-        //Power Card
-        if(selectingSkill.type == MMSkillType.Power)
-        {
-            selectingSkill.EnterState(MMSkillState.Used);
-
-            foreach(var skill in selectingSkill.unit.skills)
-            {
-                if(skill.type == MMSkillType.Power)
-                {
-                    selectingSkill.isEnabled = false;
-                }
-            }
-            selectingSkill.isEnabled = true;
-        }
-
         
 
         //Final Card

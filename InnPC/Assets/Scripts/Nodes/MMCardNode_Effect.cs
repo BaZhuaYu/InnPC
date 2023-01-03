@@ -11,18 +11,18 @@ public partial class MMCardNode : MMNode
         effect.type = this.effectType;
         effect.area = card.area;
         effect.value = this.value;
-        
+
         switch (this.type)
         {
-            case MMSkillType.Attack:
-            case MMSkillType.Power:
+            case MMCardType.Attack:
+            case MMCardType.Power:
                 effect.userinfo.Add("TempATK", tempATK);
                 effect.userinfo.Add("TempDEF", tempDEF);
                 break;
             default:
                 break;
         }
-        
+
         return effect;
     }
 

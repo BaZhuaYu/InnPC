@@ -43,7 +43,7 @@ public class MMSkillPanel : MMNode
 
     public void Clear()
     {
-        this.avatar.LoadImage("");
+        this.avatar.LoadImage("UI/ccc/shuoshuren");
         foreach (var skill in skills)
         {
             skill.Clear();

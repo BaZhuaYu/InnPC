@@ -254,24 +254,12 @@ public partial class MMBattleManager
 
     public bool TryEnterStateSelectingCard(MMCardNode card)
     {
-        if (card.type == MMSkillType.Passive)
+        if (card.type == MMCardType.Passive)
         {
             MMTipManager.instance.CreateTip("被动技能，无法使用");
             return false;
         }
-
-        if (card.state == MMSkillState.Used)
-        {
-            MMTipManager.instance.CreateTip("已使用，不能再次使用");
-            return false;
-        }
-
-        if (card.state == MMSkillState.NotReady)
-        {
-            MMTipManager.instance.CreateTip("这个技能还没有准备好");
-            return false;
-        }
-
+        
         if (sourceUnit == null)
         {
             MMTipManager.instance.CreateTip("需要选中己方英雄");

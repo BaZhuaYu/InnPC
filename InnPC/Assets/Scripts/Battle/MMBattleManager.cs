@@ -144,7 +144,6 @@ public partial class MMBattleManager : MMNode
     public void LoadLevel()
     {
         LoadPlayerUnits();
-        this.phase = MMBattlePhase.BattleEnd;
         MMUnitPanel.Instance.OpenUI();
         MMUnitPanel.Instance.Accept(MMExplorePanel.Instance.minions);
 
@@ -170,7 +169,7 @@ public partial class MMBattleManager : MMNode
     {
         switch (phase)
         {
-            case MMBattlePhase.BattleEnd:
+            case MMBattlePhase.None:
                 EnterPhase(MMBattlePhase.BattleBegin);
                 break;
                 

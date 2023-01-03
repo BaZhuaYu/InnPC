@@ -28,8 +28,7 @@ public partial class MMSkillNode : MMNode
 
     public string displayName;
     public string displayNote;
-
-    public MMSkillType type;
+    
     public int cost;
 
     public MMArea area;
@@ -44,9 +43,7 @@ public partial class MMSkillNode : MMNode
 
     public int tempATK;
     public int tempDEF;
-
-    public MMSkillState state;
-
+    
 
     /// <summary>
     /// Battle
@@ -86,16 +83,7 @@ public partial class MMSkillNode : MMNode
         this.key = skill.key;
         this.displayName = skill.displayName;
         this.displayNote = skill.displayNote;
-
-        this.type = MMUtility.DeserializeSkillType(skill.type);
-        if (type == MMSkillType.Power)
-        {
-            isEnabled = false;
-        }
-        else
-        {
-            isEnabled = true;
-        }
+        
         this.cost = skill.cost;
         this.area = skill.area;
         
@@ -139,47 +127,7 @@ public partial class MMSkillNode : MMNode
     {
         this.textName.text = skill.displayName;
         this.textNote.text = skill.displayNote;
-        if (this.type == MMSkillType.Passive)
-        {
-            this.textCost.transform.parent.gameObject.SetActive(false);
-        }
-        else
-        {
-            this.textCost.transform.parent.gameObject.SetActive(true);
-            this.textCost.text = skill.cost + "";
-        }
-        switch (this.type)
-        {
-            case MMSkillType.Attack:
-                this.GetComponent<Image>().color = Color.red;
-                textATK.gameObject.SetActive(true);
-                textDEF.gameObject.SetActive(true);
-                textATK.text = "" + tempATK;
-                textDEF.text = "" + tempDEF;
-                break;
-            case MMSkillType.Spell:
-                this.GetComponent<Image>().color = Color.blue;
-                textATK.gameObject.SetActive(false);
-                textDEF.gameObject.SetActive(false);
-                break;
-            case MMSkillType.Power:
-                this.GetComponent<Image>().color = Color.yellow;
-                textATK.gameObject.SetActive(true);
-                textDEF.gameObject.SetActive(true);
-                textATK.text = "" + tempATK;
-                textDEF.text = "" + tempDEF;
-                break;
-            case MMSkillType.Passive:
-                this.GetComponent<Image>().color = Color.gray;
-                textATK.gameObject.SetActive(false);
-                textDEF.gameObject.SetActive(false);
-                break;
-            default:
-                this.GetComponent<Image>().color = Color.black;
-                textATK.gameObject.SetActive(false);
-                textDEF.gameObject.SetActive(false);
-                break;
-        }
+        
         icon.LoadImage("Cards/" + key);
     }
 
@@ -203,19 +151,8 @@ public partial class MMSkillNode : MMNode
         }
     }
 
-
-    public void EnterState(MMSkillState s)
-    {
-        this.state = s;
-
-    }
-
-
-
-
-
-
-
+   
+    
 
 
     public static MMSkillNode Create()

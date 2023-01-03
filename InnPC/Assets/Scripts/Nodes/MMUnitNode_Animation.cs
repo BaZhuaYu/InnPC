@@ -71,8 +71,7 @@ public partial class MMUnitNode : MMNode
             cell.HandleHighlight(MMNodeHighlight.Green);
         }
     }
-
-
+    
     public void HideMoveCells()
     {
         if (tempMoveCells == null)
@@ -84,7 +83,7 @@ public partial class MMUnitNode : MMNode
         {
             cell.HandleHighlight(MMNodeHighlight.Normal);
         }
-        
+
     }
 
 
@@ -104,7 +103,7 @@ public partial class MMUnitNode : MMNode
         {
             ret = MMMap.Instance.FindCellsInColLessThanCell(this.cell, this.attackRange);
         }
-        
+
         return ret;
     }
 
@@ -123,13 +122,11 @@ public partial class MMUnitNode : MMNode
                 }
             }
         }
-        
     }
-
-
+    
     public void HideAttackCells()
     {
-        if(tempAttackCells == null)
+        if (tempAttackCells == null)
         {
             return;
         }
@@ -142,15 +139,27 @@ public partial class MMUnitNode : MMNode
                 cell.HandleHighlight(MMNodeHighlight.Normal);
             }
         }
-        
     }
 
 
-    public void MoveToCell(MMCell cell)
+    
+    public void ShowWillMove(MMCell cell)
     {
-        int dis = this.cell.FindDistanceFromCell(cell);
-        this.spd = 0;
-        cell.Accept(this);
+        MMUnitNode node = MMUnitNode.Create(this.unit);
+        node.name = "WillMoveNode";
+        Color c = node.GetComponent<Image>().color;
+        node.GetComponent<Image>().color = new Color(c.r, c.g, c.b, 0.5f);
+        this.AddChild(node);
+        node.transform.position = cell.transform.position;
+    }
+
+    public void HideWillMove()
+    {
+        Transform a = gameObject.transform.Find("WillMoveNode");
+        if (a != null)
+        {
+            Destroy(a.gameObject);
+        }
     }
 
 
@@ -162,7 +171,7 @@ public partial class MMUnitNode : MMNode
         //}
         this.HandleHighlight(MMNodeHighlight.Green);
     }
-
+    
     public void HideSelected()
     {
         //if (this.cell != null)
@@ -171,7 +180,6 @@ public partial class MMUnitNode : MMNode
         //}
         this.HandleHighlight(MMNodeHighlight.Normal);
     }
-
 
 
     public void PlayAnimationHurt(int value)
@@ -188,8 +196,32 @@ public partial class MMUnitNode : MMNode
     }
 
 
+    public void ShowCard()
+    {
+        MMCardNode tempCard = MMCardNode.Create();
+        tempCard.Accept(this.cards[0].card);
+        tempCard.transform.SetSiblingIndex(1000);
+        tempCard.SetParent(MMMap.Instance);
+        tempCard.name = "TempCard";
+        if (this.group == 1)
+        {
+            tempCard.MoveLeft(MMMap.Instance.FindWidth() / 2 + tempCard.FindWidth());
+        }
+        else
+        {
+            tempCard.MoveRight(MMMap.Instance.FindWidth() / 2 + tempCard.FindWidth());
+        }
+    }
 
 
+    public void HideCard()
+    {
+        Transform obj = MMMap.Instance.transform.Find("TempCard");
+        if (obj != null)
+        {
+            Destroy(obj.gameObject);
+        }
+    }
 
-
+    
 }

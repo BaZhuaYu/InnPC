@@ -3,24 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum MMSkillState
-{
-    Ready,
-    NotReady,
-    Used
-}
-
-
-public enum MMSkillType
-{
-    None,
-    Attack,
-    Spell,
-    Power,
-    Passive,
-}
-
-
 
 public enum MMNodeHighlight
 {
@@ -42,3 +24,12 @@ public enum MMUnitState
     Dead
 }
 
+
+public enum MMCardType
+{
+    None,
+    Attack,
+    Spell,
+    Power,
+    Passive,
+}

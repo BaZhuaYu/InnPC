@@ -25,17 +25,6 @@ public partial class MMSkillNode : MMNode
                 break;
         }
         
-        switch (this.type)
-        {
-            case MMSkillType.Attack:
-            case MMSkillType.Power:
-                effect.userinfo.Add("TempATK", tempATK);
-                effect.userinfo.Add("TempDEF", tempDEF);
-                break;
-            default:
-                break;
-        }
-
         if (effect.target != null)
         {
             effect.sideTargets = FindSideTargets(effect.target.cell);

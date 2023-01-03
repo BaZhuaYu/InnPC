@@ -22,7 +22,7 @@ public class MMRoundNode : MMNode
     public void SetPlayerRound()
     {
         SetParent(MMBattleManager.Instance);
-        MoveUp(MMBattleManager.Instance.FindHeight() * 0.2f);
+        MoveUp(MMBattleManager.Instance.FindHeight() * 0.35f);
         LoadImage("UI/ddd/Icon_PlayerRound");
 
         Vector3 a = new Vector3(0.5f, 0.5f, 0.5f);
@@ -51,7 +51,7 @@ public class MMRoundNode : MMNode
     public void SetEnemyRound()
     {
         SetParent(MMBattleManager.Instance);
-        MoveUp(MMBattleManager.Instance.FindHeight() * 0.2f);
+        MoveUp(MMBattleManager.Instance.FindHeight() * 0.35f);
 
         LoadImage("UI/ddd/Icon_EnemyRound");
 

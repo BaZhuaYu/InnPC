@@ -174,46 +174,46 @@ public class MMUtility : MonoBehaviour
     }
 
 
-    public static MMSkillType DeserializeSkillType(int t)
+    public static MMCardType DeserializeCardType(int t)
     {
         switch (t)
         {
             case 1:
-                return MMSkillType.Attack;
+                return MMCardType.Attack;
             case 2:
-                return MMSkillType.Spell;
+                return MMCardType.Spell;
             case 3:
-                return MMSkillType.Power;
+                return MMCardType.Power;
             case 4:
-                return MMSkillType.Passive;
+                return MMCardType.Passive;
         }
-        return MMSkillType.None;
+        return MMCardType.None;
     }
 
 
     public static Color FindColorRed()
     {
-        return new Color(235f / 255f, 75f / 255f, 23f / 255f);
+        return new Color(154f / 255f, 91f / 255f, 95f / 255f);
     }
 
     public static Color FindColorYellow()
     {
-        return new Color(254f / 255f, 186f / 255f, 7f / 255f);
+        return new Color(199f / 255f, 170f / 255f, 62f / 255f);
     }
 
     public static Color FindColorBlue()
     {
-        return new Color(11f / 255f, 50f / 255f, 140f / 255f);
+        return new Color(76f / 255f, 137f / 255f, 167f / 255f);
     }
 
     public static Color FindColorGreen()
     {
-        return new Color(63f / 255f, 110f / 255f, 83f / 255f);
+        return new Color(114f / 255f, 159f / 255f, 95f / 255f);
     }
 
     public static Color FindColorBlack()
     {
-        return new Color(16f / 255f, 42f / 255f, 58f / 255f);
+        return new Color(15f / 255f, 15f / 255f, 15f / 255f);
     }
 
     public static Color FindColorWhite()

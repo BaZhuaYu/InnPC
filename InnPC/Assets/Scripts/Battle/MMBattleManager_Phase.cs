@@ -5,11 +5,12 @@ using UnityEngine;
 
 public enum MMBattlePhase
 {
+    None,
     BattleBegin,
 
     RoundBegin,
-    PickUnit,
 
+    PickUnit,
     UnitBegin,
     UnitActing,
     UnitEnd,
@@ -27,9 +28,12 @@ public partial class MMBattleManager
 
     public void EnterPhase(MMBattlePhase p)
     {
+
+        Debug.Log("xxxxxxxxxxxx: " + p.ToString());
+
         if (p == MMBattlePhase.BattleBegin)
         {
-            if (phase != MMBattlePhase.BattleEnd)
+            if (phase != MMBattlePhase.None)
             {
                 Debug.Log("From: " + phase.ToString() + " To: " + p.ToString());
                 return;
@@ -123,19 +127,19 @@ public partial class MMBattleManager
 
         switch (p)
         {
-            case MMBattlePhase.BattleBegin:
+            case MMBattlePhase.None:
+                isPlayerRound = 0;
                 round = 0;
-                historySkills = new Dictionary<int, List<MMSkillNode>>();
-
+                LoadLevel();
                 MMCardPanel.Instance.LoadDeck(MMExplorePanel.Instance.cards);
                 MMCardPanel.Instance.ShuffleDeck();
-                isPlayerRound = 1;
+                historySkills = new Dictionary<int, List<MMSkillNode>>();
+                break;
 
-                DebugConfig();
 
-                DrawCards(4, true);
+            case MMBattlePhase.BattleBegin:
                 
-                foreach(var unit in units1)
+                foreach (var unit in units1)
                 {
                     unit.OnBattleBegin();
                 }
@@ -144,8 +148,10 @@ public partial class MMBattleManager
                     unit.OnBattleBegin();
                 }
 
-
+                DrawCards(4, true);
+                DebugConfig();
                 break;
+
 
             case MMBattlePhase.RoundBegin:
                 round += 1;
@@ -155,23 +161,23 @@ public partial class MMBattleManager
                 {
                     MMRoundNode node = MMRoundNode.Create();
                     node.SetPlayerRound();
-
-                    DrawCards(2);
                     foreach (var unit in units1)
                     {
                         unit.OnRoundBegin();
                     }
+
+                    DrawCards(2);
                 }
                 else
                 {
-                    MMRoundNode node = MMRoundNode.Create();
-                    node.SetEnemyRound();
-
                     foreach (var unit in units2)
                     {
                         unit.OnRoundBegin();
                     }
 
+                    MMRoundNode node = MMRoundNode.Create();
+                    node.SetEnemyRound();
+                    
                     tempEnemyUnits = new List<MMUnitNode>();
                     foreach (var unit in units2)
                     {
@@ -181,25 +187,21 @@ public partial class MMBattleManager
                         }
                     }
                 }
-
-                
                 EnterState(MMBattleState.Normal);
-                
                 break;
+
 
             case MMBattlePhase.PickUnit:
                 break;
 
+
             case MMBattlePhase.UnitBegin:
-                Debug.Log("UnitBegin: " + " " + sourceUnit.displayName + " " + sourceUnit.cell.index);
-                sourceUnit.OnActive();
-                //EnterState(MMBattleState.SelectedSourceUnit);
+                sourceUnit.OnUnitBegin();
                 MMSkillPanel.Instance.Accept(sourceUnit);
                 break;
 
 
             case MMBattlePhase.UnitActing:
-                Debug.Log("UnitActing: " + " " + sourceUnit.displayName + " " + sourceUnit.cell.index);
                 if (isPlayerRound == 1)
                 {
                     
@@ -212,10 +214,13 @@ public partial class MMBattleManager
 
 
             case MMBattlePhase.UnitEnd:
-                Debug.Log("UnitEnd: " + " " + sourceUnit.displayName + " " + sourceUnit.cell.index);
                 if (sourceUnit.state == MMUnitState.Dead)
                 {
                     isSourceUnitDead = true;
+                }
+                else
+                {
+                    sourceUnit.OnUnitEnd();
                 }
                 
                 HandleUnitActionDone();
@@ -223,8 +228,8 @@ public partial class MMBattleManager
                 ClearDeadUnits();
                 break;
 
+
             case MMBattlePhase.RoundEnd:
-                
                 if (isPlayerRound == 1)
                 {
                     foreach (var unit in units1)
@@ -241,13 +246,11 @@ public partial class MMBattleManager
                 }
 
                 isSourceUnitDead = false;
-                isPlayerRound = (isPlayerRound + 1) % 2;
                 
                 break;
 
 
             case MMBattlePhase.BattleEnd:
-                isPlayerRound = 0;
                 MMBattleManager.Instance.Clear();
                 panelGameover.gameObject.SetActive(true);
                 break;
@@ -258,46 +261,56 @@ public partial class MMBattleManager
 
     void UpdateUI()
     {
+        Debug.Log("UpdateUI: " + phase.ToString());
+
         ClosePanels();
         
         switch (phase)
         {
-            case MMBattlePhase.BattleEnd:
-                ShowTitle("Begin");
-                ShowButton("End");
+
+            case MMBattlePhase.None:
+                ShowTitle(MMLevel.Create(MMExplorePanel.Instance.levelBattle).displayName);
+                ShowButton("战斗开始");
                 MMUnitPanel.Instance.OpenUI();
-                
+                break;
+
+            case MMBattlePhase.BattleEnd:
+                ShowTitle("战斗胜利");
+                ShowButton("战斗结束", false);
+                MMUnitPanel.Instance.CloseUI();
+                MMCardPanel.Instance.OpenUI();
                 break;
 
             case MMBattlePhase.BattleBegin:
-                ShowTitle("Round 1");
-                ShowButton("Begin");
+                ShowTitle("xxxx");
+                ShowButton("xxxx");
                 MMUnitPanel.Instance.OpenUI();
                 break;
 
             case MMBattlePhase.PickUnit:
-                ShowButton("PickUnit");
+                ShowTitle("激活侠客");
+                ShowButton("回合结束");
                 MMCardPanel.Instance.OpenUI();
                 MMSkillPanel.Instance.OpenUI();
                 MMSkillPanel.Instance.Clear();
                 break;
 
             case MMBattlePhase.RoundBegin:
-                ShowButton("PlayerRound");
+                ShowButton("结束");
                 MMCardPanel.Instance.OpenUI();
                 MMSkillPanel.Instance.OpenUI();
                 MMSkillPanel.Instance.Clear();
                 break;
 
             case MMBattlePhase.RoundEnd:
-                ShowButton("PlayerRound");
+                ShowButton("结束");
                 MMCardPanel.Instance.OpenUI();
                 MMSkillPanel.Instance.OpenUI();
                 MMSkillPanel.Instance.Clear();
                 break;
 
             case MMBattlePhase.UnitBegin:
-                ShowButton("UnitBegin");
+                ShowButton("结束");
                 sourceUnit.HandleHighlight(MMNodeHighlight.Green);
                 MMCardPanel.Instance.OpenUI();
                 MMSkillPanel.Instance.OpenUI();
@@ -305,7 +318,7 @@ public partial class MMBattleManager
                 break;
 
             case MMBattlePhase.UnitActing:
-                ShowButton("UnitActing");
+                ShowButton("行动结束");
                 sourceUnit.HandleHighlight(MMNodeHighlight.Green);
                 MMCardPanel.Instance.OpenUI();
                 MMSkillPanel.Instance.OpenUI();
@@ -313,7 +326,7 @@ public partial class MMBattleManager
                 break;
 
             case MMBattlePhase.UnitEnd:
-                ShowButton("UnitEnd");
+                ShowButton("行动结束");
                 MMCardPanel.Instance.OpenUI();
                 break;
 
@@ -323,10 +336,6 @@ public partial class MMBattleManager
         if (isPlayerRound == 1)
         {
             backgroundNote.SetColor(MMUtility.FindColorLightGreen());
-        }
-        else if (isPlayerRound == 2)
-        {
-            backgroundNote.SetColor(MMUtility.FindColorLightRed());
         }
         else
         {
@@ -358,6 +367,7 @@ public partial class MMBattleManager
         switch (phase)
         {
             case MMBattlePhase.BattleBegin:
+                isPlayerRound = (isPlayerRound + 1) % 2;
                 EnterPhase(MMBattlePhase.RoundBegin);
                 break;
 
@@ -368,19 +378,13 @@ public partial class MMBattleManager
             case MMBattlePhase.PickUnit:
                 if (isPlayerRound == 1)
                 {
-                    if (isSourceUnitDead)
+                    if(CheckPlayerHasUnit())
+                    {
+
+                    }
+                    else
                     {
                         EnterPhase(MMBattlePhase.RoundEnd);
-                        return;
-                    }
-
-                    foreach (var unit in units1)
-                    {
-                        if (unit.isActived)
-                        {
-                            EnterPhase(MMBattlePhase.RoundEnd);
-                            return;
-                        }
                     }
                 }
                 else
@@ -433,6 +437,7 @@ public partial class MMBattleManager
                 break;
 
             case MMBattlePhase.RoundEnd:
+                isPlayerRound = (isPlayerRound + 1) % 2;
                 Invoke("AutoRoundBegin", 2.0f);
                 break;
 
@@ -501,6 +506,26 @@ public partial class MMBattleManager
 
         return null;
     }
+
+
+    bool CheckPlayerHasUnit()
+    {
+        if(isSourceUnitDead)
+        {
+            return false;
+        }
+
+        foreach (var unit in units1)
+        {
+            if (unit.isActived)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 
 
 

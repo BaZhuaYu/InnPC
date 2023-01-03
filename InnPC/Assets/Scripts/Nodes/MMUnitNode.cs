@@ -18,6 +18,7 @@ public partial class MMUnitNode : MMNode
     public Text textAP;
     public Text textATK;
     public MMNode border;
+    public MMNode iconRage;
 
 
     public MMUnitNode target;
@@ -108,7 +109,6 @@ public partial class MMUnitNode : MMNode
         hp = unit.hp;
         maxAP = unit.maxAP;
         ap = unit.ap;
-        //ap = unit.maxAP;
 
         atk = unit.atk;
         def = unit.def;
@@ -197,7 +197,7 @@ public partial class MMUnitNode : MMNode
         UpdateUI();
     }
 
-    public void IncreaseAP(int value)
+    public void IncreaseAP(int value, bool animated = false)
     {
         if(this.id == 10200)
         {
@@ -206,10 +206,14 @@ public partial class MMUnitNode : MMNode
 
         this.ap += value;
 
-        MMAPNode node = MMAPNode.Create();
-        node.ShowIncrease();
-        node.SetParent(this);
-        node.MoveUp(50);
+        if(animated)
+        {
+            MMAPNode node = MMAPNode.Create();
+            node.ShowIncrease();
+            node.SetParent(this);
+            node.MoveUp(50);
+        }
+        
 
         if (this.ap >= maxAP)
         {
@@ -220,15 +224,18 @@ public partial class MMUnitNode : MMNode
         UpdateUI();
     }
 
-    public void DecreaseAP(int value)
+    public void DecreaseAP(int value, bool animated = false)
     {
         this.ap -= value;
 
-        MMAPNode node = MMAPNode.Create();
-        node.ShowDecrease();
-        node.SetParent(this);
-        node.MoveUp(50);
-
+        if(animated)
+        {
+            MMAPNode node = MMAPNode.Create();
+            node.ShowDecrease();
+            node.SetParent(this);
+            node.MoveUp(50);
+        }
+        
         if (this.ap <= 0)
         {
             this.ap = 0;
@@ -303,27 +310,26 @@ public partial class MMUnitNode : MMNode
     {
         textHP.text = hp + "";
         textATK.text = atk + "";
-        
 
-        //if(maxAP == 0)
-        //{
-        //    groupSP.SetActive(false);
-        //}
-        //else
-        //{
-        //    groupSP.SetActive(true);
-        //    if(maxAP == ap)
-        //    {
-        //        groupSP.LoadImage("UI/IconRage");
-        //    }
-        //    else
-        //    {
-        //        groupSP.LoadImage("UI/IconWeak");
-        //    }
-        //}
-        
 
-        for(int i = 0; i < 5;i++)
+        if (maxAP == 0)
+        {
+            iconRage.SetActive(false);
+        }
+        else
+        {
+            if (maxAP == ap)
+            {
+                iconRage.SetActive(true);
+            }
+            else
+            {
+                iconRage.SetActive(false);
+            }
+        }
+
+
+        for (int i = 0; i < 5;i++)
         {
             if(i < ap)
             {
@@ -364,6 +370,14 @@ public partial class MMUnitNode : MMNode
             
         }
         
+    }
+
+
+    public void MoveToCell(MMCell cell)
+    {
+        int dis = this.cell.FindDistanceFromCell(cell);
+        this.spd = 0;
+        cell.Accept(this);
     }
 
 
@@ -430,14 +444,7 @@ public partial class MMUnitNode : MMNode
     {
         return this.ap <= 0;
     }
-
-    public void IncreaspAPToMax()
-    {
-        for (int i = 0; i < maxAP; i++)
-        {
-            IncreaseAP(1);
-        }
-    }
+    
 
     
     public List<MMSkillNode> FindAllHistorySkills()
@@ -510,6 +517,7 @@ public partial class MMUnitNode : MMNode
         return false;
     }
 
+
     public void AddBuff(MMBuff b)
     {
         if(HasBuff(b))
@@ -518,6 +526,7 @@ public partial class MMUnitNode : MMNode
         }
         this.buffs.Add(b);
     }
+
 
     public void RemoveBuff(MMBuff b)
     {

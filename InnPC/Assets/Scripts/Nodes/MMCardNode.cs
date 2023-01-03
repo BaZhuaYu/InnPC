@@ -36,23 +36,20 @@ public partial class MMCardNode : MMNode
 
     public int cost;
     public int clss;
-    public MMSkillType type;
-    public int sortingOrder;
-
-    public MMArea area;
-    public MMEffectTarget target;
-
-    public MMTriggerTime time;
+    public MMCardType type;
+    
 
     public List<MMSkillKeyWord> keywords;
 
     public MMEffectType effectType;
+    public MMEffectTarget target;
+    public MMTriggerTime time;
+    public MMArea area;
     public int value;
 
     public int tempATK;
     public int tempDEF;
-
-    public MMSkillState state;
+    public int sortingOrder;
 
 
     /// <summary>
@@ -90,8 +87,8 @@ public partial class MMCardNode : MMNode
 
         this.clss = card.clss;
         this.sortingOrder = this.clss;
-        this.type = MMUtility.DeserializeSkillType(card.type);
-        if (type == MMSkillType.Power)
+        this.type = MMUtility.DeserializeCardType(card.type);
+        if (type == MMCardType.Power)
         {
             isEnabled = false;
         }
@@ -141,7 +138,7 @@ public partial class MMCardNode : MMNode
     {
         this.textName.text = card.displayName;
         this.textNote.text = card.displayNote;
-        if (this.type == MMSkillType.Passive)
+        if (this.type == MMCardType.Passive)
         {
             this.textCost.transform.parent.gameObject.SetActive(false);
         }
@@ -152,23 +149,23 @@ public partial class MMCardNode : MMNode
         }
         switch (this.type)
         {
-            case MMSkillType.Attack:
+            case MMCardType.Attack:
                 bgATK.gameObject.SetActive(true);
                 bgDEF.gameObject.SetActive(true);
                 textATK.text = "" + tempATK;
                 textDEF.text = "" + tempDEF;
                 break;
-            case MMSkillType.Spell:
+            case MMCardType.Spell:
                 bgATK.gameObject.SetActive(false);
                 bgDEF.gameObject.SetActive(false);
                 break;
-            case MMSkillType.Power:
+            case MMCardType.Power:
                 bgATK.gameObject.SetActive(true);
                 bgDEF.gameObject.SetActive(true);
                 textATK.text = "" + tempATK;
                 textDEF.text = "" + tempDEF;
                 break;
-            case MMSkillType.Passive:
+            case MMCardType.Passive:
                 bgATK.gameObject.SetActive(false);
                 bgDEF.gameObject.SetActive(false);
                 break;
@@ -226,21 +223,7 @@ public partial class MMCardNode : MMNode
         }
     }
 
-
-    public void EnterState(MMSkillState s)
-    {
-        this.state = s;
-
-    }
-
-
-
-
-
-
-
-
-
+    
 
     public static MMCardNode Create()
     {
