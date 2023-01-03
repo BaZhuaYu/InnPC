@@ -278,15 +278,15 @@ public class MMCardPanel : MMNode
         //hand.Clear();
         foreach (var card in deck)
         {
-            card.DestroySelf();
+            card.Clear();
         }
         foreach (var card in hand)
         {
-            card.DestroySelf();
+            card.Clear();
         }
         foreach (var card in used)
         {
-            card.DestroySelf();
+            card.Clear();
         }
         hand = new List<MMCardNode>();
         deck = new List<MMCardNode>();

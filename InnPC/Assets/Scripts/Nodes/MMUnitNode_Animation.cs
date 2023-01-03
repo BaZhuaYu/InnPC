@@ -149,13 +149,18 @@ public partial class MMUnitNode : MMNode
         node.name = "WillMoveNode";
         Color c = node.GetComponent<Image>().color;
         node.GetComponent<Image>().color = new Color(c.r, c.g, c.b, 0.5f);
-        this.AddChild(node);
-        node.transform.position = cell.transform.position;
+        cell.AddChild(node);
+        
+
+        //if(node.GetComponent<MMUnitNode_Battle>())
+        //{
+        //    Debug.Log("aaaaaaaaaaaaaaaaa");
+        //}
     }
 
-    public void HideWillMove()
+    public void HideWillMove(MMCell cell)
     {
-        Transform a = gameObject.transform.Find("WillMoveNode");
+        Transform a = cell.gameObject.transform.Find("WillMoveNode");
         if (a != null)
         {
             Destroy(a.gameObject);
@@ -199,7 +204,7 @@ public partial class MMUnitNode : MMNode
     public void ShowCard()
     {
         MMCardNode tempCard = MMCardNode.Create();
-        tempCard.Accept(this.cards[0].card);
+        tempCard.Accept(MMCard.Create(this.unit.cards[0]));
         tempCard.transform.SetSiblingIndex(1000);
         tempCard.SetParent(MMMap.Instance);
         tempCard.name = "TempCard";
@@ -216,10 +221,10 @@ public partial class MMUnitNode : MMNode
 
     public void HideCard()
     {
-        Transform obj = MMMap.Instance.transform.Find("TempCard");
-        if (obj != null)
+        MMCardNode[] nodes = MMMap.Instance.gameObject.GetComponentsInChildren<MMCardNode>();
+        foreach(var node in nodes)
         {
-            Destroy(obj.gameObject);
+            Destroy(node.gameObject);
         }
     }
 

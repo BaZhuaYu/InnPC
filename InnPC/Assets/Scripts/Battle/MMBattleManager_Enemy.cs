@@ -38,11 +38,23 @@ public partial class MMBattleManager : MMNode
         }
         else
         {
-            TryEnterStateSelectingCard(sourceUnit.cards[0]);
-            TryEnterStateSelectedTargetUnit(dest);
+            sourceUnit.ShowCard();
+            StartCoroutine(aaa(sourceUnit));
+            //sourceUnit.cards[0]
+            TryEnterStateSelectingCard(MMCardNode.Create(sourceUnit.unit.cards[0]));
+            //TryEnterStateSelectedTargetUnit(dest);
         }
-
     }
+
+
+    IEnumerator aaa(MMUnitNode unit)
+    {
+        yield return new WaitForSeconds(1.5f);
+        Debug.Log("aaaaaabbbbbbbbbcccccccccc");
+        unit.HideCard();
+    }
+    
+    
 
 
 

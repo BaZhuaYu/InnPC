@@ -59,14 +59,9 @@ public partial class MMCardNode : MMNode
     public bool isEnabled;
 
 
-    public void Accept(MMCard skill)
+    public void Accept(MMCard card)
     {
-        if (this.card != null)
-        {
-            Clear();
-        }
-
-        this.card = skill;
+        this.card = card;
 
         Reload();
     }
@@ -121,19 +116,10 @@ public partial class MMCardNode : MMNode
     public void Clear()
     {
         Debug.Log("Clear: " + card.id);
-        this.card = null;
-        this.textName.text = "";
-        this.textNote.text = "";
-        this.name = "Card_0";
-        this.gameObject.transform.SetParent(null);
-    }
-
-    public void DestroySelf()
-    {
         StopAnimation();
         Destroy(gameObject);
     }
-
+    
 
     private void UpdateUI()
     {

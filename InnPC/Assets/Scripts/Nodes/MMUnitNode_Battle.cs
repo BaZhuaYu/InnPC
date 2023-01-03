@@ -41,10 +41,10 @@ public class MMUnitNode_Battle : MonoBehaviour, IPointerClickHandler, IPointerEn
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        //if (MMBattleManager.Instance.state == MMBattleState.None)
-        //{
-            
-        //}
+        if (MMBattleManager.Instance.sourceUnit != null)
+        {
+            return;
+        }
         unit.ShowCard();
         unit.ShowAttackCells();
     }
@@ -52,10 +52,10 @@ public class MMUnitNode_Battle : MonoBehaviour, IPointerClickHandler, IPointerEn
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        //if (MMBattleManager.Instance.state == MMBattleState.None)
-        //{
-
-        //}
+        if (MMBattleManager.Instance.sourceUnit != null)
+        {
+            return;
+        }
         unit.HideCard();
         unit.HideAttackCells();
     }

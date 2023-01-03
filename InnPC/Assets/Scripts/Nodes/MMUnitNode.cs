@@ -122,27 +122,29 @@ public partial class MMUnitNode : MMNode
 
 
         skills = new List<MMSkillNode>();
-        foreach(var s in unit.skills)
-        {
-            MMSkill skill = MMSkill.Create(s);
-            MMSkillNode node = MMSkillNode.Create();
-            node.Accept(skill);
-            node.name = this.displayName + "_" + "skill_" + skill.id;
-            skills.Add(node);
-            node.unit = this;
-        }
+        //foreach(var s in unit.skills)
+        //{
+        //    MMSkill skill = MMSkill.Create(s);
+        //    MMSkillNode nodeSkill = MMSkillNode.Create();
+        //    nodeSkill.Accept(skill);
+        //    nodeSkill.name = this.displayName + "_" + "skill_" + skill.id;
+        //    skills.Add(nodeSkill);
+        //    nodeSkill.unit = this;
+        //    nodeSkill.SetParent(this);
+        //}
         
         
         cards = new List<MMCardNode>();
-        foreach (var c in unit.cards)
-        {
-            MMCard card = MMCard.Create(c);
-            MMCardNode nodeCard = MMCardNode.Create();
-            nodeCard.Accept(card);
-            nodeCard.name = this.displayName + "_" + "card_" + card.id;
-            cards.Add(nodeCard);
-            nodeCard.unit = this;
-        }
+        //foreach (var c in unit.cards)
+        //{
+        //    MMCard card = MMCard.Create(c);
+        //    MMCardNode nodeCard = MMCardNode.Create();
+        //    nodeCard.Accept(card);
+        //    nodeCard.name = this.displayName + "_" + "card_" + card.id;
+        //    cards.Add(nodeCard);
+        //    nodeCard.unit = this;
+        //    nodeCard.SetParent(this);
+        //}
             
         
         buffs = new List<MMBuff>();
@@ -178,6 +180,7 @@ public partial class MMUnitNode : MMNode
 
     public void DecreaseHP(int value)
     {
+        Debug.Log(this.displayName + " DecreaseHP: " + value);
         this.hp -= value;
         PlayAnimationHurt(value);
 
@@ -334,34 +337,38 @@ public partial class MMUnitNode : MMNode
             if(i < ap)
             {
                 iconsSP[i].SetActive(true);
-                Color c = Color.black;
+                iconsSP[i].LoadImage("UI/aaa/Icon_AP");
                 if (clss == 1)
                 {
-                    c = MMUtility.FindColorRed();
+                    //c = MMUtility.FindColorRed();
+                    LoadImage("UI/aaa/IconCircle_Red");
                 }
                 else if (clss == 2)
                 {
-                    c = MMUtility.FindColorYellow();
+                    //c = MMUtility.FindColorYellow();
+                    LoadImage("UI/aaa/IconCircle_Yellow");
                 }
                 else if (clss == 3)
                 {
-                    c = MMUtility.FindColorBlue();
+                    //c = MMUtility.FindColorBlue();
+                    LoadImage("UI/aaa/IconCircle_Blue");
                 }
                 else if (clss == 4)
                 {
-                    c = MMUtility.FindColorGreen();
+                    //c = MMUtility.FindColorGreen();
+                    LoadImage("UI/aaa/IconCircle_Green");
                 }
                 else
                 {
-                    c = MMUtility.FindColorBlack();
+                    //c = MMUtility.FindColorBlack();
+                    LoadImage("");
                 }
-
-                iconsSP[i].SetColor(c);
+                
             }
             else if (i < maxAP)
             {
                 iconsSP[i].SetActive(true);
-                iconsSP[i].SetColor(MMUtility.FindColorWhite());
+                iconsSP[i].LoadImage("UI/aaa/Icon_AP_Gray");
             }
             else
             {

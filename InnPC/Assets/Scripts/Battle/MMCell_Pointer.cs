@@ -24,7 +24,7 @@ public partial class MMCell : MMNode, IPointerEnterHandler, IPointerExitHandler,
         }
         else if (MMBattleManager.Instance.state == MMBattleState.SelectingCard)
         {
-            if(this.unitNode == null)
+            if (this.unitNode == null)
             {
                 MMTipManager.instance.CreateTip("没有目标");
             }
@@ -47,30 +47,33 @@ public partial class MMCell : MMNode, IPointerEnterHandler, IPointerExitHandler,
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-        if(MMBattleManager.Instance.phase == MMBattlePhase.UnitActing)
+        if (MMBattleManager.Instance.phase != MMBattlePhase.UnitActing)
         {
-            if(MMBattleManager.Instance.sourceUnit.isMoved)
-            {
-
-            }
-            else
-            {
-                if(MMBattleManager.Instance.sourceUnit.FindMovableCells().Contains(this))
-                {
-                    MMBattleManager.Instance.sourceUnit.ShowWillMove(this);
-                }
-            }
-            
+            return;
         }
+
+        if (MMBattleManager.Instance.sourceUnit.isMoved)
+        {
+            return;
+        }
+
+        if(this.unitNode != null)
+        {
+            return;
+        }
+
+        if (MMBattleManager.Instance.sourceUnit.FindMovableCells().Contains(this))
+        {
+            MMBattleManager.Instance.sourceUnit.ShowWillMove(this);
+        }
+
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        Debug.Log("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
         if (MMBattleManager.Instance.phase == MMBattlePhase.UnitActing)
         {
-            MMBattleManager.Instance.sourceUnit.HideWillMove();
+            MMBattleManager.Instance.sourceUnit.HideWillMove(this);
         }
     }
 

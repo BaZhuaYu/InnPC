@@ -28,9 +28,7 @@ public partial class MMBattleManager
 
     public void EnterPhase(MMBattlePhase p)
     {
-
-        Debug.Log("xxxxxxxxxxxx: " + p.ToString());
-
+        
         if (p == MMBattlePhase.BattleBegin)
         {
             if (phase != MMBattlePhase.None)
@@ -261,7 +259,6 @@ public partial class MMBattleManager
 
     void UpdateUI()
     {
-        Debug.Log("UpdateUI: " + phase.ToString());
 
         ClosePanels();
         
@@ -410,7 +407,7 @@ public partial class MMBattleManager
                 else
                 {
                     Invoke("AutoSelectTarget", 1.0f);
-                    Invoke("AutoActing", 2.0f);
+                    StartCoroutine(AutoActing(2));
                 }
                 break;
 
@@ -459,8 +456,9 @@ public partial class MMBattleManager
         EnterPhase(MMBattlePhase.UnitBegin);
     }
 
-    void AutoActing()
+    IEnumerator AutoActing(float time)
     {
+        yield return new WaitForSeconds(time);
         EnterPhase(MMBattlePhase.UnitActing);
     }
     
@@ -500,6 +498,8 @@ public partial class MMBattleManager
         {
             if (unit.ap == unit.maxAP && unit.isActived == false)
             {
+                Debug.LogWarning("FindFirstEnemy: " + unit.displayName);
+
                 return unit;
             }
         }
