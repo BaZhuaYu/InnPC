@@ -55,6 +55,51 @@ public partial class MMUnitNode : MMNode
 
     }
 
+    public List<int> FindMoveCellRows()
+    {
+        List<int> ret = new List<int>();
+        if (this.state == MMUnitState.Stunned)
+        {
+            return ret;
+        }
+
+        if (this.group == 1)
+        {
+            int min = this.tempCell.row;
+            int max = MMMap.Instance.row + 1;
+
+            MMUnitNode unit = MMBattleManager.Instance.FindFrontUnitOfGroup(2);
+            if (unit != null)
+            {
+                max = unit.cell.row;
+            }
+
+            List<int> rows = new List<int>();
+            for (int i = min; i < max; i++)
+            {
+                rows.Add(i);
+            }
+            return rows;
+        }
+        else
+        {
+            int max = this.tempCell.row;
+            int min = -1;
+
+            MMUnitNode unit = MMBattleManager.Instance.FindFrontUnitOfGroup(1);
+            if (unit != null)
+            {
+                min = unit.cell.row;
+            }
+            List<int> rows = new List<int>();
+            for (int i = min + 1; i <= max; i++)
+            {
+                rows.Add(i);
+            }
+            return rows;
+        }
+
+    }
 
 
     public void ShowMoveCells()
@@ -66,12 +111,31 @@ public partial class MMUnitNode : MMNode
 
         List<MMCell> cells = FindMovableCells();
         tempMoveCells = cells;
-        foreach (var cell in cells)
+        //foreach (var cell in cells)
+        //{
+        //    cell.HandleHighlight(MMNodeHighlight.Green);
+        //}
+
+        foreach(var cell in MMMap.Instance.cells)
         {
-            cell.HandleHighlight(MMNodeHighlight.Green);
+            if(tempMoveCells.Contains(cell))
+            {
+                cell.HideDark();
+            }
+            else
+            {
+                cell.ShowDark();
+            }
         }
+
+
+        //foreach (var row in FindMoveCellRows())
+        //{
+        //    MMMap.Instance.ShowHighlightRow(row);
+        //}
+
     }
-    
+
     public void HideMoveCells()
     {
         if (tempMoveCells == null)
@@ -84,6 +148,13 @@ public partial class MMUnitNode : MMNode
             cell.HandleHighlight(MMNodeHighlight.Normal);
         }
 
+        foreach (var cell in MMMap.Instance.cells)
+        {
+            cell.HideDark();
+        }
+
+
+        //MMMap.Instance.HideHightlightRow();
     }
 
 
@@ -113,17 +184,17 @@ public partial class MMUnitNode : MMNode
         tempAttackCells = FindAttackCells();
         foreach (var cell in tempAttackCells)
         {
-            cell.HandleHighlight(MMNodeHighlight.Blue);
-            if (cell.unitNode != null)
-            {
-                if (cell.unitNode.group != this.group)
-                {
-                    cell.HandleHighlight(MMNodeHighlight.Red);
-                }
-            }
+            cell.HandleHighlight(MMNodeHighlight.Red);
+            //if (cell.unitNode != null)
+            //{
+            //    if (cell.unitNode.group != this.group)
+            //    {
+            //        cell.HandleHighlight(MMNodeHighlight.Red);
+            //    }
+            //}
         }
     }
-    
+
     public void HideAttackCells()
     {
         if (tempAttackCells == null)
@@ -142,7 +213,25 @@ public partial class MMUnitNode : MMNode
     }
 
 
-    
+    public void ShowTarget()
+    {
+        MMUnitNode target = this.FindTarget();
+        if (target != null)
+        {
+            target.HandleHighlight(MMNodeHighlight.Red);
+        }
+    }
+
+    public void HideTarget()
+    {
+        MMUnitNode target = this.FindTarget();
+        if (target != null)
+        {
+            target.HandleHighlight(MMNodeHighlight.Normal);
+        }
+    }
+
+
     public void ShowWillMove(MMCell cell)
     {
         MMUnitNode node = MMUnitNode.Create(this.unit);
@@ -150,12 +239,15 @@ public partial class MMUnitNode : MMNode
         Color c = node.GetComponent<Image>().color;
         node.GetComponent<Image>().color = new Color(c.r, c.g, c.b, 0.5f);
         cell.AddChild(node);
-        
 
-        //if(node.GetComponent<MMUnitNode_Battle>())
-        //{
-        //    Debug.Log("aaaaaaaaaaaaaaaaa");
-        //}
+        MMUnitNode target = this.FindTarget();
+        if (target != null)
+        {
+            MMNode targetNode = MMNode.Create("CellBorder_Red");
+            targetNode.gameObject.name = "WillMoveTargetNode";
+            this.AddChild(targetNode);
+            targetNode.transform.position = target.transform.position;
+        }
     }
 
     public void HideWillMove(MMCell cell)
@@ -164,6 +256,12 @@ public partial class MMUnitNode : MMNode
         if (a != null)
         {
             Destroy(a.gameObject);
+        }
+
+        Transform b = this.gameObject.transform.Find("WillMoveTargetNode");
+        if (b != null)
+        {
+            Destroy(b.gameObject);
         }
     }
 
@@ -176,7 +274,7 @@ public partial class MMUnitNode : MMNode
         //}
         this.HandleHighlight(MMNodeHighlight.Green);
     }
-    
+
     public void HideSelected()
     {
         //if (this.cell != null)
@@ -222,11 +320,11 @@ public partial class MMUnitNode : MMNode
     public void HideCard()
     {
         MMCardNode[] nodes = MMMap.Instance.gameObject.GetComponentsInChildren<MMCardNode>();
-        foreach(var node in nodes)
+        foreach (var node in nodes)
         {
             Destroy(node.gameObject);
         }
     }
 
-    
+
 }

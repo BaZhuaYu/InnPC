@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public partial class MMMap : MMNode
 {
     public static MMMap Instance;
-    
+
     public int row;
 
     public int col;
@@ -27,7 +27,7 @@ public partial class MMMap : MMNode
 
         LoadData();
         LoadCells();
-        
+
     }
 
     private void Start()
@@ -54,31 +54,21 @@ public partial class MMMap : MMNode
             cell.col = i % col;
             cell.SetParent(this);
             cells.Add(cell);
-            
+
             cell.labelID.text = "" + i;
-            
+
             cell.MoveToParentLeftOffset((float)(cell.row) * cell.FindWidth());
             cell.MoveToParentTopOffset((float)(cell.col) * cell.FindHeight());
-            
+
         }
     }
 
 
     public void LoadData()
     {
-        
+
     }
 
-
-
-
-
-
-
-    public void Accept(MMUnitNode nodeUnit)
-    {
-        nodeUnit.SetParent(this);
-    }
 
     public void Reload()
     {
@@ -87,11 +77,46 @@ public partial class MMMap : MMNode
 
     public void Clear()
     {
-        foreach(var cell in cells)
+        foreach (var cell in cells)
         {
             cell.Clear();
         }
     }
-    
+
+
+    public void ShowHighlightRow(int row)
+    {
+        GameObject prefab = Resources.Load<GameObject>("Prefabs/MMHighlightRow");
+        MMNode node = Instantiate(prefab).GetComponent<MMNode>();
+        AddChild(node);
+        node.name = "HighlightRow";
+
+        Vector2 pos = new Vector2(FindCellsInRow(row)[0].transform.localPosition.x, 0);
+        node.transform.localPosition = pos;
+    }
+
+    public void HideHightlightRow()
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            GameObject obj = transform.GetChild(i).gameObject;
+            if (obj.name == "HighlightRow")
+            {
+                Destroy(obj);
+            }
+        }
+    }
+
+    public void ShowHighlightCol(int col)
+    {
+        GameObject prefab = Resources.Load<GameObject>("Prefabs/MMNode");
+        MMNode node = Instantiate(prefab).GetComponent<MMNode>();
+        node.LoadImage("");
+        AddChild(node);
+
+        Vector2 pos = new Vector2(FindCellsInCol(col)[0].transform.localPosition.x, 0);
+        node.transform.localPosition = pos;
+    }
+
 
 }

@@ -37,20 +37,11 @@ public partial class MMBattleManager
             }
         }
 
-
-        //Normal,
-        //SelectedSourceUnit,
-        //SelectingCard,
-        //SelectingSkill,
-        //SelectedTargetUnit,
-        //PlayCard,
-        //PlaySkill,
-        int temp = index++;
-
+        
         OnExitState();
         this.state = s;
         OnEnterState();
-        UpdateStateUI();
+        UpdateUI_State();
 
         AutoRoute_State();
 
@@ -201,7 +192,7 @@ public partial class MMBattleManager
     }
 
 
-    void UpdateStateUI()
+    void UpdateUI_State()
     {
 
         if (state == MMBattleState.SelectedSourceUnit)
@@ -218,6 +209,7 @@ public partial class MMBattleManager
             sourceUnit.HideMoveCells();
             sourceUnit.HideAttackCells();
             sourceUnit.HideSelected();
+            MMBattleManager.Instance.HideAllUnitAttackCells();
         }
 
 
@@ -228,8 +220,17 @@ public partial class MMBattleManager
 
             case MMBattleState.SelectedSourceUnit:
                 MMCardPanel.Instance.UpdateUI();
-                sourceUnit.ShowMoveCells();
                 sourceUnit.ShowSelected();
+                if(sourceUnit.isMoved)
+                {
+                    sourceUnit.HideMoveCells();
+                }
+                else
+                {
+                    sourceUnit.ShowMoveCells();
+                }
+                sourceUnit.ShowTarget();
+                MMBattleManager.Instance.ShowAllUnitAttackCells();
                 break;
 
             case MMBattleState.SelectingCard:

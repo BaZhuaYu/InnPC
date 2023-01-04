@@ -107,7 +107,7 @@ public partial class MMBattleManager
         this.phase = p;
         OnEnterPhase(p);
 
-        UpdateUI();
+        UpdateUI_Phase();
 
         AutoRoute_Phase();
     }
@@ -257,10 +257,17 @@ public partial class MMBattleManager
     }
 
 
-    void UpdateUI()
+    public void UpdateUI()
+    {
+        this.UpdateUI_Phase();
+        this.UpdateUI_State();
+    }
+
+    void UpdateUI_Phase()
     {
 
         ClosePanels();
+        this.HideAllUnitAttackCells();
         
         switch (phase)
         {
@@ -320,6 +327,8 @@ public partial class MMBattleManager
                 MMCardPanel.Instance.OpenUI();
                 MMSkillPanel.Instance.OpenUI();
                 MMSkillPanel.Instance.Accept(sourceUnit);
+                sourceUnit.ShowTarget();
+                this.ShowAllUnitAttackCells();
                 break;
 
             case MMBattlePhase.UnitEnd:

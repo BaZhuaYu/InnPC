@@ -41,22 +41,32 @@ public class MMUnitNode_Battle : MonoBehaviour, IPointerClickHandler, IPointerEn
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (MMBattleManager.Instance.sourceUnit != null)
+        //if (MMBattleManager.Instance.sourceUnit != null)
+        //{
+        //    return;
+        //}
+        unit.ShowCard();
+
+        if (MMBattleManager.Instance.phase != MMBattlePhase.PickUnit)
         {
             return;
         }
-        unit.ShowCard();
+        
+        
         unit.ShowAttackCells();
+        //MMBattleManager.Instance.
     }
 
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (MMBattleManager.Instance.sourceUnit != null)
+        unit.HideCard();
+
+        if (MMBattleManager.Instance.phase != MMBattlePhase.PickUnit)
         {
             return;
         }
-        unit.HideCard();
+        
         unit.HideAttackCells();
     }
 

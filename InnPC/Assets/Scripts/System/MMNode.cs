@@ -23,7 +23,27 @@ public class MMNode : MonoBehaviour
     }
 
 
+    public static MMNode Create(string key)
+    {
+        GameObject obj = Instantiate(Resources.Load("Prefabs/MMNode") as GameObject);
+        obj.name = key;
+        MMNode ret = obj.GetComponent<MMNode>();
+        ret.LoadImage("UI/aaa/" + key);
+        return ret;
+    }
 
+
+    public Vector2 FindSize()
+    {
+        return gameObject.GetComponent<RectTransform>().sizeDelta;
+    }
+
+    public void LoadSize(Vector2 size)
+    {
+        gameObject.GetComponent<RectTransform>().sizeDelta = size;
+    } 
+
+    
     public void LoadImage(string key)
     {
         GetComponent<Image>().sprite = Resources.Load<Sprite>(key);
@@ -232,5 +252,29 @@ public class MMNode : MonoBehaviour
     {
         MMDebugManager.Instance.gameObject.GetComponent<MonoBehaviour>().StopAllCoroutines();
     }
+
+
+
+    public void ShowDark()
+    {
+        foreach(var node in transform.GetComponentsInChildren<MMNode>())
+        {
+            Color c = node.GetComponent<Image>().color;
+            node.SetColor(new Color(c.r, c.g, c.b, 0.1f));
+        }
+    }
+
+    public void HideDark()
+    {
+        foreach (var node in transform.GetComponentsInChildren<MMNode>())
+        {
+            Color c = node.GetComponent<Image>().color;
+            node.SetColor(new Color(c.r, c.g, c.b, 1.0f));
+        }
+
+        //Color c = this.GetComponent<Image>().color;
+        //this.SetColor(new Color(c.r, c.g, c.b, 1.0f));
+    }
+
 
 }

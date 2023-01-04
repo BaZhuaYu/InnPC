@@ -20,6 +20,7 @@ public partial class MMCell : MMNode, IPointerEnterHandler, IPointerExitHandler,
                 this.Accept(MMBattleManager.Instance.sourceUnit);
                 MMBattleManager.Instance.sourceUnit.isMoved = true;
                 MMBattleManager.Instance.sourceUnit.HideMoveCells();
+                MMBattleManager.Instance.UpdateUI();
             }
         }
         else if (MMBattleManager.Instance.state == MMBattleState.SelectingCard)

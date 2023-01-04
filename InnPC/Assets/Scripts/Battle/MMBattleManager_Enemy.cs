@@ -53,8 +53,8 @@ public partial class MMBattleManager : MMNode
         Debug.Log("aaaaaabbbbbbbbbcccccccccc");
         unit.HideCard();
     }
-    
-    
+
+
 
 
 
@@ -179,5 +179,73 @@ public partial class MMBattleManager : MMNode
 
         return ret;
     }
+
+
+
+    public void ShowAllUnitAttackCells()
+    {
+        foreach (var unit in units2)
+        {
+            if (unit.CheckRage())
+            {
+                bool flag = false;
+
+                List<MMCell> cells = unit.FindAttackCells();
+                foreach (var cell in cells)
+                {
+                    if (cell.unitNode != null)
+                    {
+                        if (cell.unitNode.group != unit.group)
+                        {
+                            flag = true;
+                            //MMNode node = MMNode.Create("CellBorder_Red");
+                            //node.name = "ShowAllUnitAttackCells";
+                            //MMMap.Instance.AddChild(node);
+                            //node.transform.position = cell.transform.position;
+                            //node.LoadSize(cell.FindSize());
+                            //Debug.Log(node.FindSize());
+                            break;
+                        }
+                    }
+                }
+
+                if (flag)
+                {
+
+                }
+                else
+                {
+                    foreach (var cell in cells)
+                    {
+                        MMNode node = MMNode.Create("CellFill_Red");
+                        node.name = "ShowAllUnitAttackCells";
+                        MMMap.Instance.AddChild(node);
+                        node.transform.position = cell.transform.position;
+                        node.LoadSize(cell.FindSize());
+                    }
+                }
+            }
+        }
+    }
+
+    public void HideAllUnitAttackCells()
+    {
+        for (int i = 0; i < MMMap.Instance.gameObject.transform.childCount; i++)
+        {
+            if (MMMap.Instance.gameObject.transform.GetChild(i).name == "ShowAllUnitAttackCells")
+            {
+                Destroy(MMMap.Instance.gameObject.transform.GetChild(i).gameObject);
+            }
+        }
+    }
+
+
+    public void ShowUnitWillMove()
+    {
+
+    }
+
+
+
 
 }

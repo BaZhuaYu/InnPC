@@ -540,4 +540,14 @@ public partial class MMUnitNode : MMNode
         this.buffs.Remove(b);
     }
 
+
+    public bool CheckRage()
+    {
+        if(this.ap == this.maxAP && this.isActived == false)
+        {
+            return true;
+        }
+
+        return false;
+    }
 }
