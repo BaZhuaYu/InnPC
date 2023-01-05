@@ -214,7 +214,7 @@ public class MMNode : MonoBehaviour
         this.transform.localPosition = Vector3.zero;
     }
 
-    public void SetColor(Color c)
+    public void LoadColor(Color c)
     {
         GetComponent<Image>().color = c;
     }
@@ -260,7 +260,7 @@ public class MMNode : MonoBehaviour
         foreach(var node in transform.GetComponentsInChildren<MMNode>())
         {
             Color c = node.GetComponent<Image>().color;
-            node.SetColor(new Color(c.r, c.g, c.b, 0.1f));
+            node.LoadColor(new Color(c.r, c.g, c.b, 0.1f));
         }
     }
 
@@ -269,7 +269,7 @@ public class MMNode : MonoBehaviour
         foreach (var node in transform.GetComponentsInChildren<MMNode>())
         {
             Color c = node.GetComponent<Image>().color;
-            node.SetColor(new Color(c.r, c.g, c.b, 1.0f));
+            node.LoadColor(new Color(c.r, c.g, c.b, 1.0f));
         }
 
         //Color c = this.GetComponent<Image>().color;

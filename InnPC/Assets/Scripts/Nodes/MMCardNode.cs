@@ -184,7 +184,7 @@ public partial class MMCardNode : MMNode
         }
         
         this.GetComponent<Image>().color = c;
-        topBar.SetColor(c);
+        topBar.LoadColor(c);
         //botBar.SetColor(c);
 
         icon.LoadImage("Cards/" + key);

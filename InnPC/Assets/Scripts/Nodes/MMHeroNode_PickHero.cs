@@ -29,13 +29,13 @@ public class MMHeroNode_PickHero : MonoBehaviour, IPointerClickHandler
         if(MMPickHeroPanel.Instance.selectedHeroes.Contains(hero))
         {
             isSelected = false;
-            hero.avatar.SetColor(Color.white);
+            hero.avatar.LoadColor(Color.white);
             MMPickHeroPanel.Instance.UnselectHero(hero);
         }
         else
         {
             isSelected = true;
-            hero.avatar.SetColor(Color.gray);
+            hero.avatar.LoadColor(Color.gray);
             MMPickHeroPanel.Instance.SelectHero(hero);
         }
         

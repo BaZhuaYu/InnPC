@@ -53,19 +53,19 @@ public class MMHeroNode : MMNode
         switch (clss)
         {
             case 1:
-                this.SetColor(MMUtility.FindColorRed());
+                this.LoadColor(MMUtility.FindColorRed());
                 break;
             case 2:
-                this.SetColor(MMUtility.FindColorYellow());
+                this.LoadColor(MMUtility.FindColorYellow());
                 break;
             case 3:
-                this.SetColor(MMUtility.FindColorBlue());
+                this.LoadColor(MMUtility.FindColorBlue());
                 break;
             case 4:
-                this.SetColor(MMUtility.FindColorGreen());
+                this.LoadColor(MMUtility.FindColorGreen());
                 break;
             default:
-                this.SetColor(MMUtility.FindColorBlack());
+                this.LoadColor(MMUtility.FindColorBlack());
                 break;
         }
 

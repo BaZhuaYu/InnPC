@@ -311,23 +311,12 @@ public partial class MMBattleManager
                 MMSkillPanel.Instance.CloseUI();
                 break;
 
-            case MMBattlePhase.PickUnit:
-                ShowTitle("激活侠客");
-                ShowButton("回合结束");
-                buttonMain.gameObject.SetActive(false);
-                buttonAwait.gameObject.SetActive(false);
-                MMCardPanel.Instance.OpenUI();
-                MMSkillPanel.Instance.CloseUI();
-                MMSkillPanel.Instance.Clear();
-                break;
-
             case MMBattlePhase.RoundBegin:
                 ShowButton("结束");
                 buttonMain.gameObject.SetActive(false);
                 buttonAwait.gameObject.SetActive(false);
                 MMCardPanel.Instance.OpenUI();
                 MMSkillPanel.Instance.CloseUI();
-                //MMSkillPanel.Instance.Clear();
                 break;
 
             case MMBattlePhase.RoundEnd:
@@ -337,6 +326,16 @@ public partial class MMBattleManager
                 MMCardPanel.Instance.OpenUI();
                 MMSkillPanel.Instance.CloseUI();
                 //MMSkillPanel.Instance.Clear();
+                break;
+
+            case MMBattlePhase.PickUnit:
+                ShowTitle("激活侠客");
+                ShowButton("回合结束");
+                buttonMain.gameObject.SetActive(false);
+                buttonAwait.gameObject.SetActive(false);
+                MMCardPanel.Instance.OpenUI();
+                MMSkillPanel.Instance.CloseUI();
+                MMSkillPanel.Instance.Clear();
                 break;
 
             case MMBattlePhase.UnitBegin:
@@ -375,11 +374,13 @@ public partial class MMBattleManager
         textPhase.text = phase.ToString();
         if (isPlayerRound == 1)
         {
-            backgroundNote.SetColor(MMUtility.FindColorLightGreen());
+            backgroundNote.LoadColor(MMUtility.FindColorLightGreen());
+            MMSkillPanel.Instance.LoadColor(MMUtility.FindColorLightGreen());
         }
         else
         {
-            backgroundNote.SetColor(MMUtility.FindColorWhite());
+            backgroundNote.LoadColor(MMUtility.FindColorLightRed());
+            MMSkillPanel.Instance.LoadColor(MMUtility.FindColorLightRed());
         }
     }
 
