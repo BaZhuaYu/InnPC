@@ -54,6 +54,7 @@ public class MMCardNode_Battle : MonoBehaviour, IPointerClickHandler, IPointerEn
     {
         HideCard();
         HideTarget();
+        MMBattleManager.Instance.UpdateUI();
     }
 
 

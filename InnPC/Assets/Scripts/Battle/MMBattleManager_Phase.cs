@@ -28,6 +28,11 @@ public partial class MMBattleManager
 
     public void EnterPhase(MMBattlePhase p)
     {
+
+        if(isLocked)
+        {
+            return;
+        }
         
         if (p == MMBattlePhase.BattleBegin)
         {
@@ -275,46 +280,69 @@ public partial class MMBattleManager
             case MMBattlePhase.None:
                 ShowTitle(MMLevel.Create(MMExplorePanel.Instance.levelBattle).displayName);
                 ShowButton("战斗开始");
+                buttonMain.gameObject.SetActive(true);
+                buttonAwait.gameObject.SetActive(false);
+                panelAvatar.gameObject.SetActive(false);
                 MMUnitPanel.Instance.OpenUI();
+                foreach(var cell in MMMap.Instance.cells)
+                {
+                    cell.HideDark();
+                }
                 break;
 
             case MMBattlePhase.BattleEnd:
                 ShowTitle("战斗胜利");
-                ShowButton("战斗结束", false);
+                //ShowButton("战斗结束", false);
+                buttonMain.gameObject.SetActive(false);
+                buttonAwait.gameObject.SetActive(false);
+                panelAvatar.gameObject.SetActive(false);
                 MMUnitPanel.Instance.CloseUI();
                 MMCardPanel.Instance.OpenUI();
+                MMSkillPanel.Instance.CloseUI();
                 break;
 
             case MMBattlePhase.BattleBegin:
                 ShowTitle("xxxx");
                 ShowButton("xxxx");
+                buttonMain.gameObject.SetActive(false);
+                buttonAwait.gameObject.SetActive(false);
+                panelAvatar.gameObject.SetActive(false);
                 MMUnitPanel.Instance.OpenUI();
+                MMSkillPanel.Instance.CloseUI();
                 break;
 
             case MMBattlePhase.PickUnit:
                 ShowTitle("激活侠客");
                 ShowButton("回合结束");
+                buttonMain.gameObject.SetActive(false);
+                buttonAwait.gameObject.SetActive(false);
                 MMCardPanel.Instance.OpenUI();
-                MMSkillPanel.Instance.OpenUI();
+                MMSkillPanel.Instance.CloseUI();
                 MMSkillPanel.Instance.Clear();
                 break;
 
             case MMBattlePhase.RoundBegin:
                 ShowButton("结束");
+                buttonMain.gameObject.SetActive(false);
+                buttonAwait.gameObject.SetActive(false);
                 MMCardPanel.Instance.OpenUI();
-                MMSkillPanel.Instance.OpenUI();
-                MMSkillPanel.Instance.Clear();
+                MMSkillPanel.Instance.CloseUI();
+                //MMSkillPanel.Instance.Clear();
                 break;
 
             case MMBattlePhase.RoundEnd:
                 ShowButton("结束");
+                buttonMain.gameObject.SetActive(false);
+                buttonAwait.gameObject.SetActive(false);
                 MMCardPanel.Instance.OpenUI();
-                MMSkillPanel.Instance.OpenUI();
-                MMSkillPanel.Instance.Clear();
+                MMSkillPanel.Instance.CloseUI();
+                //MMSkillPanel.Instance.Clear();
                 break;
 
             case MMBattlePhase.UnitBegin:
                 ShowButton("结束");
+                buttonMain.gameObject.SetActive(false);
+                buttonAwait.gameObject.SetActive(true);
                 sourceUnit.HandleHighlight(MMNodeHighlight.Green);
                 MMCardPanel.Instance.OpenUI();
                 MMSkillPanel.Instance.OpenUI();
@@ -323,6 +351,8 @@ public partial class MMBattleManager
 
             case MMBattlePhase.UnitActing:
                 ShowButton("行动结束");
+                buttonMain.gameObject.SetActive(false);
+                buttonAwait.gameObject.SetActive(true);
                 sourceUnit.HandleHighlight(MMNodeHighlight.Green);
                 MMCardPanel.Instance.OpenUI();
                 MMSkillPanel.Instance.OpenUI();
@@ -333,7 +363,11 @@ public partial class MMBattleManager
 
             case MMBattlePhase.UnitEnd:
                 ShowButton("行动结束");
+                buttonMain.gameObject.SetActive(false);
+                buttonAwait.gameObject.SetActive(true);
+                panelAvatar.gameObject.SetActive(true);
                 MMCardPanel.Instance.OpenUI();
+                MMSkillPanel.Instance.OpenUI();
                 break;
 
         }

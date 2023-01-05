@@ -30,48 +30,49 @@ public partial class MMBattleManager : MMNode
     public Button buttonGameOver;
     public GameObject panelSettings;
 
+    public MMNode panelAvatar;
+
+
     //
+    [HideInInspector]
     public MMBattlePhase phase;
+    [HideInInspector]
     public MMBattleState state;
 
-
+    [HideInInspector]
     public List<MMUnitNode> units1;
+    [HideInInspector]
     public List<MMUnitNode> units2;
 
+    [HideInInspector]
     public MMCardNode selectingCard;
+    [HideInInspector]
     public MMSkillNode selectingSkill;
+    [HideInInspector]
     public MMUnitNode sourceUnit;
+    [HideInInspector]
     public MMUnitNode targetUnit;
-
-
-    //
-    public int round;
-    public int isPlayerRound;
-
+    [HideInInspector]
     public Dictionary<int, List<MMSkillNode>> historySkills;
+
+
+    //Private
+
+    int round;
+    int isPlayerRound;
+    bool isLocked;
+    
 
 
     private void Start()
     {
         //TopBar
-        buttonMain = GameObject.Find("MainButton").GetComponent<Button>();
-        backgroundNote = GameObject.Find("Canvas/PanelBattle/TopBar/Note").GetComponent<MMNode>();
 
-        //PanelButton
-        //buttonAttack = GameObject.Find("AttackButton").GetComponent<Button>();
-
-        textButtonMain = GameObject.Find("MainButton").GetComponentInChildren<Text>();
         buttonMain.onClick.AddListener(OnClickButtonMain);
-
-        //PanelSkill
-        buttonAwait = GameObject.Find("AwaitButton").GetComponent<Button>();
         buttonAwait.onClick.AddListener(OnClickButtonAwait);
-        textHP = GameObject.Find("TextHP").GetComponent<Text>();
-        
-
-        panelGameover.SetActive(false);
         buttonGameOver.onClick.AddListener(OnClickGameOverButton);
 
+        panelGameover.SetActive(false);
         panelSettings.SetActive(false);
 
         MMCardPanel.Instance.CloseUI();
@@ -79,11 +80,10 @@ public partial class MMBattleManager : MMNode
         MMUnitPanel.Instance.CloseUI();
 
         historySkills = new Dictionary<int, List<MMSkillNode>>();
-
         isPlayerRound = 0;
+        isLocked = false;
 
         CloseUI();
-        
     }
 
     

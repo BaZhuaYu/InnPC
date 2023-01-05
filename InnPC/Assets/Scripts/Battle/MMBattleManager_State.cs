@@ -18,10 +18,14 @@ public enum MMBattleState
 public partial class MMBattleManager
 {
     int index = 0;
-    bool isLock = false;
 
     public void EnterState(MMBattleState s)
     {
+        if (isLocked)
+        {
+            return;
+        }
+
         if (s == MMBattleState.SelectedSourceUnit)
         {
             if (sourceUnit == null)

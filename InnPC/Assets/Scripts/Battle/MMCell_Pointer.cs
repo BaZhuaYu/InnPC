@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public partial class MMCell : MMNode, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerClickHandler
+public partial class MMCell : MMNode, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
 
     public void OnPointerClick(PointerEventData eventData)
@@ -39,12 +39,7 @@ public partial class MMCell : MMNode, IPointerEnterHandler, IPointerExitHandler,
         }
 
     }
-
-
-    public void OnPointerDown(PointerEventData eventData)
-    {
-
-    }
+    
 
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -76,6 +71,7 @@ public partial class MMCell : MMNode, IPointerEnterHandler, IPointerExitHandler,
         {
             MMBattleManager.Instance.sourceUnit.HideWillMove(this);
         }
+        MMBattleManager.Instance.UpdateUI();
     }
 
 }

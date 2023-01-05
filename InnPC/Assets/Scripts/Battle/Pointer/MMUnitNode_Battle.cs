@@ -68,6 +68,7 @@ public class MMUnitNode_Battle : MonoBehaviour, IPointerClickHandler, IPointerEn
         }
         
         unit.HideAttackCells();
+        MMBattleManager.Instance.UpdateUI();
     }
 
 
