@@ -180,7 +180,7 @@ public class MMCardPanel : MMNode
 
         for (int i = 0; i < hand.Count; i++)
         {
-            hand[i].gameObject.transform.SetSiblingIndex(hand.Count - i);
+            hand[i].gameObject.transform.SetSiblingIndex(i);
         }
 
 
@@ -251,21 +251,26 @@ public class MMCardPanel : MMNode
                 if (card.clss == MMBattleManager.Instance.sourceUnit.clss)
                 {
                     card.sortingOrder = card.id;
-                    card.ShowMiddleY();
+                    //card.ShowMiddleY();
+                    card.border.SetActive(true);
                 }
                 else if (card.clss == 0)
                 {
                     card.sortingOrder = card.id + 100000;
-                    card.MoveToCenterY();
+                    //card.MoveToCenterY();
+                    card.border.SetActive(true);
                 }
                 else
                 {
                     card.sortingOrder = card.id + 200000;
-                    card.ShowDown();
+                    //card.ShowDown();
+                    card.border.SetActive(false);
                 }
+
+                card.sortingOrder = card.id + card.clss * 100000;
             }
         }
-
+        
         hand.Sort((x, y) => x.sortingOrder < y.sortingOrder ? -1 : 1);
     }
 

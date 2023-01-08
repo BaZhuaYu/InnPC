@@ -54,7 +54,7 @@ public class MMCardNode_Battle : MonoBehaviour, IPointerClickHandler, IPointerEn
     {
         HideCard();
         HideTarget();
-        MMBattleManager.Instance.UpdateUI();
+        //MMBattleManager.Instance.UpdateUI();
     }
 
 
@@ -66,14 +66,16 @@ public class MMCardNode_Battle : MonoBehaviour, IPointerClickHandler, IPointerEn
     {
         siblingIndex = card.transform.GetSiblingIndex();
         card.transform.SetSiblingIndex(1000);
-        if(MMBattleManager.Instance.sourceUnit == null)
-        {
-            card.ShowMiddleY();
-        }
-        else
-        {
-            card.ShowUp();
-        }
+        //if(MMBattleManager.Instance.sourceUnit == null)
+        //{
+        //    card.ShowMiddleY();
+        //}
+        //else
+        //{
+        //    card.ShowUp();
+        //}
+
+        card.ShowMiddleY();
     }
 
     void HideCard()
@@ -81,15 +83,16 @@ public class MMCardNode_Battle : MonoBehaviour, IPointerClickHandler, IPointerEn
         card.ShowDown();
         card.transform.SetSiblingIndex(siblingIndex);
 
-        if (MMBattleManager.Instance.sourceUnit == null)
-        {
-            card.ShowDown();
-        }
-        else
-        {
-            card.ShowMiddleY();
-        }
+        //if (MMBattleManager.Instance.sourceUnit == null)
+        //{
+        //    card.ShowDown();
+        //}
+        //else
+        //{
+        //    card.ShowMiddleY();
+        //}
 
+        card.ShowDown();
     }
 
     void ShowTarget()

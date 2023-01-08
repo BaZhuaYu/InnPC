@@ -34,13 +34,14 @@ public class MMPickHeroNode : MMNode
         UpdateUI();
     }
 
+
     public void UpdateUI()
     {
-        float offset = this.FindWidth() * 0.4f;
+        float offset = this.FindWidth() * 0.25f;
         foreach (var unit in units)
         {
             unit.MoveLeft(offset);
-            offset += unit.FindWidth() * 1.1f;
+            offset -= this.FindWidth() * 0.25f;
         }
     }
 

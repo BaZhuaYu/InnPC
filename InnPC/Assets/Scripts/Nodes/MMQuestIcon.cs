@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-
-public class MMReward_CardNode : MonoBehaviour, IPointerClickHandler
+public class MMQuestIcon : MMNode, IPointerClickHandler
 {
-    public MMCard card;
+    [HideInInspector]
+    public MMQuestNode node;
+
 
     // Start is called before the first frame update
     void Start()
@@ -23,13 +24,8 @@ public class MMReward_CardNode : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-
-        MMExplorePanel.Instance.cards.Add(card);
-        Debug.Log("asdasdasdad: " + card.displayName);
-        gameObject.SetActive(false);
-
-        MMRewardPanel.instance.CloseUI();
-        MMExplorePanel.Instance.UpdateUI();
+        Debug.Log("asdasdasdasdasdasd");
+        node.gameObject.SetActive(true);
     }
 
 }

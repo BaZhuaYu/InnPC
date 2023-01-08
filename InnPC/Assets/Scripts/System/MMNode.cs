@@ -214,6 +214,12 @@ public class MMNode : MonoBehaviour
         this.transform.localPosition = Vector3.zero;
     }
 
+    public void AddBrother(MMNode brother)
+    {
+        brother.transform.SetParent(this.transform.parent);
+        brother.transform.localPosition = Vector3.zero;
+    }
+
     public void LoadColor(Color c)
     {
         GetComponent<Image>().color = c;
@@ -238,7 +244,7 @@ public class MMNode : MonoBehaviour
     IEnumerator MoveToAAA()
     {
         int i = 0;
-        while (i++ < 1000)
+        while (i++ < 500)
         {
             if(this.gameObject.activeSelf)
             {

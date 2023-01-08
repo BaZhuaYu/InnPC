@@ -5,15 +5,14 @@ using UnityEngine.UI;
 
 public partial class MMCardNode : MMNode
 {
-
+    [HideInInspector]
     public MMCard card;
-    /// <summary>
-    /// Panel
-    /// </summary>
+    [HideInInspector]
     public MMUnitNode unit;
 
     public MMNode topBar;
     public MMNode botBar;
+    public MMNode border;
 
     public MMNode icon;
     public Text textName;
@@ -28,14 +27,19 @@ public partial class MMCardNode : MMNode
     /// <summary>
     /// Data
     /// </summary>
+    [HideInInspector]
     public int id;
+    [HideInInspector]
     public string key;
-
+    [HideInInspector]
     public string displayName;
+    [HideInInspector]
     public string displayNote;
-
+    [HideInInspector]
     public int cost;
+    [HideInInspector]
     public int clss;
+    [HideInInspector]
     public MMCardType type;
     
 

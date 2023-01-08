@@ -81,7 +81,20 @@ public class MMItemNode : MMNode
         return obj.GetComponent<MMItemNode>();
     }
 
-    
+    public static MMItemNode Create(MMItem item)
+    {
+        MMItemNode ret = MMItemNode.Create();
+        ret.Accept(item);
+        return ret;
+    }
+
+    public static MMItemNode Create(int id)
+    {
+        MMItem item = MMItem.Create(id);
+        return MMItemNode.Create(item);
+    }
+
+
     public MMEffect CreateEffect()
     {
         MMEffect ret = new MMEffect();
