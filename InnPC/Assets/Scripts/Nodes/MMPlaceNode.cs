@@ -14,24 +14,27 @@ public partial class MMPlaceNode : MMNode
 
     public MMPlace place;
 
+
     [HideInInspector]
     public string key;
+    [HideInInspector]
     public int id;
+    [HideInInspector]
     public string displayName;
+    [HideInInspector]
     public string displayNote;
+    [HideInInspector]
+    public int num;
+    [HideInInspector]
     public int price;
 
-
-    /// <summary>
-    /// 
-    /// </summary>
-    bool isEnabled;
+    
 
 
     // Start is called before the first frame update
     void Start()
     {
-        isEnabled = true;
+        
     }
 
     // Update is called once per frame
@@ -40,13 +43,7 @@ public partial class MMPlaceNode : MMNode
 
     }
 
-
-    public void SetEnable(bool flag)
-    {
-        this.isEnabled = flag;
-        UpdateUI();
-    }
-
+    
 
     public void Accpet(MMPlace place)
     {
@@ -62,8 +59,7 @@ public partial class MMPlaceNode : MMNode
         this.displayNote = place.displayNote;
 
         this.price = place.price;
-        isEnabled = true;
-
+        this.num = 10;
     }
 
     public void Clear()
@@ -79,15 +75,7 @@ public partial class MMPlaceNode : MMNode
         this.textNote.text = this.displayNote;
         this.textPrice.text = "" + this.price;
         this.avatar.LoadImage("Places/" + this.key);
-        
-        if(isEnabled)
-        {
-            bgPrice.gameObject.SetActive(true);
-        }
-        else
-        {
-            bgPrice.gameObject.SetActive(false);
-        }
+       
     }
 
 
@@ -108,12 +96,11 @@ public partial class MMPlaceNode : MMNode
         ret.UpdateUI();
         return ret;
     }
-
-
-    public static MMPlaceNode Create(string key)
+    
+    public static MMPlaceNode Create(int id)
     {
         MMPlaceNode ret = Create();
-        MMPlace one = MMPlace.FindOne(key);
+        MMPlace one = MMPlace.FindOne(id);
         ret.Accpet(one);
 
         ret.UpdateUI();

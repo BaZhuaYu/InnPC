@@ -14,13 +14,16 @@ public class MMTipManager : MMNode
         instance = this;
     }
 
+    GameObject canvas;
 
+    
     public void CreateTip(string s)
     {
         Debug.LogWarning(s);
         GameObject obj = Resources.Load("Prefabs/MMTipNode") as GameObject;
         MMTipNode tip = Instantiate(obj).GetComponent<MMTipNode>();
-        AddChild(tip);
+        canvas = GameObject.Find("Canvas");
+        tip.transform.SetParent(canvas.transform);
         tip.Show(s);
     }
 

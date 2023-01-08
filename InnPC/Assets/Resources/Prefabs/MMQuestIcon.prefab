@@ -12,8 +12,6 @@ GameObject:
   - component: {fileID: 6431878020830075298}
   - component: {fileID: 4655183768481508511}
   - component: {fileID: -6155399178396520903}
-  - component: {fileID: 3217067643612530260}
-  - component: {fileID: 8623177271398857426}
   m_Layer: 5
   m_Name: MMQuestIcon
   m_TagString: Untagged
@@ -94,35 +92,3 @@ MonoBehaviour:
   nodeHighlight: 0
   userinfo: 
   node: {fileID: 0}
---- !u!114 &3217067643612530260
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7882364714840343207}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 4
-    callback:
-      m_PersistentCalls:
-        m_Calls: []
---- !u!114 &8623177271398857426
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7882364714840343207}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 0}
-  m_sendNavigationEvents: 1
-  m_DragThreshold: 10

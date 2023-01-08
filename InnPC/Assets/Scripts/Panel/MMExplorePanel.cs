@@ -155,14 +155,9 @@ public partial class MMExplorePanel : MMNode
     {
         this.places = new List<MMPlaceNode>();
 
-        MMPlaceNode place1 = MMPlaceNode.Create("Place_JiShi");
+        MMPlaceNode place1 = MMPlaceNode.Create(1);
         places.Add(place1);
-
-        MMPlaceNode place2 = MMPlaceNode.Create("Place_YouJianKeZhan");
-        places.Add(place2);
-
-        MMPlaceNode place3 = MMPlaceNode.Create("Place_LuoYangJiaoWai");
-        places.Add(place3);
+        
     }
 
 
@@ -287,11 +282,6 @@ public partial class MMExplorePanel : MMNode
 
     public void OnClickMainButton()
     {
-        foreach (var place in places)
-        {
-            place.SetEnable(true);
-        }
-
         this.CloseUI();
         MMBattleManager.Instance.OpenUI();
         MMBattleManager.Instance.EnterPhase(MMBattlePhase.None);
@@ -367,5 +357,18 @@ public partial class MMExplorePanel : MMNode
         return false;
     }
 
-    
+
+
+    public void GainExp(int value)
+    {
+        this.tansuoExp += value;
+        MMTipManager.instance.CreateTip("获得" + value + "点经验" );
+    }
+
+    public void GainGold(int value)
+    {
+        this.tansuoGold += value;
+        MMTipManager.instance.CreateTip("获得" + value + "两银子");
+    }
+
 }
