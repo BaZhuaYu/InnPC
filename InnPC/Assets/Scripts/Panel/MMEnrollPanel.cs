@@ -15,9 +15,7 @@ public class MMEnrollPanel : MMNode
     
     public Text textGold; 
 
-    /// <summary>
-    /// 
-    /// </summary>
+   
     List<MMHeroNode> heroes;
 
 

@@ -456,15 +456,7 @@ public partial class MMUnitNode : MMNode
     
     public List<MMSkillNode> FindAllHistorySkills()
     {
-        List<MMSkillNode> ret = new List<MMSkillNode>();
-        foreach(var (round, skills) in MMBattleManager.Instance.historySkills)
-        {
-            foreach(var skill in skills)
-            {
-                ret.Add(skill);
-            }
-        }
-        return ret;
+        return null;
     }
     
 

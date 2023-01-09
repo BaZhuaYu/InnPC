@@ -14,7 +14,6 @@ public class MMReward_SkillNode : MonoBehaviour, IPointerClickHandler
         MMUnit unit = node.unit;
         unit.skills.Add(skill.id);
         
-        MMRewardPanel.instance.CloseUI();
         MMExplorePanel.Instance.UpdateUI();
     }
 

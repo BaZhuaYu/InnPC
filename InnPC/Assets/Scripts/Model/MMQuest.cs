@@ -18,14 +18,20 @@ public class MMQuest
 
     public MMQuestType type;
 
+    public string displayName;
+    public string displayNote;
+
 
     public static MMQuest Create(int id)
     {
         MMQuest ret = new MMQuest();
         ret.id = id;
+        ret.key = "Card_10000";
         if (id == 1)
         {
             ret.type = MMQuestType.RewardUnit;
+            ret.displayName = "招募侠客";
+            ret.displayNote = "招募一名侠客";
             ret.reward = MMHeroNode.Create(10100);
 
             ret.units = new List<MMUnit>();
@@ -38,6 +44,8 @@ public class MMQuest
         else if (id == 2)
         {
             ret.type = MMQuestType.RewardCard;
+            ret.displayName = "卡牌";
+            ret.displayNote = "获得一张卡牌";
             ret.reward = MMCardNode.Create(10101);
 
             ret.cards = new List<MMCard>();
@@ -58,6 +66,8 @@ public class MMQuest
         else if (id == 3)
         {
             ret.type = MMQuestType.RewardItem;
+            ret.displayName = "物品";
+            ret.displayNote = "获得一个物品";
             ret.reward = MMItemNode.Create(1);
 
             ret.items = new List<MMItem>();
@@ -68,6 +78,8 @@ public class MMQuest
         else if (id == 4)
         {
             ret.type = MMQuestType.RewardPlace;
+            ret.displayName = "场景";
+            ret.displayNote = "发现一个地点";
             ret.reward = MMPlaceNode.Create(2);
             ret.place = MMPlace.Create(2);
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MMRewardPanel : MMNode
 {
-    public static MMRewardPanel instance;
+    static MMRewardPanel instance;
 
     private void Awake()
     {

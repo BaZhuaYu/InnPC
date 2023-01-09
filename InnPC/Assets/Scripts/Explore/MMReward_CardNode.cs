@@ -27,8 +27,7 @@ public class MMReward_CardNode : MonoBehaviour, IPointerClickHandler
         MMExplorePanel.Instance.cards.Add(card);
         Debug.Log("asdasdasdad: " + card.displayName);
         gameObject.SetActive(false);
-
-        MMRewardPanel.instance.CloseUI();
+        
         MMExplorePanel.Instance.UpdateUI();
     }
 

@@ -52,8 +52,7 @@ public partial class MMBattleManager : MMNode
     public MMUnitNode sourceUnit;
     [HideInInspector]
     public MMUnitNode targetUnit;
-    [HideInInspector]
-    public Dictionary<int, List<MMSkillNode>> historySkills;
+    
 
 
     //Private
@@ -78,8 +77,7 @@ public partial class MMBattleManager : MMNode
         MMCardPanel.Instance.CloseUI();
         MMSkillPanel.Instance.CloseUI();
         MMUnitPanel.Instance.CloseUI();
-
-        historySkills = new Dictionary<int, List<MMSkillNode>>();
+        
         isPlayerRound = 0;
         isLocked = false;
 

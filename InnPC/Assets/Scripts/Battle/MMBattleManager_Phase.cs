@@ -136,7 +136,6 @@ public partial class MMBattleManager
                 LoadLevel();
                 MMCardPanel.Instance.LoadDeck(MMExplorePanel.Instance.cards);
                 MMCardPanel.Instance.ShuffleDeck();
-                historySkills = new Dictionary<int, List<MMSkillNode>>();
                 break;
 
 
@@ -158,7 +157,6 @@ public partial class MMBattleManager
 
             case MMBattlePhase.RoundBegin:
                 round += 1;
-                historySkills.Add(round, new List<MMSkillNode>());
 
                 if (isPlayerRound == 1)
                 {

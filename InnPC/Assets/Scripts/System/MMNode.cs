@@ -28,7 +28,7 @@ public class MMNode : MonoBehaviour
         GameObject obj = Instantiate(Resources.Load("Prefabs/MMNode") as GameObject);
         obj.name = key;
         MMNode ret = obj.GetComponent<MMNode>();
-        ret.LoadImage("UI/aaa/" + key);
+        ret.LoadImage(key);
         return ret;
     }
 

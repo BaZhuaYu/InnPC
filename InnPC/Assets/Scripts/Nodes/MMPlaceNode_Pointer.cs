@@ -49,7 +49,7 @@ public partial class MMPlaceNode : MMNode, IPointerClickHandler
             //洛阳郊外
             case "Place_LuoYangJiaoWai":
                 //MMRewardPanel.instance.LoadCardPanel();
-                MMQuestNode node2 = MMQuestNode.Create(MMQuest.Create(2));
+                MMQuestPanel node2 = MMQuestPanel.Create(MMQuest.Create(2));
                 AddBrother(node2);
                 break;
 
@@ -57,7 +57,7 @@ public partial class MMPlaceNode : MMNode, IPointerClickHandler
             //集市
             case "Place_JiShi":
                 //MMRewardPanel.instance.LoadItemPanel();
-                MMQuestNode node3 = MMQuestNode.Create(MMQuest.Create(3));
+                MMQuestPanel node3 = MMQuestPanel.Create(MMQuest.Create(3));
                 AddBrother(node3);
                 break;
 
@@ -70,6 +70,13 @@ public partial class MMPlaceNode : MMNode, IPointerClickHandler
 
     void Place_LuoYangCheng()
     {
+        MMQuestPanel node = MMQuestPanel.Create(MMQuest.Create(2));
+        AddBrother(node);
+        MMExplorePanel.Instance.quests.Add(node.quest.quest);
+        MMExplorePanel.Instance.UpdateUI();
+        return;
+
+
         int r = Random.Range(0,100);
         if(r < 25)
         {
@@ -82,25 +89,25 @@ public partial class MMPlaceNode : MMNode, IPointerClickHandler
         else if (r < 60)
         {
             //侠客
-            MMQuestNode node1 = MMQuestNode.Create(MMQuest.Create(1));
+            MMQuestPanel node1 = MMQuestPanel.Create(MMQuest.Create(1));
             AddBrother(node1);
         }
         else if (r < 75)
         {
             //卡牌
-            MMQuestNode node2 = MMQuestNode.Create(MMQuest.Create(2));
+            MMQuestPanel node2 = MMQuestPanel.Create(MMQuest.Create(2));
             AddBrother(node2);
         }
         else if (r < 85)
         {
             //物品
-            MMQuestNode node3 = MMQuestNode.Create(MMQuest.Create(3));
+            MMQuestPanel node3 = MMQuestPanel.Create(MMQuest.Create(3));
             AddBrother(node3);
         }
         else if (r < 100)
         {
             //场景
-            MMQuestNode node4 = MMQuestNode.Create(MMQuest.Create(4));
+            MMQuestPanel node4 = MMQuestPanel.Create(MMQuest.Create(4));
             AddBrother(node4);
         }
     }
@@ -108,7 +115,7 @@ public partial class MMPlaceNode : MMNode, IPointerClickHandler
 
     void Place_YouJianKeZhan()
     {
-        MMQuestNode node1 = MMQuestNode.Create(MMQuest.Create(1));
+        MMQuestPanel node1 = MMQuestPanel.Create(MMQuest.Create(1));
         AddBrother(node1);
     }
 

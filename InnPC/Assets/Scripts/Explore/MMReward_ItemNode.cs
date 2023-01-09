@@ -14,7 +14,6 @@ public class MMReward_ItemNode : MonoBehaviour, IPointerClickHandler
         
         OnGainItem();
         
-        MMRewardPanel.instance.CloseUI();
         MMExplorePanel.Instance.UpdateUI();
     }
 

@@ -217,7 +217,7 @@ public partial class MMBattleManager : MMNode
                 {
                     foreach (var cell in cells)
                     {
-                        MMNode node = MMNode.Create("CellFill_Red");
+                        MMNode node = MMNode.Create("UI/aaa/CellFill_Red");
                         node.name = "ShowAllUnitAttackCells";
                         MMMap.Instance.AddChild(node);
                         node.transform.position = cell.transform.position;

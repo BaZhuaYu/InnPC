@@ -16,8 +16,7 @@ public class MMReward_UnitNode : MonoBehaviour, IPointerClickHandler
         }
 
         MMExplorePanel.Instance.minions.Add(unit);
-
-        MMRewardPanel.instance.CloseUI();
+        
         MMExplorePanel.Instance.UpdateUI();
     }
 

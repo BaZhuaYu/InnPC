@@ -243,7 +243,7 @@ public partial class MMUnitNode : MMNode
         MMUnitNode target = this.FindTarget();
         if (target != null)
         {
-            MMNode targetNode = MMNode.Create("CellBorder_Red");
+            MMNode targetNode = MMNode.Create("UI/aaa/CellBorder_Red");
             targetNode.gameObject.name = "WillMoveTargetNode";
             this.AddChild(targetNode);
             targetNode.transform.position = target.transform.position;

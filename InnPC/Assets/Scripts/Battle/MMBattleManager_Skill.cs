@@ -7,16 +7,11 @@ public partial class MMBattleManager
 
     public void HandlePlaySkill()
     {
-        
-
         MMEffect effect = selectingSkill.CreateEffect();
         effect.target = this.targetUnit;
         
 
         ExecuteEffect(effect);
-
-        
-        this.historySkills[round].Add(selectingSkill);
         
 
         //Final Card

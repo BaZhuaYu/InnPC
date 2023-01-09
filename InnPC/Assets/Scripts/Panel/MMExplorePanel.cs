@@ -12,18 +12,16 @@ public partial class MMExplorePanel : MMNode
         Instance = this;
     }
 
-
+    public MMNode topBar;
+    public MMNode botBar;
 
     public Button mainButton;
-    public Button discoverButton;
     public Text mainText;
 
     public Text textLevel;
     public Text textGold;
     public Text textExp;
     public Text textTime;
-    
-    public Text textDiscover;
 
 
     /// <summary>
@@ -42,16 +40,16 @@ public partial class MMExplorePanel : MMNode
     public int tansuoExp;
     [HideInInspector]
     public int tansuoTime;
+    [HideInInspector]
+    public int tansuoEvil;
+    [HideInInspector]
+    public int tansuoDay;
+
 
     [HideInInspector]
     public int levelBattle;
-    [HideInInspector]
-    public int tansuoLevel;
-
-    [HideInInspector]
-    List<int> exps;
-
-
+    
+    
     [HideInInspector]
     public List<MMPlaceNode> places;
     [HideInInspector]
@@ -62,7 +60,8 @@ public partial class MMExplorePanel : MMNode
     public List<MMUnit> minions;
     [HideInInspector]
     public List<MMItem> items;
-
+    [HideInInspector]
+    public List<MMQuest> quests;
 
     /// <summary>
     /// Private
@@ -71,16 +70,11 @@ public partial class MMExplorePanel : MMNode
 
     void Start()
     {
-        mainButton = GameObject.Find("PanelExplore/MainButton").GetComponent<Button>();
+        mainButton = GameObject.Find("PanelExplore/BotBar/MainButton").GetComponent<Button>();
         mainText = mainButton.GetComponentInChildren<Text>();
         mainButton.onClick.AddListener(OnClickMainButton);
-        
-        discoverButton = GameObject.Find("PanelExplore/DiscoverButton").GetComponent<Button>();
-        discoverButton.onClick.AddListener(OnClickButtonDiscover);
 
-        textDiscover = discoverButton.GetComponentInChildren<Text>();
-
-        exps = new List<int>() {0, 1, 2, 4, 7, 11, 16, 22 };
+        quests = new List<MMQuest>();
 
         CloseUI();
     }
@@ -99,7 +93,7 @@ public partial class MMExplorePanel : MMNode
         hp = 100;
         levelBattle = 1;
 
-        tansuoLevel = 1;
+        tansuoDay = 1;
         tansuoGold = 100;
         tansuoExp = 0;
         tansuoTime = 12;
@@ -121,7 +115,7 @@ public partial class MMExplorePanel : MMNode
     public void AcceptCards(List<MMCard> cards)
     {
         this.cards = new List<MMCard>();
-        
+
         this.cards.Add(MMCard.Create(1003));
         this.cards.Add(MMCard.Create(1003));
         this.cards.Add(MMCard.Create(1005));
@@ -157,7 +151,6 @@ public partial class MMExplorePanel : MMNode
 
         MMPlaceNode place1 = MMPlaceNode.Create(1);
         places.Add(place1);
-        
     }
 
 
@@ -213,11 +206,10 @@ public partial class MMExplorePanel : MMNode
 
         int coin = HandleRewardGold();
         MMExplorePanel.Instance.tansuoGold += coin;
-        
+
         tansuoExp += 1;
 
         OpenUI();
-        MMRewardPanel.instance.CloseUI();
 
         UpdateUI();
     }
@@ -232,12 +224,10 @@ public partial class MMExplorePanel : MMNode
 
         int coin = HandleRewardGold();
         MMExplorePanel.Instance.tansuoGold += coin;
-        
+
         tansuoExp += 1;
 
         OpenUI();
-        MMRewardPanel.instance.CloseUI();
-
         UpdateUI();
     }
 
@@ -245,18 +235,17 @@ public partial class MMExplorePanel : MMNode
     public void UpdateUI()
     {
         mainText.text = "开始战斗: " + levelBattle;
-        textLevel.text = tansuoLevel + "";
+        textLevel.text = tansuoDay + "";
         textGold.text = tansuoGold + "";
         textExp.text = tansuoExp + "";
         textTime.text = tansuoTime + "";
-        textDiscover.text = "新地点（" + tansuoExp + "/" + exps[tansuoLevel] + "）";
-
+        MMEvilPanel.Instance.UpdateUI();
 
         //Reward
         float offsetX = 500f;
         float offsetY = 200f;
 
-        for(int i =0;i<places.Count;i++)
+        for (int i = 0; i < places.Count; i++)
         {
             MMPlaceNode place = places[i];
             place.SetParent(this);
@@ -264,11 +253,28 @@ public partial class MMExplorePanel : MMNode
             place.MoveLeft(offsetX);
 
             offsetX -= 500f;
-            if(i %3 == 2)
+            if (i % 3 == 2)
             {
                 offsetX = 500;
                 offsetY -= 400;
             }
+        }
+
+
+        MMQuestIcon[] a = botBar.GetComponentsInChildren<MMQuestIcon>();
+        foreach(var aa in a)
+        {
+            Destroy(aa.gameObject);
+        }
+        
+        float offset = botBar.FindWidth() * 0.3f;
+        foreach (var quest in quests)
+        {
+            MMQuestIcon icon = MMQuestIcon.Create(quest);
+            botBar.AddChild(icon);
+            icon.gameObject.name = "MMQuestIcon";
+            icon.MoveRight(offset);
+            offset -= icon.FindWidth();
         }
 
     }
@@ -289,29 +295,6 @@ public partial class MMExplorePanel : MMNode
     }
 
 
-    public void OnClickButtonDiscover()
-    {
-        if (this.places.Count >= MMPlace.places.Count)
-        {
-            MMTipManager.instance.CreateTip("没有更多地点");
-            return;
-        }
-
-        if (tansuoGold < (exps[tansuoLevel] - tansuoExp))
-        {
-            MMTipManager.instance.CreateTip("银两不足");
-            return;
-        }
-
-        tansuoGold -= (exps[tansuoLevel] - tansuoExp);
-        tansuoLevel += 1;
-        tansuoExp = 0;
-
-        MMPlaceNode n = MMPlaceNode.Create(FindRandomPlace());
-        this.places.Add(n);
-        UpdateUI();
-    }
-
 
     int HandleRewardGold()
     {
@@ -323,18 +306,12 @@ public partial class MMExplorePanel : MMNode
         return ret;
     }
 
-
-    public void SkipReward()
-    {
-        MMRewardPanel.instance.CloseUI();
-    }
-
-
+   
 
     MMPlace FindRandomPlace()
     {
         MMPlace place = MMPlace.FindRandomOne();
-        if(HasPlace(place))
+        if (HasPlace(place))
         {
             return FindRandomPlace();
         }
@@ -362,7 +339,7 @@ public partial class MMExplorePanel : MMNode
     public void GainExp(int value)
     {
         this.tansuoExp += value;
-        MMTipManager.instance.CreateTip("获得" + value + "点经验" );
+        MMTipManager.instance.CreateTip("获得" + value + "点经验");
     }
 
     public void GainGold(int value)
