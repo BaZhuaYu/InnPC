@@ -25,6 +25,7 @@ public class MMHintNode : MMNode, IPointerEnterHandler, IPointerExitHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        Debug.Log("OnPointerEnter: " + node.name);
         node.OpenUI();
     }
 

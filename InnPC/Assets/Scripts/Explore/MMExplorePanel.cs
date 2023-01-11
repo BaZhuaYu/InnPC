@@ -22,6 +22,8 @@ public partial class MMExplorePanel : MMNode
     public Text textGold;
     public Text textExp;
     public Text textTime;
+    public Text textEventCards;
+    public GameObject iconTime;
 
 
     /// <summary>
@@ -45,11 +47,12 @@ public partial class MMExplorePanel : MMNode
     [HideInInspector]
     public int tansuoDay;
 
-
+    [HideInInspector]
+    public int levelTanSuo;
     [HideInInspector]
     public int levelBattle;
-    
-    
+
+
     [HideInInspector]
     public List<MMPlaceNode> places;
     [HideInInspector]
@@ -62,6 +65,8 @@ public partial class MMExplorePanel : MMNode
     public List<MMItem> items;
     [HideInInspector]
     public List<MMQuest> quests;
+    [HideInInspector]
+    public List<MMQuest> events;
 
     /// <summary>
     /// Private
@@ -75,6 +80,7 @@ public partial class MMExplorePanel : MMNode
         mainButton.onClick.AddListener(OnClickMainButton);
 
         quests = new List<MMQuest>();
+        events = new List<MMQuest>();
 
         CloseUI();
     }
@@ -96,7 +102,8 @@ public partial class MMExplorePanel : MMNode
         tansuoDay = 1;
         tansuoGold = 100;
         tansuoExp = 0;
-        tansuoTime = 12;
+        tansuoTime = 4;
+        UpdateUI();
     }
 
 
@@ -149,8 +156,12 @@ public partial class MMExplorePanel : MMNode
     {
         this.places = new List<MMPlaceNode>();
 
-        MMPlaceNode place1 = MMPlaceNode.Create(1);
-        places.Add(place1);
+        int[] indexes = new int[] { 1, 2, 5, 6, 7, 10 };
+        foreach (var index in indexes)
+        {
+            MMPlaceNode place = MMPlaceNode.Create(index);
+            places.Add(place);
+        }
     }
 
 
@@ -238,8 +249,9 @@ public partial class MMExplorePanel : MMNode
         textLevel.text = tansuoDay + "";
         textGold.text = tansuoGold + "";
         textExp.text = tansuoExp + "";
-        textTime.text = tansuoTime + "";
+        textTime.text = tansuoTime + "/12";
         MMEvilPanel.Instance.UpdateUI();
+        iconTime.transform.localPosition = new Vector2((float)(tansuoTime - 6) / 12f * this.FindWidth(), 0);
 
         //Reward
         float offsetX = 500f;
@@ -262,11 +274,11 @@ public partial class MMExplorePanel : MMNode
 
 
         MMQuestIcon[] a = botBar.GetComponentsInChildren<MMQuestIcon>();
-        foreach(var aa in a)
+        foreach (var aa in a)
         {
             Destroy(aa.gameObject);
         }
-        
+
         float offset = botBar.FindWidth() * 0.3f;
         foreach (var quest in quests)
         {
@@ -288,10 +300,8 @@ public partial class MMExplorePanel : MMNode
 
     public void OnClickMainButton()
     {
-        this.CloseUI();
-        MMBattleManager.Instance.OpenUI();
-        MMBattleManager.Instance.EnterPhase(MMBattlePhase.None);
-        MMBattleManager.Instance.panelGameover.SetActive(false);
+        ExitExplore();
+        EnterBattle();
     }
 
 
@@ -306,7 +316,7 @@ public partial class MMExplorePanel : MMNode
         return ret;
     }
 
-   
+
 
     MMPlace FindRandomPlace()
     {
@@ -336,16 +346,15 @@ public partial class MMExplorePanel : MMNode
 
 
 
-    public void GainExp(int value)
+
+    public void ShowCardIndex()
     {
-        this.tansuoExp += value;
-        MMTipManager.instance.CreateTip("获得" + value + "点经验");
+        MMCardIndexPanel node = MMCardIndexPanel.Create();
+        //node.Accept(this.minions);
+        node.ShowHeroes();
+        node.transform.SetSiblingIndex(100);
+        AddChild(node);
     }
 
-    public void GainGold(int value)
-    {
-        this.tansuoGold += value;
-        MMTipManager.instance.CreateTip("获得" + value + "两银子");
-    }
 
 }

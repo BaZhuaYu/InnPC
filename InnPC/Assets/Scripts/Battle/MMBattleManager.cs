@@ -33,7 +33,7 @@ public partial class MMBattleManager : MMNode
     public MMNode panelAvatar;
 
 
-    //
+    
     [HideInInspector]
     public MMBattlePhase phase;
     [HideInInspector]
@@ -280,8 +280,9 @@ public partial class MMBattleManager : MMNode
     public void OnClickGameOverButton()
     {
         panelGameover.SetActive(false);
-        this.CloseUI();
         MMExplorePanel.Instance.SetWin();
+        MMExplorePanel.Instance.ExitBattle();
+        MMExplorePanel.Instance.EnterExplore();
     }
     
 

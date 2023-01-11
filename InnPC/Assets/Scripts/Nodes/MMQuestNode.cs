@@ -46,8 +46,6 @@ public class MMQuestNode : MMNode
 
     public void Reload()
     {
-        Debug.Log(quest.displayName);
-        Debug.Log(quest.displayNote);
         this.id = quest.id;
         this.key = quest.key;
         this.displayName = quest.displayName;

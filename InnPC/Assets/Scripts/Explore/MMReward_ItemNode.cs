@@ -7,13 +7,16 @@ public class MMReward_ItemNode : MonoBehaviour, IPointerClickHandler
 {
     public MMUnitNode unit;
     public MMItemNode item;
+    public MMItemPanel panel;
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        Debug.Log("MMReward_ItemNode: " + item.displayName);
         unit = GetComponent<MMUnitNode>();
         
         OnGainItem();
         
+        panel.Use();
         MMExplorePanel.Instance.UpdateUI();
     }
 

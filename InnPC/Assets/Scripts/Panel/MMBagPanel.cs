@@ -49,11 +49,12 @@ public class MMBagPanel : MMNode
         }
     }
 
-
-
+    
     public void OnClickButtonBack()
     {
         CloseUI();
         MMMainPanel.Instance.OpenUI();
     }
+
+
 }

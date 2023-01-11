@@ -58,7 +58,7 @@ public partial class MMPlaceNode : MMNode
         this.displayName = place.displayName;
         this.displayNote = place.displayNote;
 
-        this.price = place.price;
+        this.price = place.costGold;
         this.num = 10;
     }
 

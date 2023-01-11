@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MMPlace
+public partial class MMPlace
 {
 
     public static Dictionary<string, int> allKeys;
@@ -21,12 +21,15 @@ public class MMPlace
     public string displayName;
     public string displayNote;
 
-    public int price;
-    public int num;
+    public int type;
+    public int clss;
+
     public int prob;
-
+    public int costTime;
+    public int costGold;
+    public int num;
     
-
+    
 
     public static MMPlace Create(int id)
     {
@@ -48,8 +51,11 @@ public class MMPlace
         place.displayName = values[allKeys["Name"]];
         place.displayNote = values[allKeys["Note"]];
 
+        place.type = int.Parse(values[allKeys["Type"]]);
+        place.clss = int.Parse(values[allKeys["Clss"]]);
 
-        int.TryParse(values[allKeys["Price"]], out place.price);
+        int.TryParse(values[allKeys["Price"]], out place.costGold);
+        int.TryParse(values[allKeys["Time"]], out place.costTime);
         int.TryParse(values[allKeys["Num"]], out place.num);
         int.TryParse(values[allKeys["Prob"]], out place.prob);
 

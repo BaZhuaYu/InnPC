@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public enum MMQuestType
 {
+    None,
     RewardUnit,
     RewardCard,
     RewardItem,
@@ -18,15 +19,16 @@ public class MMQuestPanel : MMNode
     public MMQuestNode quest;
 
 
-    public MMButton option1;
-    public MMButton option2;
-    public MMButton option3;
-    public MMPickHeroNode pickHero;
-    
+    public MMOptionNode option1;
+    public MMOptionNode option2;
+    public MMOptionNode option3;
+
 
     void Start()
     {
-
+        option1 = CreateOption();
+        option2 = CreateOption();
+        option3 = CreateOption();
     }
 
 
@@ -44,87 +46,104 @@ public class MMQuestPanel : MMNode
         q.MoveUp(this.FindHeight() * 0.2f);
         q.transform.SetSiblingIndex(0);
 
-        Debug.Log("lllllllllllllll" + quest.displayName);
-        Debug.Log("lllllllllllllll" + quest.displayNote);
-
-        this.quest.name = "sadfsadfsdaf";
 
         switch (quest.quest.type)
         {
             case MMQuestType.RewardUnit:
-                option2.gameObject.AddComponent<MMReward_UnitNode>();
-                option2.AddClickAction(DestroyThis);
-                option3.AddClickAction(DestroyThis);
+                option2.LoadAction(GainUnit);
 
-                option2.GetComponentInChildren<Text>().text = quest.quest.options[0];
-                option3.GetComponentInChildren<Text>().text = quest.quest.options[1];
+                option2.LoadTitle(quest.quest.options[0]);
+                option3.LoadTitle(quest.quest.options[1]);
 
-                option2.gameObject.GetComponent<MMReward_UnitNode>().unit = this.quest.quest.units[0];
-
+                MMHintNode hintNode = MMHintNode.Create(MMHeroNode.Create(quest.quest.units[0]));
+                hintNode.LoadImage("UI/Icon/IconRewardUnit");
+                option2.LoadHintNode(hintNode);
                 break;
+
 
             case MMQuestType.RewardCard:
                 option1.gameObject.AddComponent<MMReward_CardNode>();
                 option2.gameObject.AddComponent<MMReward_CardNode>();
                 option3.gameObject.AddComponent<MMReward_CardNode>();
-
-                option1.GetComponentInChildren<Text>().text = quest.quest.options[0];
-                option2.GetComponentInChildren<Text>().text = quest.quest.options[1];
-                option3.GetComponentInChildren<Text>().text = quest.quest.options[2];
-
+                
                 option1.gameObject.GetComponent<MMReward_CardNode>().card = quest.quest.cards[0];
                 option2.gameObject.GetComponent<MMReward_CardNode>().card = quest.quest.cards[1];
                 option3.gameObject.GetComponent<MMReward_CardNode>().card = quest.quest.cards[2];
 
-                option1.AddClickAction(DestroyThis);
-                option2.AddClickAction(DestroyThis);
-                option3.AddClickAction(DestroyThis);
 
-
+                option1.LoadTitle(quest.quest.options[0]);
+                option2.LoadTitle(quest.quest.options[1]);
+                option3.LoadTitle(quest.quest.options[2]);
+                
                 MMHintNode hintNode1 = MMHintNode.Create(MMCardNode.Create(quest.quest.cards[0]));
                 MMHintNode hintNode2 = MMHintNode.Create(MMCardNode.Create(quest.quest.cards[1]));
                 MMHintNode hintNode3 = MMHintNode.Create(MMCardNode.Create(quest.quest.cards[2]));
-
-                option1.AddChild(hintNode1);
-                option2.AddChild(hintNode2);
-                option3.AddChild(hintNode3);
-
-                hintNode1.MoveRight(option1.FindWidth() * 0.5f);
-                hintNode2.MoveRight(option2.FindWidth() * 0.5f);
-                hintNode3.MoveRight(option3.FindWidth() * 0.5f);
-
-                hintNode1.node.SetParent(option1);
-                hintNode2.node.SetParent(option2);
-                hintNode3.node.SetParent(option3);
-
-                hintNode1.node.transform.position = hintNode1.transform.position + new Vector3(0, hintNode1.node.FindHeight(), 0);
-                hintNode2.node.transform.position = hintNode2.transform.position + new Vector3(0, hintNode2.node.FindHeight(), 0);
-                hintNode3.node.transform.position = hintNode3.transform.position + new Vector3(0, hintNode3.node.FindHeight(), 0);
-
+                
+                option1.LoadHintNode(hintNode1);
+                option2.LoadHintNode(hintNode2);
+                option3.LoadHintNode(hintNode3);
 
                 hintNode1.LoadImage("UI/Icon/IconRewardCard");
                 hintNode2.LoadImage("UI/Icon/IconRewardCard");
                 hintNode3.LoadImage("UI/Icon/IconRewardCard");
-
+                
                 break;
 
             case MMQuestType.RewardItem:
-                pickHero.Accept(MMPlayerManager.Instance.heroes);
-                foreach (var unit in pickHero.units)
+                option3.LoadTitle(quest.quest.options[0]);
+                MMItemNode n = MMItemNode.Create(this.quest.quest.items[0]);
+                MMHintNode hintnode = MMHintNode.Create(n);
+                option3.LoadHintNode(hintnode);
+                option3.LoadAction(() =>
                 {
-                    unit.gameObject.AddComponent<MMReward_ItemNode>();
-                    unit.gameObject.GetComponent<MMReward_ItemNode>().item = MMItemNode.Create(quest.quest.items[0]);
+                    MMItemPanel panel = MMItemPanel.Create(this.quest.quest.items[0]);
+                    MMExplorePanel.Instance.AddChild(panel);
+                });
 
-                }
                 break;
 
 
             case MMQuestType.RewardPlace:
-                option3.GetComponentInChildren<Text>().text = quest.quest.options[0];
-                option3.AddClickAction(GainPlace);
-                option3.AddClickAction(DestroyThis);
+                option3.LoadTitle(quest.quest.options[0]);
+                option3.LoadAction(GainPlace);
+                break;
+
+            case MMQuestType.None:
                 break;
         }
+
+
+        if (quest.quest.id == 10)
+        {
+            option2.LoadAction(DuBo);
+        }
+        else if (quest.quest.id == 107)
+        {
+            MMCard card = this.quest.quest.cards[0];
+            MMHintNode nodeHint = MMHintNode.Create(MMCardNode.Create(card));
+            option2.LoadHintNode(nodeHint);
+            option2.LoadAction(() =>
+            {
+                MMExplorePanel.Instance.GainCard(card);
+            });
+        }
+        else if (quest.quest.id == 110)
+        {
+            option2.LoadAction(() =>
+            {
+                if (Random.Range(0, 100) < 50)
+                {
+                    MMExplorePanel.Instance.GainGold(10);
+                    MMTipManager.instance.CreateTip("¶ÄÓ®ÁË£¡");
+                }
+                else
+                {
+                    MMTipManager.instance.CreateTip("Ê®¶Ä¾ÅÊä");
+                }
+                CloseUI();
+            });
+        }
+
 
         UpdateUI();
     }
@@ -133,37 +152,38 @@ public class MMQuestPanel : MMNode
     public void UpdateUI()
     {
         MMExplorePanel.Instance.UpdateUI();
-        switch (quest.quest.type)
+        
+        option1.gameObject.SetActive(false);
+        option2.gameObject.SetActive(false);
+        option3.gameObject.SetActive(false);
+
+        //if(quest.quest.type == MMQuestType.RewardItem)
+        //{
+        //    return;
+        //}
+
+        if (quest.quest.options.Count == 1)
         {
-            case MMQuestType.RewardUnit:
-                option1.gameObject.SetActive(false);
-                option2.gameObject.SetActive(true);
-                option3.gameObject.SetActive(true);
-                pickHero.gameObject.SetActive(false);
-                break;
-
-            case MMQuestType.RewardCard:
-                option1.gameObject.SetActive(true);
-                option2.gameObject.SetActive(true);
-                option3.gameObject.SetActive(true);
-                pickHero.gameObject.SetActive(false);
-                break;
-
-            case MMQuestType.RewardItem:
-                option1.gameObject.SetActive(false);
-                option2.gameObject.SetActive(false);
-                option3.gameObject.SetActive(false);
-                pickHero.gameObject.SetActive(true);
-                break;
-
-            case MMQuestType.RewardPlace:
-                option1.gameObject.SetActive(false);
-                option2.gameObject.SetActive(false);
-                option3.gameObject.SetActive(true);
-                pickHero.gameObject.SetActive(false);
-                break;
-
+            option3.gameObject.SetActive(true);
+            option3.LoadTitle(quest.quest.options[0]);
         }
+        else if (quest.quest.options.Count == 2)
+        {
+            option2.gameObject.SetActive(true);
+            option3.gameObject.SetActive(true);
+            option2.LoadTitle(quest.quest.options[0]);
+            option3.LoadTitle(quest.quest.options[1]);
+        }
+        else if (quest.quest.options.Count == 3)
+        {
+            option1.gameObject.SetActive(true);
+            option2.gameObject.SetActive(true);
+            option3.gameObject.SetActive(true);
+            option1.LoadTitle(quest.quest.options[0]);
+            option2.LoadTitle(quest.quest.options[1]);
+            option3.LoadTitle(quest.quest.options[2]);
+        }
+
     }
 
 
@@ -176,13 +196,23 @@ public class MMQuestPanel : MMNode
     public void DestroyThis()
     {
         MMExplorePanel.Instance.quests.Remove(this.quest.quest);
+        MMExplorePanel.Instance.UpdateUI();
         Destroy(gameObject);
+    }
+
+
+    public void LoadHintNode(MMHintNode hint, MMButton option)
+    {
+        option.AddChild(hint);
+        hint.MoveRight(option.FindWidth() * 0.5f);
+        hint.node.SetParent(option);
+        hint.node.transform.position = hint.transform.position + new Vector3(0, hint.node.FindHeight(), 0);
     }
 
 
     public void GainUnit()
     {
-
+        MMExplorePanel.Instance.minions.Add(this.quest.quest.units[0]);
     }
 
 
@@ -193,9 +223,28 @@ public class MMQuestPanel : MMNode
 
     public void GainPlace()
     {
-        MMExplorePanel.Instance.places.Add(MMPlaceNode.Create(this.quest.quest.place));
+        MMExplorePanel.Instance.GainPlace(this.quest.quest.place);
     }
 
+
+
+    public void DuBo()
+    {
+        if (Random.Range(0, 100) < 50)
+        {
+            MMExplorePanel.Instance.GainGold(10);
+        }
+        else
+        {
+            MMTipManager.instance.CreateTip("Ê®¶Ä¾ÅÊä");
+        }
+    }
+
+
+    public MMOptionNode CreateOption()
+    {
+        return MMOptionNode.Create(this);
+    }
 
 
 
@@ -214,6 +263,5 @@ public class MMQuestPanel : MMNode
         return node;
     }
 
-
-
+    
 }

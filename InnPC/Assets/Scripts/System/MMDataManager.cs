@@ -18,6 +18,7 @@ public class MMDataManager : MonoBehaviour
         string[] itemData = MMDataManager.ReadFile("Data/InnPC - Item");
         string[] cardData = MMDataManager.ReadFile("Data/InnPC - Card");
         string[] placeData = MMDataManager.ReadFile("Data/InnPC - Place");
+        string[] questData = MMDataManager.ReadFile("Data/InnPC - Quest");
 
         Deserialize(skillData, out MMSkill.allKeys, out MMSkill.allValues);
         Deserialize(unitData, out MMUnit.allKeys, out MMUnit.allValues);
@@ -25,6 +26,7 @@ public class MMDataManager : MonoBehaviour
         Deserialize(itemData, out MMItem.allKeys, out MMItem.allValues);
         Deserialize(cardData, out MMCard.allKeys, out MMCard.allValues);
         Deserialize(placeData, out MMPlace.allKeys, out MMPlace.allValues);
+        Deserialize(questData, out MMQuest.allKeys, out MMQuest.allValues);
     }
 
 
@@ -35,6 +37,7 @@ public class MMDataManager : MonoBehaviour
         MMUnit.Init();
         MMItem.Init();
         MMPlace.Init();
+        MMQuest.Init();
     }
 
 

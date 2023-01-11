@@ -5,10 +5,16 @@ using UnityEngine;
 public class MMQuest
 {
 
-    public int id;
-    public string key;
+    public static Dictionary<string, int> allKeys;
+    public static Dictionary<int, string> allValues;
 
-    public MMNode reward;
+
+    public static List<MMQuest> all;
+    public static List<MMQuest> quests;
+
+
+
+    //public MMNode reward;
     public List<string> options;
 
     public List<MMUnit> units;
@@ -16,79 +22,179 @@ public class MMQuest
     public List<MMItem> items;
     public MMPlace place;
 
-    public MMQuestType type;
 
+    public int id;
+    public string key;
     public string displayName;
     public string displayNote;
+
+    public MMQuestType type;
+    public int day;
+    public int prob;
+
+
 
 
     public static MMQuest Create(int id)
     {
-        MMQuest ret = new MMQuest();
-        ret.id = id;
-        ret.key = "Card_10000";
+        if (allValues.ContainsKey(id) == false)
+        {
+            MMDebugManager.FatalError("MMQuest Create: " + id);
+        }
+        return CreateFromData(allValues[id]);
+    }
+
+
+    public static MMQuest CreateFromData(string s)
+    {
+        string[] values = s.Split(',');
+
+        MMQuest card = new MMQuest();
+        card.id = int.Parse(values[allKeys["ID"]]);
+        card.key = values[allKeys["Key"]];
+        card.displayName = values[allKeys["Name"]];
+        card.displayNote = values[allKeys["Note"]];
+
+        int.TryParse(values[allKeys["Prob"]], out card.prob);
+        int.TryParse(values[allKeys["Day"]], out card.day);
+
+        card.options = new List<string>();
+        for (int i = 1; i <= 3; i++)
+        {
+            string o = values[allKeys["Option" + i]];
+            if(o == null)
+            {
+                continue;
+            }
+
+            if(o == "")
+            {
+                continue;
+            }
+
+            card.options.Add(o);
+        }
+
+        card.LoadOptions();
+
+        return card;
+    }
+
+
+    public static void Init()
+    {
+        all = new List<MMQuest>();
+        quests = new List<MMQuest>();
+
+        foreach (var temp in allValues.Values)
+        {
+            MMQuest quest = MMQuest.CreateFromData(temp);
+            all.Add(quest);
+            if (quest.prob > 0)
+            {
+                quests.Add(quest);
+            }
+        }
+
+        if (all.Count == 0)
+        {
+            MMDebugManager.FatalError("public static List<MMCard> FindAll()");
+        }
+    }
+
+
+
+
+    private void LoadOptions()
+    {
+
         if (id == 1)
         {
-            ret.type = MMQuestType.RewardUnit;
-            ret.displayName = "招募侠客";
-            ret.displayNote = "招募一名侠客";
-            ret.reward = MMHeroNode.Create(10100);
+            this.units = new List<MMUnit>();
+            this.units.Add(MMUnit.FindRandomOne());
 
-            ret.units = new List<MMUnit>();
-            ret.units.Add(MMUnit.Create(10100));
-
-            ret.options = new List<string>();
-            ret.options.Add("招募");
-            ret.options.Add("放弃");
+            this.options = new List<string>();
+            this.options.Add("招募");
+            this.options.Add("放弃");
         }
         else if (id == 2)
         {
-            ret.type = MMQuestType.RewardCard;
-            ret.displayName = "卡牌";
-            ret.displayNote = "获得一张卡牌";
-            ret.reward = MMCardNode.Create(10101);
+            this.cards = MMCard.FindRandomCount(3);
 
-            ret.cards = new List<MMCard>();
-            MMCard card1 = MMCard.Create(10101);
-            MMCard card2 = MMCard.Create(10201);
-            MMCard card3 = MMCard.Create(10301);
+            this.options = new List<string>();
+            foreach (var card in this.cards)
+            {
+                this.options.Add(card.displayName);
+            }
 
-            ret.cards.Add(card1);
-            ret.cards.Add(card2);
-            ret.cards.Add(card3);
-
-
-            ret.options = new List<string>();
-            ret.options.Add(card1.displayName);
-            ret.options.Add(card2.displayName);
-            ret.options.Add(card3.displayName);
         }
         else if (id == 3)
         {
-            ret.type = MMQuestType.RewardItem;
-            ret.displayName = "物品";
-            ret.displayNote = "获得一个物品";
-            ret.reward = MMItemNode.Create(1);
+            this.items = new List<MMItem>();
+            this.items.Add(MMItem.Create(1));
 
-            ret.items = new List<MMItem>();
-            ret.items.Add(MMItem.Create(1));
-
-            ret.options = new List<string>();
+            this.options = new List<string>();
         }
-        else if (id == 4)
+        else if (id == 5)
         {
-            ret.type = MMQuestType.RewardPlace;
-            ret.displayName = "场景";
-            ret.displayNote = "发现一个地点";
-            ret.reward = MMPlaceNode.Create(2);
-            ret.place = MMPlace.Create(2);
+            this.items = new List<MMItem>();
+            this.items.Add(MMItem.Create(1));
 
-
-            ret.options = new List<string>();
-            ret.options.Add("获得");
+            this.options = new List<string>();
+            this.options.Add("获得");
         }
+        else if (id == 6)
+        {
+            this.place = MMPlace.Create(2);
 
-        return ret;
+            this.options = new List<string>();
+            this.options.Add("获得");
+        }
+        else if (id == 7)
+        {
+            this.cards = new List<MMCard>();
+            this.cards.Add(MMCard.Create(1003));
+
+            this.options = new List<string>();
+            this.options.Add("获得");
+        }
+        else if (id == 101)
+        {
+            this.type = MMQuestType.RewardPlace;
+            this.place = MMPlace.FindRandomOneWithClss(1);
+        }
+        else if (id == 102)
+        {
+            this.type = MMQuestType.RewardUnit;
+            this.units = new List<MMUnit>();
+            this.units.Add(MMUnit.FindRandomOne());
+        }
+        else if (id == 103)
+        {
+            this.type = MMQuestType.RewardItem;
+            this.items = MMItem.FindRandomCount(1);
+        }
+        else if (id == 105)
+        {
+            this.type = MMQuestType.RewardItem;
+            this.items = new List<MMItem>();
+            this.items.Add(MMItem.Create(3));
+        }
+        else if (id == 106)
+        {
+            this.type = MMQuestType.RewardPlace;
+            this.place = MMPlace.FindRandomOne();
+        }
+        else if (id == 107)
+        {
+            this.type = MMQuestType.None;
+            this.cards = new List<MMCard>();
+            this.cards.Add(MMCard.Create(1225));
+        }
+        else if (id == 110)
+        {
+            this.type = MMQuestType.None;
+        }
     }
 
 
