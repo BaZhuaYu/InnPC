@@ -14,15 +14,21 @@ public partial class MMPlaceNode : MMNode, IPointerClickHandler
             return;
         }
 
-        if (MMExplorePanel.Instance.tansuoTime < price)
+        if (this.time > (12 - MMExplorePanel.Instance.tansuoTime))
         {
             MMTipManager.instance.CreateTip("天色已晚");
             return;
         }
 
+        if (this.price > MMExplorePanel.Instance.tansuoGold)
+        {
+            MMTipManager.instance.CreateTip("银两不足");
+            return;
+        }
 
-        MMExplorePanel.Instance.tansuoTime -= price;
         this.num -= 1;
+        MMExplorePanel.Instance.tansuoTime -= this.time;
+        MMExplorePanel.Instance.tansuoGold -= this.price;
         MMExplorePanel.Instance.UpdateUI();
 
         OnClick();

@@ -9,7 +9,8 @@ public class MMCardIndexPanel : MMNode
     List<MMNode> nodes;
     public Button buttonClose;
     
-
+    public List<MMButton> tabs;
+    public MMButton tab;
     
     void Start()
     {
@@ -86,7 +87,11 @@ public class MMCardIndexPanel : MMNode
 
     public void Clear()
     {
-        
+        foreach(var node in nodes)
+        {
+            Destroy(node.gameObject);
+        }
+        this.nodes = new List<MMNode>();
     }
 
 
@@ -101,6 +106,25 @@ public class MMCardIndexPanel : MMNode
     public void Reload()
     {
 
+    }
+
+
+    public void SelectHero()
+    {
+        Clear();
+        Accept(MMExplorePanel.Instance.units);
+    }
+
+    public void SelectCard()
+    {
+        Clear();
+        Accept(MMExplorePanel.Instance.cards);
+    }
+
+    public void SelectMinion()
+    {
+        Clear();
+        Accept(MMExplorePanel.Instance.minions);
     }
 
 

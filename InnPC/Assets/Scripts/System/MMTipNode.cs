@@ -30,7 +30,7 @@ public class MMTipNode : MMNode
 
         this.transform.localPosition = new Vector3(0, 400f, 0);
         this.transform.SetSiblingIndex(100);
-        Invoke("GoMove", 1f);
+        Invoke("GoMove", 0.5f);
         Destroy(gameObject, 2f);
     }
 

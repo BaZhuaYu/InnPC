@@ -45,13 +45,10 @@ public class MMOptionNode : MMNode
 
 
     
-
-
-
     public static MMOptionNode Create(MMQuestPanel panel)
     {
-        GameObject obj = Instantiate(Resources.Load("Prefabs/MMHintNode") as GameObject);
-        obj.name = "MMHintNode";
+        GameObject obj = Instantiate(Resources.Load("Prefabs/MMOptionNode") as GameObject);
+        obj.name = "MMOptionNode";
         MMOptionNode ret = obj.GetComponent<MMOptionNode>();
         ret.panel = panel;
         ret.LoadAction(panel.DestroyThis);

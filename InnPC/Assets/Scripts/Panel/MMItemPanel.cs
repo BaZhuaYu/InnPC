@@ -27,6 +27,8 @@ public class MMItemPanel : MMNode
     public void Accept(MMItemNode item)
     {
         this.item = item;
+        AddChild(item);
+        item.MoveUp(this.FindHeight() * 0.15f);
     }
 
     public void Reload()

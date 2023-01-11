@@ -11,6 +11,7 @@ public partial class MMPlaceNode : MMNode
     public Text textNote;
     public GameObject bgPrice;
     public Text textPrice;
+    public Text textTime;
 
     public MMPlace place;
 
@@ -27,8 +28,10 @@ public partial class MMPlaceNode : MMNode
     public int num;
     [HideInInspector]
     public int price;
+    [HideInInspector]
+    public int time;
 
-    
+
 
 
     // Start is called before the first frame update
@@ -59,6 +62,7 @@ public partial class MMPlaceNode : MMNode
         this.displayNote = place.displayNote;
 
         this.price = place.costGold;
+        this.time = place.costTime;
         this.num = 10;
     }
 
@@ -74,8 +78,10 @@ public partial class MMPlaceNode : MMNode
         this.textName.text = this.displayName;
         this.textNote.text = this.displayNote;
         this.textPrice.text = "" + this.price;
+        this.textTime.text = "" + this.time;
         this.avatar.LoadImage("Places/" + this.key);
-       
+
+        this.bgPrice.gameObject.SetActive(this.price != 0);
     }
 
 

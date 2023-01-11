@@ -21,6 +21,7 @@ public class MMEvilPanel : MMNode
     // Start is called before the first frame update
     void Start()
     {
+        this.nodes = new List<MMNode>();
         UpdateUI();
     }
 
@@ -43,6 +44,38 @@ public class MMEvilPanel : MMNode
         UpdateUI();
     }
 
+    public void AcceptEvil(int cur, int max)
+    {
+        Clear();
+        this.curEvil = cur;
+        this.maxEvil = max;
+
+        for (int i = 0; i < maxEvil; i++)
+        {
+            MMNode node = Create("UI/Icon/Icon_Evil");
+            node.LoadSize(new Vector2(this.FindHeight() * 0.8f, this.FindHeight() * 0.8f));
+            this.nodes.Add(node);
+            node.SetParent(this);
+        }
+
+        UpdateUI();
+    }
+
+    public void Clear()
+    {
+        if(this.nodes == null)
+        {
+            this.nodes = new List<MMNode>();
+            return;
+        }
+        foreach(var node in this.nodes)
+        {
+            Destroy(node.gameObject);
+        }
+        this.nodes = new List<MMNode>();
+    }
+
+
     public bool CheckReachMax()
     {
         return curEvil >= maxEvil;
@@ -56,19 +89,23 @@ public class MMEvilPanel : MMNode
 
     public void UpdateUI()
     {
-        for (int i = 0; i < maxEvil; i++)
+        float offset = (this.FindWidth() - this.FindHeight()) * 0.5f;
+
+        for (int i = 0; i < nodes.Count; i++)
         {
-            MMNode node = Create("UI/Icon/Icon_Evil");
-            node.SetParent(this);
+            MMNode node = nodes[i];
+            node.MoveLeft(offset);
+            offset -= this.FindHeight();
             if (i < curEvil)
             {
 
             }
             else
             {
-                node.LoadColor(Color.gray);
+                node.LoadColor(Color.black);
             }
         }
     }
+
 
 }

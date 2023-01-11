@@ -26,9 +26,7 @@ public class MMQuestPanel : MMNode
 
     void Start()
     {
-        option1 = CreateOption();
-        option2 = CreateOption();
-        option3 = CreateOption();
+        
     }
 
 
@@ -252,7 +250,11 @@ public class MMQuestPanel : MMNode
     {
         GameObject obj = Instantiate(Resources.Load("Prefabs/MMQuestPanel") as GameObject);
         obj.name = "MMQuestPanel";
-        return obj.GetComponent<MMQuestPanel>();
+        MMQuestPanel ret = obj.GetComponent<MMQuestPanel>();
+        //ret.option1 = MMOptionNode.Create(ret);
+        //ret.option2 = MMOptionNode.Create(ret);
+        //ret.option3 = MMOptionNode.Create(ret);
+        return ret;
     }
 
 

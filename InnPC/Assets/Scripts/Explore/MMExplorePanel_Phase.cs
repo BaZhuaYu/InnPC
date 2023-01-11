@@ -43,7 +43,8 @@ public partial class MMExplorePanel : MMNode
 
     public void OnEndDay()
     {
-
+        this.tansuoEvil += 1;
+        MMEvilPanel.Instance.UpdateUI();
     }
 
 

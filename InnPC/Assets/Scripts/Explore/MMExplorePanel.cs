@@ -156,7 +156,8 @@ public partial class MMExplorePanel : MMNode
     {
         this.places = new List<MMPlaceNode>();
 
-        int[] indexes = new int[] { 1, 2, 5, 6, 7, 10 };
+        //int[] indexes = new int[] { 1, 2, 5, 6, 7, 10 };
+        int[] indexes = new int[] { 1 };
         foreach (var index in indexes)
         {
             MMPlaceNode place = MMPlaceNode.Create(index);
@@ -250,7 +251,7 @@ public partial class MMExplorePanel : MMNode
         textGold.text = tansuoGold + "";
         textExp.text = tansuoExp + "";
         textTime.text = tansuoTime + "/12";
-        MMEvilPanel.Instance.UpdateUI();
+        MMEvilPanel.Instance.AcceptEvil(3,5);
         iconTime.transform.localPosition = new Vector2((float)(tansuoTime - 6) / 12f * this.FindWidth(), 0);
 
         //Reward
